@@ -6,6 +6,8 @@
   let {
     style: styleProp,
     theme: themeProp,
+    variant = "filled",
+    color = "primary",
     children,
     items = [],
     position = "bottom",
@@ -17,6 +19,7 @@
   const theme = $derived(themeProp ?? defaults.theme);
   const styleClass = $derived(`s-dropdown-${style}`);
   const themeClass = $derived(`theme-${theme}`);
+  const variantClass = $derived(`dropdown-${color}`);
 
   let open = $state(false);
   let menuEl = $state(null);
@@ -63,7 +66,7 @@
 >
   <div
     bind:this={triggerEl}
-    class="s-dropdown-trigger"
+    class="s-dropdown-trigger {variantClass}"
     onclick={toggle}
     role="button"
     tabindex="0"
@@ -71,7 +74,6 @@
     onkeydown={(e) => { if (e.key === "Enter" || e.key === " ") toggle(); }}
   >
     {@render children?.()}
-    <span class="s-dropdown-arrow">▼</span>
   </div>
 
   {#if open}

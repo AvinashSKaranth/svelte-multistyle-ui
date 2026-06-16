@@ -8,6 +8,7 @@
     theme: themeProp,
     open = $bindable(false),
     title = "",
+    size = "medium",
     children,
     onclose,
     ...rest
@@ -18,6 +19,7 @@
 
   const styleClass = $derived(`s-modal-${style}`);
   const themeClass = $derived(`theme-${theme}`);
+  const sizeClass = $derived(`s-modal-${size}`);
 
   function handleClose() {
     open = false;
@@ -38,17 +40,12 @@
     aria-modal="true"
     {...rest}
   >
-    <div
-      class="s-modal"
-      transition:scale={{ start: 0.95, duration: 200 }}
-    >
+    <div class="s-modal {sizeClass}" transition:scale={{ start: 0.95, duration: 200 }}>
       <div class="s-modal-header">
         <h2 class="s-modal-title">{title}</h2>
-        <button
-          class="s-modal-close"
-          onclick={handleClose}
-          aria-label="Close"
-        >&times;</button>
+        <button class="s-modal-close" onclick={handleClose} aria-label="Close"
+          >&times;</button
+        >
       </div>
       <div class="s-modal-body">
         {@render children?.()}

@@ -21,9 +21,11 @@
   color: var(--t-primary);
   border-color: transparent;
 }
-.chip-filled.chip-success { background: color-mix(in srgb, #22c55e 15%, var(--t-surface)); color: #16a34a; }
-.chip-filled.chip-warning { background: color-mix(in srgb, #eab308 15%, var(--t-surface)); color: #a16207; }
-.chip-filled.chip-error   { background: color-mix(in srgb, #ef4444 15%, var(--t-surface)); color: #dc2626; }
+.chip-filled.chip-secondary { background: color-mix(in srgb, var(--t-secondary) 15%, var(--t-surface)); color: var(--t-secondary); }
+.chip-filled.chip-success { background: color-mix(in srgb, var(--t-success) 15%, var(--t-surface)); color: var(--t-text-success); }
+.chip-filled.chip-warning { background: color-mix(in srgb, var(--t-warning) 15%, var(--t-surface)); color: var(--t-text-warning); }
+.chip-filled.chip-error   { background: color-mix(in srgb, var(--t-error) 15%, var(--t-surface)); color: var(--t-text-error); }
+.chip-filled.chip-info    { background: color-mix(in srgb, var(--t-info) 15%, var(--t-surface)); color: var(--t-text-info); }
 .chip-filled.chip-neutral { background: color-mix(in srgb, #64748b 15%, var(--t-surface)); color: var(--t-text); }
 
 .chip-outlined.chip-primary {
@@ -31,15 +33,19 @@
   color: var(--t-primary);
   border-color: color-mix(in srgb, var(--t-primary) 30%, transparent);
 }
-.chip-outlined.chip-success { background: transparent; color: #16a34a; border-color: color-mix(in srgb, #22c55e 30%, transparent); }
-.chip-outlined.chip-warning { background: transparent; color: #a16207; border-color: color-mix(in srgb, #eab308 30%, transparent); }
-.chip-outlined.chip-error   { background: transparent; color: #dc2626; border-color: color-mix(in srgb, #ef4444 30%, transparent); }
+.chip-outlined.chip-secondary { background: transparent; color: var(--t-secondary); border-color: color-mix(in srgb, var(--t-secondary) 30%, transparent); }
+.chip-outlined.chip-success { background: transparent; color: var(--t-text-success); border-color: color-mix(in srgb, var(--t-success) 30%, transparent); }
+.chip-outlined.chip-warning { background: transparent; color: var(--t-text-warning); border-color: color-mix(in srgb, var(--t-warning) 30%, transparent); }
+.chip-outlined.chip-error   { background: transparent; color: var(--t-text-error); border-color: color-mix(in srgb, var(--t-error) 30%, transparent); }
+.chip-outlined.chip-info    { background: transparent; color: var(--t-text-info); border-color: color-mix(in srgb, var(--t-info) 30%, transparent); }
 .chip-outlined.chip-neutral { background: transparent; color: var(--t-text-hint); border-color: var(--t-border); }
 
 .chip-ghost.chip-primary { background: transparent; color: var(--t-primary); border-color: transparent; }
-.chip-ghost.chip-success { background: transparent; color: #16a34a; border-color: transparent; }
-.chip-ghost.chip-warning { background: transparent; color: #a16207; border-color: transparent; }
-.chip-ghost.chip-error   { background: transparent; color: #dc2626; border-color: transparent; }
+.chip-ghost.chip-secondary { background: transparent; color: var(--t-secondary); border-color: transparent; }
+.chip-ghost.chip-success { background: transparent; color: var(--t-text-success); border-color: transparent; }
+.chip-ghost.chip-warning { background: transparent; color: var(--t-text-warning); border-color: transparent; }
+.chip-ghost.chip-error   { background: transparent; color: var(--t-text-error); border-color: transparent; }
+.chip-ghost.chip-info    { background: transparent; color: var(--t-text-info); border-color: transparent; }
 .chip-ghost.chip-neutral { background: transparent; color: var(--t-text-hint); border-color: transparent; }
 
 /* Sizes */

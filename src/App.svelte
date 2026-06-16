@@ -21,7 +21,6 @@
   import Pagination from "./lib/components/Pagination.svelte";
   import Stepper from "./lib/components/Stepper.svelte";
   import Avatar from "./lib/components/Avatar.svelte";
-  import Badge from "./lib/components/Badge.svelte";
   import Tooltip from "./lib/components/Tooltip.svelte";
   import ProgressBar from "./lib/components/ProgressBar.svelte";
   import Table from "./lib/components/Table.svelte";
@@ -29,8 +28,6 @@
   import Spinner from "./lib/components/Spinner.svelte";
   import Skeleton from "./lib/components/Skeleton.svelte";
   import FAB from "./lib/components/FAB.svelte";
-  // New components
-  import Sheet from "./lib/components/Sheet.svelte";
   import Toast from "./lib/components/Toast.svelte";
   import DropdownMenu from "./lib/components/DropdownMenu.svelte";
   import Popover from "./lib/components/Popover.svelte";
@@ -38,7 +35,6 @@
   import Chip from "./lib/components/Chip.svelte";
   import ButtonGroup from "./lib/components/ButtonGroup.svelte";
   import Rating from "./lib/components/Rating.svelte";
-  import Carousel from "./lib/components/Carousel.svelte";
   import CommandPalette from "./lib/components/CommandPalette.svelte";
 
   import { initMultistyleUI } from "./lib/config.js";
@@ -73,7 +69,6 @@
     { value: "custom", label: "Custom" },
   ];
 
-  // Theme preset defaults
   const themeDefaults = {
     default: {
       primary: "#2563eb",
@@ -343,6 +338,8 @@
   let modalSize = $state("medium");
   let paginationPage = $state(1);
   let progressVal = $state(65);
+  let drawerOpen = $state(false);
+  let drawerPosition = $state("left");
 
   const selectOptions = [
     { value: "opt1", label: "Option One" },
@@ -367,17 +364,22 @@
     `--t-primary:${customPrimary};--t-secondary:${customSecondary};--t-surface:${customSurface};--t-card-bg:${customCardBg};--t-card-border-color:${customCardBorderColor};--t-text:${customText};--t-text-hint:${customTextHint};--t-text-primary:${customTextPrimary};--t-text-secondary:${customTextSecondary};--t-surface-bg:${customSurfaceBg};--t-btn-bg:${customBtnBg};--t-btn-border-color:${customBtnBorderColor};--t-btn-radius:${customBtnRadius};--t-card-radius:${customCardRadius};`,
   );
 
-  // New component state
-  let sheetOpen = $state(false);
-  let sheetPosition = $state("right");
-  let drawerOpen = $state(false);
-  let drawerPosition = $state("left");
   let dropdownItems = [
     { label: "Profile", icon: "👤", onclick: () => alert("Profile clicked") },
     { label: "Settings", icon: "⚙", onclick: () => alert("Settings clicked") },
     { divider: true },
-    { label: "Help", icon: "❓", shortcut: "⌘H", onclick: () => alert("Help clicked") },
-    { label: "Logout", icon: "🚪", shortcut: "⌘Q", onclick: () => alert("Logout clicked") },
+    {
+      label: "Help",
+      icon: "❓",
+      shortcut: "⌘H",
+      onclick: () => alert("Help clicked"),
+    },
+    {
+      label: "Logout",
+      icon: "🚪",
+      shortcut: "⌘Q",
+      onclick: () => alert("Logout clicked"),
+    },
   ];
   let popoverOpen = $state(false);
   let chipVals = $state(["React", "Svelte", "Vue"]);
@@ -388,37 +390,65 @@
     { value: "month", label: "Month" },
   ];
   let ratingVal = $state(3);
-  let carouselSlides = [
-    { image: "https://picsum.photos/seed/ui1/800/400", caption: "Beautiful landscapes" },
-    { image: "https://picsum.photos/seed/ui2/800/400", caption: "Modern architecture" },
-    { image: "https://picsum.photos/seed/ui3/800/400", caption: "Urban cityscapes" },
-  ];
   let cmdPaletteOpen = $state(false);
   let cmdGroups = [
     {
       label: "Navigation",
       items: [
-        { label: "Go to Dashboard", icon: "📊", shortcut: "⌘1", onclick: () => alert("Dashboard") },
-        { label: "Go to Projects", icon: "📁", shortcut: "⌘2", onclick: () => alert("Projects") },
-        { label: "Go to Settings", icon: "⚙", shortcut: "⌘,", onclick: () => alert("Settings") },
-      ]
+        {
+          label: "Go to Dashboard",
+          icon: "📊",
+          shortcut: "⌘1",
+          onclick: () => alert("Dashboard"),
+        },
+        {
+          label: "Go to Projects",
+          icon: "📁",
+          shortcut: "⌘2",
+          onclick: () => alert("Projects"),
+        },
+        {
+          label: "Go to Settings",
+          icon: "⚙",
+          shortcut: "⌘,",
+          onclick: () => alert("Settings"),
+        },
+      ],
     },
     {
       label: "Actions",
       items: [
-        { label: "New File", icon: "📄", shortcut: "⌘N", onclick: () => alert("New File") },
-        { label: "Search", icon: "🔍", shortcut: "⌘F", onclick: () => alert("Search") },
-        { label: "Toggle Dark Mode", icon: "🌙", shortcut: "⌘D", onclick: () => alert("Toggle Dark") },
-      ]
+        {
+          label: "New File",
+          icon: "📄",
+          shortcut: "⌘N",
+          onclick: () => alert("New File"),
+        },
+        {
+          label: "Search",
+          icon: "🔍",
+          shortcut: "⌘F",
+          onclick: () => alert("Search"),
+        },
+        {
+          label: "Toggle Dark Mode",
+          icon: "🌙",
+          shortcut: "⌘D",
+          onclick: () => alert("Toggle Dark"),
+        },
+      ],
     },
   ];
+
   // Toast management
   let toasts = $state([]);
   let toastPosition = $state("top-right");
   function addToastMsg(msg, variant) {
     const id = Date.now() + Math.random();
     toasts = [...toasts, { id, message: msg, variant, duration: 3000 }];
-    setTimeout(() => { toasts = toasts.filter(t => t.id !== id); }, 3000);
+    setTimeout(() => {
+      toasts = toasts.filter((t) => t.id !== id);
+    }, 3000);
   }
 
   let settingsOpen = $state(false);
@@ -427,53 +457,31 @@
   const customCss = $derived(`/* custom-theme.css */
 /* Link this file after svelte-multistyle-ui/theme.css. */
 .theme-custom {
-  --t-primary: ${customPrimary};
-  --t-secondary: ${customSecondary};
-  --t-surface: ${customSurface};
-  --t-card-bg: ${customCardBg};
-  --t-card-border-color: ${customCardBorderColor};
-  --t-text: ${customText};
-  --t-text-hint: ${customTextHint};
-  --t-text-primary: ${customTextPrimary};
-  --t-text-secondary: ${customTextSecondary};
-  --t-surface-bg: ${customSurfaceBg};
-  --t-btn-bg: ${customBtnBg};
-  --t-btn-border-color: ${customBtnBorderColor};
-  --t-btn-radius: ${customBtnRadius};
+  --t-primary: ${customPrimary}; --t-secondary: ${customSecondary}; --t-surface: ${customSurface};
+  --t-card-bg: ${customCardBg}; --t-card-border-color: ${customCardBorderColor};
+  --t-text: ${customText}; --t-text-hint: ${customTextHint};
+  --t-text-primary: ${customTextPrimary}; --t-text-secondary: ${customTextSecondary};
+  --t-surface-bg: ${customSurfaceBg}; --t-btn-bg: ${customBtnBg};
+  --t-btn-border-color: ${customBtnBorderColor}; --t-btn-radius: ${customBtnRadius};
   --t-card-radius: ${customCardRadius};
-  --t-info: ${customPrimary};
-  --t-success: ${customPrimary};
-  --t-warning: ${customPrimary};
-  --t-error: ${customPrimary};
-  --t-text-info: ${customPrimary};
-  --t-text-success: ${customPrimary};
-  --t-text-warning: ${customPrimary};
-  --t-text-error: ${customPrimary};
+  --t-info: ${customPrimary}; --t-success: ${customPrimary};
+  --t-warning: ${customPrimary}; --t-error: ${customPrimary};
+  --t-text-info: ${customPrimary}; --t-text-success: ${customPrimary};
+  --t-text-warning: ${customPrimary}; --t-text-error: ${customPrimary};
 }
 
 html.dark .theme-custom {
-  --t-primary: ${customPrimary};
-  --t-secondary: ${customSecondary};
-  --t-surface: ${customSurface};
-  --t-card-bg: ${customCardBg};
-  --t-card-border-color: ${customCardBorderColor};
-  --t-text: ${customText};
-  --t-text-hint: ${customTextHint};
-  --t-text-primary: ${customTextPrimary};
-  --t-text-secondary: ${customTextSecondary};
-  --t-surface-bg: ${customSurfaceBg};
-  --t-btn-bg: ${customBtnBg};
-  --t-btn-border-color: ${customBtnBorderColor};
-  --t-btn-radius: ${customBtnRadius};
+  --t-primary: ${customPrimary}; --t-secondary: ${customSecondary}; --t-surface: ${customSurface};
+  --t-card-bg: ${customCardBg}; --t-card-border-color: ${customCardBorderColor};
+  --t-text: ${customText}; --t-text-hint: ${customTextHint};
+  --t-text-primary: ${customTextPrimary}; --t-text-secondary: ${customTextSecondary};
+  --t-surface-bg: ${customSurfaceBg}; --t-btn-bg: ${customBtnBg};
+  --t-btn-border-color: ${customBtnBorderColor}; --t-btn-radius: ${customBtnRadius};
   --t-card-radius: ${customCardRadius};
-  --t-info: ${customPrimary};
-  --t-success: ${customPrimary};
-  --t-warning: ${customPrimary};
-  --t-error: ${customPrimary};
-  --t-text-info: ${customPrimary};
-  --t-text-success: ${customPrimary};
-  --t-text-warning: ${customPrimary};
-  --t-text-error: ${customPrimary};
+  --t-info: ${customPrimary}; --t-success: ${customPrimary};
+  --t-warning: ${customPrimary}; --t-error: ${customPrimary};
+  --t-text-info: ${customPrimary}; --t-text-success: ${customPrimary};
+  --t-text-warning: ${customPrimary}; --t-text-error: ${customPrimary};
 }
 
 /* Use it:
@@ -484,30 +492,20 @@ Then pass theme="custom" to components.
 */`);
 
   function markCustomTheme() {
-    if (selectedTheme !== "custom") {
-      selectedTheme = "custom";
-    }
+    if (selectedTheme !== "custom") selectedTheme = "custom";
   }
 
   async function copyCustomCss() {
-    try {
-      await navigator.clipboard.writeText(customCss);
-      copyStatus = "Copied";
-      setTimeout(() => (copyStatus = ""), 1800);
-    } catch {
-      copyStatus = "Copy failed";
-    }
+    await navigator.clipboard.writeText(customCss);
+    copyStatus = "Copied";
+    setTimeout(() => (copyStatus = ""), 1800);
   }
 
   $effect(() => {
     if (!settingsOpen) return;
-
     const handler = (event) => {
-      if (event.key === "Escape") {
-        settingsOpen = false;
-      }
+      if (event.key === "Escape") settingsOpen = false;
     };
-
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   });
@@ -532,9 +530,7 @@ Then pass theme="custom" to components.
           bind:value={selectedStyle}
           class="header-select rounded-lg px-3 py-1.5 text-sm border focus:border-indigo-500 focus:outline-none"
         >
-          {#each styles as s}
-            <option value={s.value}>{s.label}</option>
-          {/each}
+          {#each styles as s}<option value={s.value}>{s.label}</option>{/each}
         </select>
         <label for="theme-sel" class="text-sm header-label">Theme:</label>
         <select
@@ -542,9 +538,7 @@ Then pass theme="custom" to components.
           bind:value={selectedTheme}
           class="header-select rounded-lg px-3 py-1.5 text-sm border focus:border-indigo-500 focus:outline-none"
         >
-          {#each themes as t}
-            <option value={t.value}>{t.label}</option>
-          {/each}
+          {#each themes as t}<option value={t.value}>{t.label}</option>{/each}
         </select>
         <label for="mode-sel" class="text-sm header-label">Mode:</label>
         <select
@@ -560,10 +554,8 @@ Then pass theme="custom" to components.
           type="button"
           class="settings-gear"
           aria-label="Open theme settings"
-          onclick={() => (settingsOpen = true)}
+          onclick={() => (settingsOpen = true)}>⚙</button
         >
-          ⚙
-        </button>
       </div>
     </div>
   </header>
@@ -592,22 +584,21 @@ Then pass theme="custom" to components.
             type="button"
             class="settings-close"
             aria-label="Close theme settings"
-            onclick={() => (settingsOpen = false)}
+            onclick={() => (settingsOpen = false)}>×</button
           >
-            ×
-          </button>
         </div>
-
         <div class="settings-content">
           <section class="settings-panel">
             <h3 class="settings-panel-title">Theme Editor</h3>
             <p class="text-sm text-gray-500">
               First edit switches the theme dropdown to Custom.
             </p>
-
             <div class="grid grid-cols-2 gap-3">
               <div class="flex flex-col gap-1">
-                <label for="custom-primary" class="text-xs font-medium text-gray-500">Primary</label>
+                <label
+                  for="custom-primary"
+                  class="text-xs font-medium text-gray-500">Primary</label
+                >
                 <input
                   id="custom-primary"
                   type="color"
@@ -617,7 +608,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-secondary" class="text-xs font-medium text-gray-500">Secondary</label>
+                <label
+                  for="custom-secondary"
+                  class="text-xs font-medium text-gray-500">Secondary</label
+                >
                 <input
                   id="custom-secondary"
                   type="color"
@@ -627,7 +621,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-surface" class="text-xs font-medium text-gray-500">Surface</label>
+                <label
+                  for="custom-surface"
+                  class="text-xs font-medium text-gray-500">Surface</label
+                >
                 <input
                   id="custom-surface"
                   type="color"
@@ -637,7 +634,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-card-bg" class="text-xs font-medium text-gray-500">Card BG</label>
+                <label
+                  for="custom-card-bg"
+                  class="text-xs font-medium text-gray-500">Card BG</label
+                >
                 <input
                   id="custom-card-bg"
                   type="color"
@@ -647,7 +647,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-card-border-color" class="text-xs font-medium text-gray-500">Card Border</label>
+                <label
+                  for="custom-card-border-color"
+                  class="text-xs font-medium text-gray-500">Card Border</label
+                >
                 <input
                   id="custom-card-border-color"
                   type="color"
@@ -657,7 +660,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-text" class="text-xs font-medium text-gray-500">Text</label>
+                <label
+                  for="custom-text"
+                  class="text-xs font-medium text-gray-500">Text</label
+                >
                 <input
                   id="custom-text"
                   type="color"
@@ -667,7 +673,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-text-hint" class="text-xs font-medium text-gray-500">Text Hint</label>
+                <label
+                  for="custom-text-hint"
+                  class="text-xs font-medium text-gray-500">Text Hint</label
+                >
                 <input
                   id="custom-text-hint"
                   type="color"
@@ -677,7 +686,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-text-primary" class="text-xs font-medium text-gray-500">Text Primary</label>
+                <label
+                  for="custom-text-primary"
+                  class="text-xs font-medium text-gray-500">Text Primary</label
+                >
                 <input
                   id="custom-text-primary"
                   type="color"
@@ -687,7 +699,11 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-text-secondary" class="text-xs font-medium text-gray-500">Text Secondary</label>
+                <label
+                  for="custom-text-secondary"
+                  class="text-xs font-medium text-gray-500"
+                  >Text Secondary</label
+                >
                 <input
                   id="custom-text-secondary"
                   type="color"
@@ -697,7 +713,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-surface-bg" class="text-xs font-medium text-gray-500">Surface BG</label>
+                <label
+                  for="custom-surface-bg"
+                  class="text-xs font-medium text-gray-500">Surface BG</label
+                >
                 <input
                   id="custom-surface-bg"
                   type="color"
@@ -707,7 +726,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-btn-bg" class="text-xs font-medium text-gray-500">Btn BG</label>
+                <label
+                  for="custom-btn-bg"
+                  class="text-xs font-medium text-gray-500">Btn BG</label
+                >
                 <input
                   id="custom-btn-bg"
                   type="color"
@@ -717,7 +739,10 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label for="custom-btn-border-color" class="text-xs font-medium text-gray-500">Btn Border</label>
+                <label
+                  for="custom-btn-border-color"
+                  class="text-xs font-medium text-gray-500">Btn Border</label
+                >
                 <input
                   id="custom-btn-border-color"
                   type="color"
@@ -727,10 +752,11 @@ Then pass theme="custom" to components.
                 />
               </div>
             </div>
-
             <div class="flex flex-wrap gap-4 mt-4">
               <div class="flex flex-col gap-2">
-                <span class="text-xs font-medium text-gray-500">Button Radius</span>
+                <span class="text-xs font-medium text-gray-500"
+                  >Button Radius</span
+                >
                 <div class="flex gap-1 flex-wrap">
                   {#each radiusOptions as r}
                     <button
@@ -741,13 +767,15 @@ Then pass theme="custom" to components.
                       onclick={() => {
                         markCustomTheme();
                         customBtnRadius = r;
-                      }}
-                    >{r}</button>
+                      }}>{r}</button
+                    >
                   {/each}
                 </div>
               </div>
               <div class="flex flex-col gap-2">
-                <span class="text-xs font-medium text-gray-500">Card Radius</span>
+                <span class="text-xs font-medium text-gray-500"
+                  >Card Radius</span
+                >
                 <div class="flex gap-1 flex-wrap">
                   {#each radiusOptions as r}
                     <button
@@ -758,8 +786,8 @@ Then pass theme="custom" to components.
                       onclick={() => {
                         markCustomTheme();
                         customCardRadius = r;
-                      }}
-                    >{r}</button>
+                      }}>{r}</button
+                    >
                   {/each}
                 </div>
               </div>
@@ -769,9 +797,9 @@ Then pass theme="custom" to components.
           <section class="settings-panel">
             <div class="flex items-center justify-between gap-3">
               <h3 class="settings-panel-title">Custom CSS</h3>
-              {#if copyStatus}
-                <span class="settings-copy-status">{copyStatus}</span>
-              {/if}
+              {#if copyStatus}<span class="settings-copy-status"
+                  >{copyStatus}</span
+                >{/if}
             </div>
             <p class="text-sm text-gray-500">
               Copy into <code>custom-theme.css</code>, import it after
@@ -782,40 +810,38 @@ Then pass theme="custom" to components.
             <button
               type="button"
               class="settings-copy-button"
-              onclick={copyCustomCss}
+              onclick={copyCustomCss}>Copy CSS</button
             >
-              Copy CSS
-            </button>
           </section>
 
           <section class="settings-panel">
             <h3 class="settings-panel-title">How to use custom CSS</h3>
-            <ul class="settings-help-list text-sm text-gray-600 dark:text-gray-300 space-y-2">
+            <ul
+              class="settings-help-list text-sm text-gray-600 dark:text-gray-300 space-y-2"
+            >
               <li>
                 <strong>Import order matters:</strong> load
-                <code>svelte-multistyle-ui/theme.css</code> first, then your
-                custom stylesheet. That way your tokens override the defaults.
+                <code>svelte-multistyle-ui/theme.css</code> first, then your custom
+                stylesheet.
               </li>
               <li>
                 <strong>Name your theme class:</strong> define
-                <code>.my-theme</code> (or use the generated
-                <code>.theme-custom</code>) and set any <code>--t-*</code>
-                tokens you want to change.
+                <code>.my-theme</code>
+                (or <code>.theme-custom</code>) and set any <code>--t-*</code> tokens.
               </li>
               <li>
-                <strong>Apply it:</strong> pass
-                <code>theme="my-theme"</code> to components, or add
-                <code>class="my-theme"</code> to a parent element.
+                <strong>Apply it:</strong> pass <code>theme="my-theme"</code> to
+                components, or add <code>class="my-theme"</code> to a parent element.
               </li>
               <li>
                 <strong>Start from scratch:</strong> import only
-                <code>svelte-multistyle-ui/theme-base.css</code> and define
-                every <code>.theme-*</code> class yourself.
+                <code>svelte-multistyle-ui/theme-base.css</code>
+                and define every <code>.theme-*</code> class.
               </li>
               <li>
                 <strong>Component overrides:</strong> target
-                <code>.s-&lt;component&gt;-&lt;style&gt;</code> classes
-                for one-off visual tweaks without touching tokens.
+                <code>.s-&lt;component&gt;-&lt;style&gt;</code> classes for one-off
+                visual tweaks.
               </li>
             </ul>
           </section>
@@ -828,39 +854,24 @@ Then pass theme="custom" to components.
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Global Defaults
       </h2>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card elevated={true} class="space-y-3">
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Call once, use everywhere
           </p>
           <p class="text-sm text-gray-600 dark:text-gray-300">
             Pass <code>style</code> and <code>theme</code> to
-            <code>initMultistyleUI</code> once. Every component below inherits
-            those defaults, while explicit props still override them.
+            <code>initMultistyleUI</code> once. Every component below inherits those
+            defaults.
           </p>
-          <pre class="component-code"><code>{`import { initMultistyleUI } from "svelte-multistyle-ui";
+          <pre class="component-code"><code
+              >{`import { initMultistyleUI } from "svelte-multistyle-ui";
 
 initMultistyleUI({ style: "fluent", theme: "ocean" });
 
-<!-- No style/theme props needed -->
 <Button variant="filled">Save</Button>
-<Badge>New</Badge>`}</code></pre>
-        </Card>
-
-        <Card elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Live preview
-          </p>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
-            These components use the global defaults set by the header selects.
-          </p>
-          <div class="flex flex-wrap items-center gap-3">
-            <Button variant="filled"
-              >{#snippet children()}Default Button{/snippet}</Button
-            >
-            <Badge>{#snippet children()}Default Badge{/snippet}</Badge>
-            <Chip>{#snippet children()}Default Chip{/snippet}</Chip>
-          </div>
+<Chip>New</Chip>`}</code
+            ></pre>
         </Card>
       </div>
     </section>
@@ -872,7 +883,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Button -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Button
           </p>
@@ -887,46 +903,40 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           />
           {#if buttonTab === "preview"}
             <div class="flex flex-wrap gap-2">
-              <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-                >{#snippet children()}Filled{/snippet}</Button
+              <Button
+                style={selectedStyle}
+                theme={selectedTheme}
+                variant="filled">{#snippet children()}Filled{/snippet}</Button
               >
               <Button
                 style={selectedStyle}
                 theme={selectedTheme}
-                variant="outlined">{#snippet children()}Outlined{/snippet}</Button
+                variant="outlined"
+                >{#snippet children()}Outlined{/snippet}</Button
               >
               <Button style={selectedStyle} theme={selectedTheme} variant="text"
                 >{#snippet children()}Text{/snippet}</Button
               >
-              <Button style={selectedStyle} theme={selectedTheme} variant="tonal"
-                >{#snippet children()}Tonal{/snippet}</Button
+              <Button
+                style={selectedStyle}
+                theme={selectedTheme}
+                variant="tonal">{#snippet children()}Tonal{/snippet}</Button
               >
             </div>
           {:else}
-            <pre class="component-code"><code>{`<!-- Filled -->
-<Button style="material" theme="default" variant="filled">
-  {#snippet children()}Filled{/snippet}
-</Button>
-
-<!-- Outlined -->
-<Button style="material" theme="default" variant="outlined">
-  {#snippet children()}Outlined{/snippet}
-</Button>
-
-<!-- Text -->
-<Button style="material" theme="default" variant="text">
-  {#snippet children()}Text{/snippet}
-</Button>
-
-<!-- Tonal -->
-<Button style="material" theme="default" variant="tonal">
-  {#snippet children()}Tonal{/snippet}
-</Button>`}</code></pre>
+            <pre class="component-code"><code
+                >{`<!-- Filled -->\n<Button style="material" theme="default" variant="filled">\n  {#snippet children()}Filled{/snippet}\n</Button>\n\n<!-- Outlined -->\n<Button style="material" theme="default" variant="outlined">\n  {#snippet children()}Outlined{/snippet}\n</Button>\n\n<!-- Text -->\n<Button style="material" theme="default" variant="text">\n  {#snippet children()}Text{/snippet}\n</Button>\n\n<!-- Tonal -->\n<Button style="material" theme="default" variant="tonal">\n  {#snippet children()}Tonal{/snippet}\n</Button>`}</code
+              ></pre>
           {/if}
         </Card>
 
         <!-- IconButton -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Icon Button
           </p>
@@ -953,7 +963,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Input -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Input
           </p>
@@ -975,18 +990,19 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
               placeholder="Your name"
             />
           {:else}
-            <pre class="component-code"><code>{`<Input
-  style="material"
-  theme="default"
-  bind:value={name}
-  label="Your name"
-  placeholder="Your name"
-/>`}</code></pre>
+            <pre class="component-code"><code
+                >{`<Input style="material" theme="default" bind:value={name} label="Your name" placeholder="Your name" />`}</code
+              ></pre>
           {/if}
         </Card>
 
         <!-- Textarea -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Textarea
           </p>
@@ -1002,7 +1018,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Select -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Select
           </p>
@@ -1017,7 +1038,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- MultiSelect -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Multi-Select
           </p>
@@ -1031,7 +1057,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Checkbox -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Checkbox
           </p>
@@ -1044,7 +1075,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Radio -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Radio
           </p>
@@ -1067,7 +1103,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Toggle -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Toggle Switch
           </p>
@@ -1080,7 +1121,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Slider -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Slider
           </p>
@@ -1095,7 +1141,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Search Input -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Search Input
           </p>
@@ -1108,7 +1159,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- Date Picker -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Date Picker
           </p>
@@ -1121,7 +1177,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         </Card>
 
         <!-- File Upload -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             File Upload
           </p>
@@ -1132,6 +1193,61 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             accept="image/*"
           />
         </Card>
+
+        <!-- Dropdown Menu -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Dropdown Menu
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <DropdownMenu
+              style={selectedStyle}
+              theme={selectedTheme}
+              items={dropdownItems}
+              variant="primary"
+              position="bottom"
+            >
+              {#snippet children()}<Button
+                  style={selectedStyle}
+                  theme={selectedTheme}
+                  variant="filled"
+                  >{#snippet children()}Primary{/snippet}</Button
+                >{/snippet}
+            </DropdownMenu>
+            <DropdownMenu
+              style={selectedStyle}
+              theme={selectedTheme}
+              items={dropdownItems.slice(0, 2)}
+              variant="secondary"
+              position="bottom"
+            >
+              {#snippet children()}<Button
+                  style={selectedStyle}
+                  theme={selectedTheme}
+                  variant="outlined"
+                  >{#snippet children()}Secondary{/snippet}</Button
+                >{/snippet}
+            </DropdownMenu>
+            <DropdownMenu
+              style={selectedStyle}
+              theme={selectedTheme}
+              items={dropdownItems.slice(0, 3)}
+              variant="success"
+              position="bottom"
+            >
+              {#snippet children()}<Button
+                  style={selectedStyle}
+                  theme={selectedTheme}
+                  variant="tonal">{#snippet children()}Success{/snippet}</Button
+                >{/snippet}
+            </DropdownMenu>
+          </div>
+        </Card>
       </div>
     </section>
 
@@ -1141,19 +1257,29 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         Layout Components
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Card
           </p>
-          <Card style={selectedStyle} theme={selectedTheme} elevated={true}>
-            {#snippet children()}<p style="margin:0">
+          <Card style={selectedStyle} theme={selectedTheme} elevated={true}
+            >{#snippet children()}<p style="margin:0">
                 This is a card component with elevated shadow and themed
                 styling.
-              </p>{/snippet}
-          </Card>
+              </p>{/snippet}</Card
+          >
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Divider
           </p>
@@ -1162,7 +1288,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-text text-sm">Below</p>
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Tabs
           </p>
@@ -1178,7 +1309,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           />
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Accordion
           </p>
@@ -1190,7 +1326,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           />
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Modal
           </p>
@@ -1202,10 +1343,8 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
               onclick={() => {
                 modalSize = "small";
                 modalOpen = true;
-              }}
+              }}>{#snippet children()}Small{/snippet}</Button
             >
-              {#snippet children()}Small{/snippet}
-            </Button>
             <Button
               style={selectedStyle}
               theme={selectedTheme}
@@ -1213,10 +1352,8 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
               onclick={() => {
                 modalSize = "medium";
                 modalOpen = true;
-              }}
+              }}>{#snippet children()}Medium{/snippet}</Button
             >
-              {#snippet children()}Medium{/snippet}
-            </Button>
             <Button
               style={selectedStyle}
               theme={selectedTheme}
@@ -1224,10 +1361,8 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
               onclick={() => {
                 modalSize = "large";
                 modalOpen = true;
-              }}
+              }}>{#snippet children()}Large{/snippet}</Button
             >
-              {#snippet children()}Large{/snippet}
-            </Button>
             <Button
               style={selectedStyle}
               theme={selectedTheme}
@@ -1235,10 +1370,8 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
               onclick={() => {
                 modalSize = "full";
                 modalOpen = true;
-              }}
+              }}>{#snippet children()}Full{/snippet}</Button
             >
-              {#snippet children()}Full{/snippet}
-            </Button>
           </div>
           <Modal
             style={selectedStyle}
@@ -1246,12 +1379,106 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             size={modalSize}
             bind:open={modalOpen}
             title="Modal Title"
+            >{#snippet children()}<p style="margin:0">
+                This is a modal dialog with themed styling.
+              </p>{/snippet}</Modal
           >
-            {#snippet children()}<p style="margin:0">
-                This is a modal dialog with themed styling. Click outside or the
-                X to close.
-              </p>{/snippet}
-          </Modal>
+        </Card>
+
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Drawer
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                drawerPosition = "left";
+                drawerOpen = true;
+              }}>{#snippet children()}Left{/snippet}</Button
+            >
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                drawerPosition = "right";
+                drawerOpen = true;
+              }}>{#snippet children()}Right{/snippet}</Button
+            >
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                drawerPosition = "top";
+                drawerOpen = true;
+              }}>{#snippet children()}Top{/snippet}</Button
+            >
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                drawerPosition = "bottom";
+                drawerOpen = true;
+              }}>{#snippet children()}Bottom{/snippet}</Button
+            >
+          </div>
+          <Drawer
+            style={selectedStyle}
+            theme={selectedTheme}
+            position={drawerPosition}
+            bind:open={drawerOpen}
+            >{#snippet children()}<div class="p-4">
+                <h3 class="text-lg font-semibold mb-4">Drawer Content</h3>
+                <p>Slides from {drawerPosition} side.</p>
+                <nav class="mt-6 space-y-2">
+                  <a href="#" class="block p-2 rounded hover:bg-gray-100"
+                    >🏠 Home</a
+                  ><a href="#" class="block p-2 rounded hover:bg-gray-100"
+                    >📊 Dashboard</a
+                  ><a href="#" class="block p-2 rounded hover:bg-gray-100"
+                    >⚙ Settings</a
+                  >
+                </nav>
+              </div>{/snippet}</Drawer
+          >
+        </Card>
+
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Command Palette
+          </p>
+          <p class="text-sm">
+            Press <kbd class="px-1.5 py-0.5 text-xs rounded border">⌘K</kbd> or click
+            button.
+          </p>
+          <Button
+            style={selectedStyle}
+            theme={selectedTheme}
+            variant="filled"
+            onclick={() => (cmdPaletteOpen = true)}
+            >{#snippet children()}Open CmdK{/snippet}</Button
+          >
+          <CommandPalette
+            style={selectedStyle}
+            theme={selectedTheme}
+            groups={cmdGroups}
+            bind:open={cmdPaletteOpen}
+          />
         </Card>
       </div>
     </section>
@@ -1262,7 +1489,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         Navigation Components
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Breadcrumb
           </p>
@@ -1276,8 +1508,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             ]}
           />
         </Card>
-
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Pagination
           </p>
@@ -1289,8 +1525,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             bind:current={paginationPage}
           />
         </Card>
-
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3 md:col-span-2">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3 md:col-span-2"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Stepper
           </p>
@@ -1309,13 +1549,18 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
       </div>
     </section>
 
-    <!-- DATA DISPLAY COMPONENTS -->
+    <!-- DATA DISPLAY -->
     <section>
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Data Display
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Avatar
           </p>
@@ -1341,27 +1586,64 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           </div>
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Badge
+            Chip
           </p>
-          <div class="flex gap-2 flex-wrap">
-            <Badge style={selectedStyle} theme={selectedTheme} color="primary"
-              >{#snippet children()}Primary{/snippet}</Badge
+          <div class="flex flex-wrap gap-2">
+            <Chip
+              style={selectedStyle}
+              theme={selectedTheme}
+              color="primary"
+              variant="filled">{#snippet children()}Primary{/snippet}</Chip
             >
-            <Badge style={selectedStyle} theme={selectedTheme} color="success"
-              >{#snippet children()}Success{/snippet}</Badge
+            <Chip
+              style={selectedStyle}
+              theme={selectedTheme}
+              color="success"
+              variant="filled">{#snippet children()}Success{/snippet}</Chip
             >
-            <Badge style={selectedStyle} theme={selectedTheme} color="warning"
-              >{#snippet children()}Warning{/snippet}</Badge
+            <Chip
+              style={selectedStyle}
+              theme={selectedTheme}
+              color="warning"
+              variant="filled">{#snippet children()}Warning{/snippet}</Chip
             >
-            <Badge style={selectedStyle} theme={selectedTheme} color="error"
-              >{#snippet children()}Error{/snippet}</Badge
+            <Chip
+              style={selectedStyle}
+              theme={selectedTheme}
+              color="error"
+              variant="filled">{#snippet children()}Error{/snippet}</Chip
+            >
+          </div>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <Chip
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="outlined"
+              color="primary"
+              icon="★">{#snippet children()}Starred{/snippet}</Chip
+            >
+            <Chip
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="ghost"
+              color="neutral">{#snippet children()}Ghost{/snippet}</Chip
             >
           </div>
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Tooltip
           </p>
@@ -1369,14 +1651,18 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             style={selectedStyle}
             theme={selectedTheme}
             text="This is a tooltip!"
-          >
-            {#snippet children()}<span
+            >{#snippet children()}<span
                 class="demo-text text-sm underline cursor-help">Hover me</span
-              >{/snippet}
-          </Tooltip>
+              >{/snippet}</Tooltip
+          >
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Progress Bar
           </p>
@@ -1389,7 +1675,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           />
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Spinner
           </p>
@@ -1400,7 +1691,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           </div>
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Skeleton
           </p>
@@ -1431,7 +1727,12 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           </div>
         </Card>
 
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3 md:col-span-2 lg:col-span-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3 md:col-span-2 lg:col-span-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Table
           </p>
@@ -1446,13 +1747,18 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
       </div>
     </section>
 
-    <!-- FEEDBACK COMPONENTS -->
+    <!-- FEEDBACK -->
     <section>
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Feedback
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Alert - Info
           </p>
@@ -1471,21 +1777,37 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
               theme={selectedTheme}
               variant="info"
               title="Information"
+              >{#snippet children()}This is an informational alert message.{/snippet}</Alert
             >
-              {#snippet children()}This is an informational alert message.{/snippet}
-            </Alert>
           {:else}
-            <pre class="component-code"><code>{`<Alert style="material" theme="default" variant="info" title="Information">
-  {#snippet children()}This is an informational alert message.{/snippet}
-</Alert>`}</code></pre>
+            <pre class="component-code"><code
+                >{`<Alert style="material" theme="default" variant="info" title="Information">\n  {#snippet children()}This is an informational alert message.{/snippet}\n</Alert>`}</code
+              ></pre>
           {/if}
         </Card>
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Alert - Success
           </p>
+          <Alert
+            style={selectedStyle}
+            theme={selectedTheme}
+            variant="success"
+            title="Success"
+            >{#snippet children()}Operation completed successfully.{/snippet}</Alert
+          >
         </Card>
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Alert - Warning
           </p>
@@ -1494,11 +1816,15 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             theme={selectedTheme}
             variant="warning"
             title="Warning"
+            >{#snippet children()}Please review before proceeding.{/snippet}</Alert
           >
-            {#snippet children()}Please review before proceeding.{/snippet}
-          </Alert>
         </Card>
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Alert - Error
           </p>
@@ -1507,220 +1833,71 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             theme={selectedTheme}
             variant="error"
             title="Error"
+            >{#snippet children()}Something went wrong. Please try again.{/snippet}</Alert
           >
-            {#snippet children()}Something went wrong. Please try again.{/snippet}
-          </Alert>
         </Card>
-      </div>
-    </section>
 
-    <!-- NEW COMPONENTS -->
-    <section>
-      <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
-        New Components
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Sheet -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Sheet (Slide-in Panel)
+            Toast
           </p>
           <div class="flex flex-wrap gap-2">
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { sheetPosition = "left"; sheetOpen = true; }}>
-              {#snippet children()}Left{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { sheetPosition = "right"; sheetOpen = true; }}>
-              {#snippet children()}Right{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { sheetPosition = "top"; sheetOpen = true; }}>
-              {#snippet children()}Top{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { sheetPosition = "bottom"; sheetOpen = true; }}>
-              {#snippet children()}Bottom{/snippet}
-            </Button>
-          </div>
-          <Sheet
-            style={selectedStyle}
-            theme={selectedTheme}
-            position={sheetPosition}
-            bind:open={sheetOpen}
-            title="Sheet Panel"
-          >
-            {#snippet children()}
-              <p>This sheet slides in from the <strong>{sheetPosition}</strong> with a smooth cubic-bezier animation.</p>
-              <p class="mt-4">Content can be anything — forms, navigation, details.</p>
-            {/snippet}
-          </Sheet>
-        </Card>
-
-        <!-- Drawer -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Drawer
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { drawerPosition = "left"; drawerOpen = true; }}>
-              {#snippet children()}Left{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { drawerPosition = "right"; drawerOpen = true; }}>
-              {#snippet children()}Right{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { drawerPosition = "top"; drawerOpen = true; }}>
-              {#snippet children()}Top{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => { drawerPosition = "bottom"; drawerOpen = true; }}>
-              {#snippet children()}Bottom{/snippet}
-            </Button>
-          </div>
-          <Drawer
-            style={selectedStyle}
-            theme={selectedTheme}
-            position={drawerPosition}
-            bind:open={drawerOpen}
-          >
-            {#snippet children()}
-              <div class="p-4">
-                <h3 class="text-lg font-semibold mb-4">Drawer Content</h3>
-                <p>This drawer slides in from the <strong>{drawerPosition}</strong> side.</p>
-                <nav class="mt-6 space-y-2">
-                  <a href="#" class="block p-2 rounded hover:bg-gray-100">🏠 Home</a>
-                  <a href="#" class="block p-2 rounded hover:bg-gray-100">📊 Dashboard</a>
-                  <a href="#" class="block p-2 rounded hover:bg-gray-100">⚙ Settings</a>
-                </nav>
-              </div>
-            {/snippet}
-          </Drawer>
-        </Card>
-
-        <!-- Dropdown Menu -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Dropdown Menu
-          </p>
-          <DropdownMenu
-            style={selectedStyle}
-            theme={selectedTheme}
-            items={dropdownItems}
-            position="bottom"
-          >
-            {#snippet children()}
-              <Button style={selectedStyle} theme={selectedTheme} variant="filled">
-                {#snippet children()}Menu ▾{/snippet}
-              </Button>
-            {/snippet}
-          </DropdownMenu>
-        </Card>
-
-        <!-- Popover -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Popover
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <Popover
+            <Button
               style={selectedStyle}
               theme={selectedTheme}
-              position="top"
-              bind:open={popoverOpen}
+              variant="filled"
+              onclick={() => addToastMsg("Toast message", "info")}
+              >{#snippet children()}Info{/snippet}</Button
             >
-              {#snippet children()}
-                <Button style={selectedStyle} theme={selectedTheme} variant="outlined">
-                  {#snippet children()}Top{/snippet}
-                </Button>
-              {/snippet}
-              {#snippet content()}
-                <div>
-                  <strong>Popover Title</strong>
-                  <p class="mt-1 text-sm">This is a popover with rich content.</p>
-                </div>
-              {/snippet}
-            </Popover>
-            <Popover
+            <Button
               style={selectedStyle}
               theme={selectedTheme}
-              position="bottom"
+              variant="filled"
+              onclick={() => addToastMsg("Saved successfully", "success")}
+              >{#snippet children()}Success{/snippet}</Button
             >
-              {#snippet children()}
-                <Button style={selectedStyle} theme={selectedTheme} variant="outlined">
-                  {#snippet children()}Bottom{/snippet}
-                </Button>
-              {/snippet}
-              {#snippet content()}
-                <p class="text-sm">Popover with an arrow indicator pointing upward.</p>
-              {/snippet}
-            </Popover>
-            <Popover
+            <Button
               style={selectedStyle}
               theme={selectedTheme}
-              position="right"
-              trigger="hover"
+              variant="filled"
+              onclick={() => addToastMsg("Review before continuing", "warning")}
+              >{#snippet children()}Warning{/snippet}</Button
             >
-              {#snippet children()}
-                <Button style={selectedStyle} theme={selectedTheme} variant="tonal">
-                  {#snippet children()}Hover{/snippet}
-                </Button>
-              {/snippet}
-              {#snippet content()}
-                <p class="text-sm">Triggered on hover!</p>
-              {/snippet}
-            </Popover>
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => addToastMsg("Something failed", "error")}
+              >{#snippet children()}Error{/snippet}</Button
+            >
           </div>
-        </Card>
-
-        <!-- Chip / Tag -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Chip / Tag
+            Toast Position
           </p>
-          <div class="flex flex-wrap gap-2">
-            <Chip style={selectedStyle} theme={selectedTheme} color="primary">
-              {#snippet children()}Primary{/snippet}
-            </Chip>
-            <Chip style={selectedStyle} theme={selectedTheme} color="success">
-              {#snippet children()}Success{/snippet}
-            </Chip>
-            <Chip style={selectedStyle} theme={selectedTheme} color="warning">
-              {#snippet children()}Warning{/snippet}
-            </Chip>
-            <Chip style={selectedStyle} theme={selectedTheme} color="error" dismissible>
-              {#snippet children()}Dismiss{/snippet}
-            </Chip>
-          </div>
-          <div class="flex flex-wrap gap-2 mt-2">
-            <Chip style={selectedStyle} theme={selectedTheme} variant="outlined" color="primary" icon="★">
-              {#snippet children()}Starred{/snippet}
-            </Chip>
-            <Chip style={selectedStyle} theme={selectedTheme} variant="ghost" color="neutral">
-              {#snippet children()}Ghost{/snippet}
-            </Chip>
-          </div>
+          <select
+            bind:value={toastPosition}
+            class="px-3 py-1.5 text-sm rounded border header-select"
+          >
+            <option value="top-right">Top Right</option>
+            <option value="top-left">Top Left</option>
+            <option value="top-center">Top Center</option>
+            <option value="bottom-right">Bottom Right</option>
+            <option value="bottom-left">Bottom Left</option>
+            <option value="bottom-center">Bottom Center</option>
+          </select>
         </Card>
 
-        <!-- Button Group -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Button Group
-          </p>
-          <ButtonGroup
-            style={selectedStyle}
-            theme={selectedTheme}
-            items={btnGroupItems}
-            bind:value={btnGroupVal}
-            variant="outlined"
-          />
-          <p class="text-sm text-gray-500">Selected: {btnGroupVal}</p>
-        </Card>
-
-        <!-- Rating -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Rating
           </p>
@@ -1731,112 +1908,65 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             max={5}
             showValue={true}
           />
-          <Rating
-            style={selectedStyle}
-            theme={selectedTheme}
-            bind:value={ratingVal}
-            max={5}
-            precision="half"
-            size="lg"
-            showValue={true}
-          />
         </Card>
 
-        <!-- Carousel -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3 md:col-span-2">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Carousel
-          </p>
-          <Carousel
-            style={selectedStyle}
-            theme={selectedTheme}
-            slides={carouselSlides}
-            autoPlay={true}
-            interval={3500}
-          />
-        </Card>
-      </div>
-    </section>
-
-    <!-- OVERLAY COMPONENTS -->
-    <section>
-      <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
-        Overlays
-      </h2>
-      <div class="flex flex-wrap gap-4">
-        <!-- Toast position selector -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Toast (Snackbar)
+            Popover
           </p>
           <div class="flex flex-wrap gap-2">
-            <select
-              bind:value={toastPosition}
-              class="px-3 py-1.5 text-sm rounded border"
+            <Popover
+              style={selectedStyle}
+              theme={selectedTheme}
+              position="top"
+              bind:open={popoverOpen}
             >
-              <option value="top-right">Top Right</option>
-              <option value="top-left">Top Left</option>
-              <option value="top-center">Top Center</option>
-              <option value="bottom-right">Bottom Right</option>
-              <option value="bottom-left">Bottom Left</option>
-              <option value="bottom-center">Bottom Center</option>
-            </select>
+              {#snippet children()}<Button
+                  style={selectedStyle}
+                  theme={selectedTheme}
+                  variant="outlined">{#snippet children()}Top{/snippet}</Button
+                >{/snippet}
+              {#snippet content()}<div>
+                  <strong>Popover Title</strong>
+                  <p class="mt-1 text-sm">Rich content popover.</p>
+                </div>{/snippet}
+            </Popover>
+            <Popover
+              style={selectedStyle}
+              theme={selectedTheme}
+              position="bottom"
+            >
+              {#snippet children()}<Button
+                  style={selectedStyle}
+                  theme={selectedTheme}
+                  variant="outlined"
+                  >{#snippet children()}Bottom{/snippet}</Button
+                >{/snippet}
+              {#snippet content()}<p class="text-sm">
+                  Popover with arrow indicator.
+                </p>{/snippet}
+            </Popover>
           </div>
-          <div class="flex flex-wrap gap-2">
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => addToastMsg("Operation successful!", "success")}>
-              {#snippet children()}Success{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              onclick={() => addToastMsg("Something went wrong.", "error")}>
-              {#snippet children()}Error{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="tonal"
-              onclick={() => addToastMsg("Here is some info.", "info")}>
-              {#snippet children()}Info{/snippet}
-            </Button>
-            <Button style={selectedStyle} theme={selectedTheme} variant="outlined"
-              onclick={() => addToastMsg("Proceed with caution.", "warning")}>
-              {#snippet children()}Warning{/snippet}
-            </Button>
-          </div>
-        </Card>
-
-        <!-- Command Palette -->
-        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Command Palette
-          </p>
-          <p class="text-sm">Press <kbd class="px-1.5 py-0.5 text-xs rounded border">⌘K</kbd> or click button.</p>
-          <Button
-            style={selectedStyle}
-            theme={selectedTheme}
-            variant="filled"
-            onclick={() => (cmdPaletteOpen = true)}
-          >
-            {#snippet children()}Open CmdK{/snippet}
-          </Button>
-          <CommandPalette
-            style={selectedStyle}
-            theme={selectedTheme}
-            groups={cmdGroups}
-            bind:open={cmdPaletteOpen}
-          />
         </Card>
       </div>
     </section>
 
-    <!-- Toast Container (renders at top level) -->
+    <!-- Toast Container -->
     <Toast
       style={selectedStyle}
       theme={selectedTheme}
       position={toastPosition}
-      bind:toasts={toasts}
+      bind:toasts
     />
 
     <!-- FAB -->
-    <FAB style={selectedStyle} theme={selectedTheme} position="bottom-right">
-      {#snippet children()}+{/snippet}
-    </FAB>
+    <FAB style={selectedStyle} theme={selectedTheme} position="bottom-right"
+      >{#snippet children()}+{/snippet}</FAB
+    >
   </main>
 </div>

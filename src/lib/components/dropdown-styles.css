@@ -118,3 +118,11 @@
 
 /* Fluent */
 .s-dropdown-fluent .s-dropdown-menu { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+
+/* Variant-based menu background colors */
+.dropdown-primary .s-dropdown-menu { background: color-mix(in srgb, var(--t-primary) 12%, var(--t-surface)); border-color: color-mix(in srgb, var(--t-primary) 30%, var(--t-border)); }
+.dropdown-secondary .s-dropdown-menu { background: color-mix(in srgb, var(--t-secondary) 12%, var(--t-surface)); border-color: color-mix(in srgb, var(--t-secondary) 30%, var(--t-border)); }
+.dropdown-success .s-dropdown-menu { background: color-mix(in srgb, var(--t-success) 12%, var(--t-surface)); border-color: color-mix(in srgb, var(--t-success) 30%, var(--t-border)); }
+.dropdown-warning .s-dropdown-menu { background: color-mix(in srgb, var(--t-warning) 12%, var(--t-surface)); border-color: color-mix(in srgb, var(--t-warning) 30%, var(--t-border)); }
+.dropdown-error .s-dropdown-menu { background: color-mix(in srgb, var(--t-error) 12%, var(--t-surface)); border-color: color-mix(in srgb, var(--t-error) 30%, var(--t-border)); }
+.dropdown-info .s-dropdown-menu { background: color-mix(in srgb, var(--t-info) 12%, var(--t-surface)); border-color: color-mix(in srgb, var(--t-info) 30%, var(--t-border)); }

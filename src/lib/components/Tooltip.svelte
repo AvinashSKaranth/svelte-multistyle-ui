@@ -30,6 +30,6 @@
 >
   {@render children?.()}
   {#if visible && text}
-    <div class="tooltip-bubble tooltip-{position}" role="tooltip">{text}</div>
+    <div class="s-tooltip tooltip-{position}" role="tooltip">{text}</div>
   {/if}
 </div>

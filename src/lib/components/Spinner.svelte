@@ -23,5 +23,5 @@
   aria-label="Loading"
   {...rest}
 >
-  <div class="spinner-ring"></div>
+  <div class="s-spinner-circle"></div>
 </div>
