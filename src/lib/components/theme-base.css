@@ -1,0 +1,54 @@
+/* ===== THEME BASE =====
+ * Default token values. Import this file alone to build a completely custom
+ * theme by overriding any --t-* variable before or after this import.
+ */
+
+:root {
+  /* Primary palette — corporate blue */
+  --t-primary: #2563eb;
+  --t-secondary: #3b82f6;
+
+  /* Surfaces */
+  --t-surface: #ffffff;
+  --t-card-bg: #ffffff;
+  --t-card-surface: #f8fafc;
+  --t-card-border-color: #e2e8f0;
+  --t-surface-bg: #f1f5f9;
+
+  /* Text */
+  --t-text: #0f172a;
+  --t-text-hint: #94a3b8;
+  --t-text-primary: #2563eb;
+  --t-text-secondary: #3b82f6;
+
+  /* Buttons */
+  --t-btn-bg: #2563eb;
+  --t-btn-border-color: transparent;
+  --t-btn-radius: 8px;
+
+  /* Cards */
+  --t-card-radius: 12px;
+
+  /* Shared dimensional tokens */
+  --t-border-width: 1.5px;
+  --t-border-w: var(--t-border-width); /* backward-compatible alias */
+
+  /* Shadow tokens (color-independent elevation) */
+  --t-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --t-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --t-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --t-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --t-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+
+  /* Theme-colored shadows */
+  --t-shadow-colored-sm: 0 1px 3px var(--t-shadow);
+  --t-shadow-colored-md: 0 4px 12px var(--t-shadow);
+  --t-shadow-colored-lg: 0 8px 24px var(--t-shadow);
+  --t-shadow: color-mix(in srgb, var(--t-primary) 18%, transparent);
+
+  /* Convenience aliases (kept for backward compatibility) */
+  --t-border: var(--t-card-border-color);
+  --t-radius: var(--t-btn-radius);
+  --t-text-muted: var(--t-text-hint);
+  --t-surface-dim: var(--t-surface-bg);
+}

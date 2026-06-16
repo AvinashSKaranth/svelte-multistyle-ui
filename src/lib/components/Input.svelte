@@ -1,0 +1,104 @@
+<script>
+  import "./input-styles.css";
+
+  let {
+    style = "material",
+    theme = "default",
+    type = "text",
+    value = $bindable(""),
+    placeholder = "",
+    label = "",
+    disabled = false,
+    readonly = false,
+    required = false,
+    name = "",
+    id = "",
+    min = undefined,
+    max = undefined,
+    minlength = undefined,
+    maxlength = undefined,
+    step = undefined,
+    pattern = undefined,
+    autocomplete = undefined,
+    autofocus = false,
+    multiple = false,
+    accept = undefined,
+    list = undefined,
+    size = undefined,
+    tabindex = undefined,
+    title = undefined,
+    form = undefined,
+    inputmode = undefined,
+    spellcheck = undefined,
+    ...rest
+  } = $props();
+
+  let focused = $state(false);
+  let hasValue = $derived(
+    value !== "" && value !== null && value !== undefined,
+  );
+  let floated = $derived(focused || hasValue);
+
+  const styleClass = $derived(`s-input-${style}`);
+  const themeClass = $derived(`theme-${theme}`);
+  const uid = Math.random().toString(36).slice(2, 9);
+  const internalId = $derived(id || `input-${uid}`);
+
+  const floatingStyles = [
+    "material",
+    "material3",
+    "fluent",
+    "carbon",
+    "bootstrap",
+    "legacy-ios",
+  ];
+  const hasFloatingLabel = $derived(
+    floatingStyles.includes(style) && (label || placeholder),
+  );
+  const displayLabel = $derived(label || placeholder);
+</script>
+
+<div
+  class="s-input-wrapper {styleClass} {themeClass}"
+  class:disabled
+  class:focused
+  class:has-value={hasValue}
+  class:floated
+>
+  {#if hasFloatingLabel}
+    <label class="s-input-floating-label" for={internalId}>{displayLabel}</label>
+  {/if}
+  <input
+    {type}
+    bind:value
+    placeholder={hasFloatingLabel ? "" : placeholder}
+    {disabled}
+    {readonly}
+    {required}
+    {name}
+    id={internalId}
+    {min}
+    {max}
+    {minlength}
+    {maxlength}
+    {step}
+    {pattern}
+    {autocomplete}
+    {autofocus}
+    {multiple}
+    {accept}
+    {list}
+    {size}
+    {tabindex}
+    {title}
+    {form}
+    {inputmode}
+    {spellcheck}
+    onfocus={() => (focused = true)}
+    onblur={() => (focused = false)}
+    {...rest}
+  />
+  {#if style === "fluent"}
+    <span class="s-input-fluent-border-indicator"></span>
+  {/if}
+</div>

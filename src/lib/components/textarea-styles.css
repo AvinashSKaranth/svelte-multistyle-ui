@@ -1,0 +1,224 @@
+/* ===== BASE ===== */
+/* Theme-controlled: colors, border-width, shadow, radius. Style-controlled: shape. */
+.s-textarea-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+.s-textarea-wrapper textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+  outline: none;
+  padding: 12px 14px;
+  background: var(--t-surface);
+  color: var(--t-text);
+  border: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.s-textarea-wrapper textarea:hover {
+  border-color: color-mix(in srgb, var(--t-text) 50%, var(--t-border));
+}
+.s-textarea-wrapper.focused textarea {
+  border-color: var(--t-primary);
+  box-shadow: 0 0 0 3px var(--t-shadow);
+}
+.s-textarea-wrapper.disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.s-textarea-floating-label {
+  position: absolute;
+  pointer-events: none;
+  left: 14px;
+  top: 14px;
+  font-size: 15px;
+  color: var(--t-border);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left center;
+}
+.s-textarea-wrapper.floated .s-textarea-floating-label {
+  transform: translateY(-10px) scale(0.75);
+  color: var(--t-primary);
+}
+.s-textarea-counter {
+  align-self: flex-end;
+  font-size: 12px;
+  color: var(--t-border);
+  margin-top: 4px;
+}
+.s-textarea-wrapper.focused .s-textarea-counter {
+  color: var(--t-primary);
+}
+
+/* ===== FLOATING LABEL STYLES ===== */
+.s-textarea-material textarea,
+.s-textarea-material3 textarea,
+.s-textarea-fluent textarea,
+.s-textarea-carbon textarea,
+.s-textarea-bootstrap textarea,
+.s-textarea-legacy-ios textarea {
+  padding-top: 24px;
+}
+
+/* ===== MATERIAL ===== */
+.s-textarea-material textarea {
+  background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
+  border: none;
+  border-bottom: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+}
+.s-textarea-material.focused textarea {
+  border-bottom-color: var(--t-primary);
+  background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface));
+  box-shadow: none;
+}
+
+/* ===== MATERIAL 3 ===== */
+.s-textarea-material3 textarea {
+  background: var(--t-surface);
+  border: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius);
+}
+.s-textarea-material3.focused textarea {
+  border-color: var(--t-primary);
+  border-width: calc(var(--t-border-width) + 0.5px);
+  padding: calc(24px - 0.5px) calc(14px - 0.5px) calc(12px - 0.5px);
+}
+
+/* ===== STYLE OVERRIDES ===== */
+.s-textarea-brutalist textarea {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  border: var(--t-border-width) solid var(--t-text);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--t-text);
+  background: var(--t-surface);
+}
+.s-textarea-brutalist.focused textarea {
+  border-color: var(--t-primary);
+  box-shadow: 5px 5px 0 var(--t-primary);
+}
+
+.s-textarea-neon textarea {
+  background: var(--t-surface);
+  color: var(--t-text);
+  border-color: var(--t-primary);
+  box-shadow: 0 0 5px var(--t-primary);
+}
+.s-textarea-neon.focused textarea {
+  box-shadow: 0 0 10px var(--t-primary), 0 0 25px var(--t-shadow);
+}
+
+.s-textarea-pixel textarea {
+  font-family: 'Courier New', monospace;
+  background: var(--t-surface);
+  color: var(--t-text);
+  border: var(--t-border-width) solid var(--t-primary);
+  border-radius: 0;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.25), inset 3px 3px 0 rgba(255,255,255,0.1);
+  transition: all 0.1s steps(3);
+}
+
+/* Metro */
+.s-textarea-metro textarea {
+  border-radius: 0;
+  border: var(--t-border-width) solid var(--t-primary);
+  background: var(--t-surface);
+  font-weight: 600;
+  box-shadow: none;
+}
+.s-textarea-metro.focused textarea {
+  box-shadow: none;
+  border-color: var(--t-primary);
+}
+
+/* Bootstrap */
+.s-textarea-bootstrap textarea {
+  border-radius: 6px;
+  border: var(--t-border-width) solid var(--t-border);
+  box-shadow: var(--t-shadow-xs);
+  background: var(--t-surface);
+}
+.s-textarea-bootstrap.focused textarea {
+  box-shadow: 0 0 0 3px var(--t-shadow);
+  border-color: var(--t-primary);
+}
+
+/* Cartoon */
+.s-textarea-cartoon textarea {
+  border-radius: 16px;
+  border: var(--t-border-width) solid var(--t-text);
+  box-shadow: 4px 4px 0 var(--t-primary);
+  font-weight: 700;
+  background: var(--t-surface);
+}
+.s-textarea-cartoon.focused textarea {
+  border-color: var(--t-primary);
+  box-shadow: 5px 5px 0 var(--t-secondary);
+}
+
+/* Illustration */
+.s-textarea-illustration textarea {
+  border-radius: 8px;
+  border: var(--t-border-width) solid var(--t-text);
+  box-shadow: 3px 3px 0 var(--t-border);
+  font-style: italic;
+  background: var(--t-surface);
+}
+.s-textarea-illustration.focused textarea {
+  border-color: var(--t-primary);
+  box-shadow: 3px 3px 0 var(--t-primary);
+}
+
+/* Carbon */
+.s-textarea-carbon textarea {
+  border-radius: 0;
+  border: var(--t-border-width) solid var(--t-border);
+  border-bottom-width: 2px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--t-surface);
+  box-shadow: none;
+}
+.s-textarea-carbon.focused textarea {
+  border-bottom-color: var(--t-primary);
+  box-shadow: none;
+}
+
+/* Liquid Glass */
+.s-textarea-liquid-glass {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.s-textarea-liquid-glass textarea {
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+}
+.s-textarea-liquid-glass.focused {
+  border-color: var(--t-primary);
+  box-shadow: var(--t-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.4), 0 0 20px var(--t-shadow);
+}
+.s-textarea-liquid-glass.focused textarea {
+  box-shadow: none;
+}
+
+/* Legacy iOS */
+.s-textarea-legacy-ios textarea {
+  border-radius: 10px;
+  border: var(--t-border-width) solid var(--t-border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
+}
+.s-textarea-legacy-ios.focused textarea {
+  border-color: var(--t-primary);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 0 0 3px var(--t-shadow);
+}

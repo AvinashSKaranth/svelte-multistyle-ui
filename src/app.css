@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@import "./lib/components/theme.css";
+
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+}
+
+#app {
+  min-height: 100svh;
+}
+
+/* ===== PAGE STYLES — All driven by theme variables ===== */
+.page-bg {
+  background: var(--t-surface-bg);
+  color: var(--t-text);
+  transition: background 0.3s, color 0.3s;
+}
+/* Demo theme editor uses inline custom properties; force the page surface
+   to a dark palette when the demo is in dark mode so components can be
+   reviewed against a dark background. */
+.demo-root.dark-mode {
+  --t-surface-bg: #0a1120 !important;
+  --t-card-bg: #1e293b !important;
+  --t-card-border-color: #334155 !important;
+  --t-text: #e2e8f0 !important;
+  --t-text-muted: #94a3b8 !important;
+  --t-border: #334155 !important;
+  background: var(--t-surface-bg) !important;
+  color: var(--t-text) !important;
+}
+
+.page-header {
+  background: color-mix(in srgb, var(--t-card-bg) 95%, transparent);
+  border-color: var(--t-card-border-color);
+  color: var(--t-text);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.demo-card {
+  background: var(--t-card-bg);
+  border-color: var(--t-card-border-color);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.demo-section-title {
+  color: var(--t-text);
+  border-color: var(--t-border);
+}
+
+.demo-label {
+  color: var(--t-text-muted);
+}
+
+.demo-text {
+  color: var(--t-text-muted);
+}
+
+.header-select {
+  background: var(--t-card-bg);
+  color: var(--t-text);
+  border-color: var(--t-card-border-color);
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.header-label {
+  color: var(--t-text-muted);
+}
+
+.page-title {
+  color: var(--t-text);
+}
+
+.settings-gear {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--t-card-border-color);
+  border-radius: 9999px;
+  background: var(--t-card-bg);
+  color: var(--t-text);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.settings-gear:hover {
+  background: var(--t-primary);
+  color: white;
+  transform: rotate(30deg);
+}
+
+.settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.settings-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  width: min(28rem, calc(100vw - 1rem));
+  background: var(--t-card-bg);
+  color: var(--t-text);
+  border-left: 1px solid var(--t-card-border-color);
+  box-shadow: -1rem 0 3rem rgba(0, 0, 0, 0.25);
+  animation: slide-settings-in 180ms ease-out;
+}
+
+.settings-sidebar-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--t-card-border-color);
+}
+
+.settings-close {
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--t-card-border-color);
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--t-text);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.settings-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  max-height: calc(100svh - 5rem);
+}
+
+.settings-panel {
+  padding: 1rem;
+  border: 1px solid var(--t-card-border-color);
+  border-radius: var(--t-card-radius);
+  background: var(--t-surface);
+}
+
+.settings-panel-title {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.settings-copy-status {
+  color: var(--t-primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.custom-css-code {
+  max-height: 22rem;
+  overflow: auto;
+  padding: 0.875rem;
+  border-radius: calc(var(--t-card-radius) - 2px);
+  border: 1px solid var(--t-card-border-color);
+  background: color-mix(in srgb, var(--t-surface-bg) 92%, var(--t-primary));
+  color: var(--t-text);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.settings-copy-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--t-btn-radius);
+  border: 1px solid var(--t-primary);
+  background: var(--t-primary);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@keyframes slide-settings-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ===== GLASSMORPHISM DEMO BACKGROUND ===== */
+.demo-card-glass {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px) saturate(1.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.demo-card-glass .demo-label {
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.glass-page-bg {
+  background:
+    linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(236,72,153,0.1) 30%, rgba(14,165,233,0.1) 60%, rgba(34,197,94,0.08) 100%),
+    url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat fixed !important;
+}
+html.dark .glass-page-bg {
+  background:
+    linear-gradient(135deg, rgba(30,0,60,0.6) 0%, rgba(10,10,40,0.5) 40%, rgba(0,20,50,0.5) 100%),
+    url('https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=1920&q=80') center/cover no-repeat fixed !important;
+}
