@@ -483,7 +483,7 @@ Then pass theme="custom" to components.
         aria-hidden="true"
         onpointerdown={() => (settingsOpen = false)}
       ></div>
-      <aside
+      <div
         class="settings-sidebar"
         role="dialog"
         aria-modal="true"
@@ -515,8 +515,9 @@ Then pass theme="custom" to components.
 
             <div class="grid grid-cols-2 gap-3">
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Primary</label>
+                <label for="custom-primary" class="text-xs font-medium text-gray-500">Primary</label>
                 <input
+                  id="custom-primary"
                   type="color"
                   bind:value={customPrimary}
                   oninput={markCustomTheme}
@@ -524,8 +525,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Secondary</label>
+                <label for="custom-secondary" class="text-xs font-medium text-gray-500">Secondary</label>
                 <input
+                  id="custom-secondary"
                   type="color"
                   bind:value={customSecondary}
                   oninput={markCustomTheme}
@@ -533,8 +535,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Surface</label>
+                <label for="custom-surface" class="text-xs font-medium text-gray-500">Surface</label>
                 <input
+                  id="custom-surface"
                   type="color"
                   bind:value={customSurface}
                   oninput={markCustomTheme}
@@ -542,8 +545,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Card BG</label>
+                <label for="custom-card-bg" class="text-xs font-medium text-gray-500">Card BG</label>
                 <input
+                  id="custom-card-bg"
                   type="color"
                   bind:value={customCardBg}
                   oninput={markCustomTheme}
@@ -551,8 +555,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Card Border</label>
+                <label for="custom-card-border-color" class="text-xs font-medium text-gray-500">Card Border</label>
                 <input
+                  id="custom-card-border-color"
                   type="color"
                   bind:value={customCardBorderColor}
                   oninput={markCustomTheme}
@@ -560,8 +565,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Text</label>
+                <label for="custom-text" class="text-xs font-medium text-gray-500">Text</label>
                 <input
+                  id="custom-text"
                   type="color"
                   bind:value={customText}
                   oninput={markCustomTheme}
@@ -569,8 +575,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Text Hint</label>
+                <label for="custom-text-hint" class="text-xs font-medium text-gray-500">Text Hint</label>
                 <input
+                  id="custom-text-hint"
                   type="color"
                   bind:value={customTextHint}
                   oninput={markCustomTheme}
@@ -578,8 +585,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Text Primary</label>
+                <label for="custom-text-primary" class="text-xs font-medium text-gray-500">Text Primary</label>
                 <input
+                  id="custom-text-primary"
                   type="color"
                   bind:value={customTextPrimary}
                   oninput={markCustomTheme}
@@ -587,8 +595,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Text Secondary</label>
+                <label for="custom-text-secondary" class="text-xs font-medium text-gray-500">Text Secondary</label>
                 <input
+                  id="custom-text-secondary"
                   type="color"
                   bind:value={customTextSecondary}
                   oninput={markCustomTheme}
@@ -596,8 +605,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Surface BG</label>
+                <label for="custom-surface-bg" class="text-xs font-medium text-gray-500">Surface BG</label>
                 <input
+                  id="custom-surface-bg"
                   type="color"
                   bind:value={customSurfaceBg}
                   oninput={markCustomTheme}
@@ -605,8 +615,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Btn BG</label>
+                <label for="custom-btn-bg" class="text-xs font-medium text-gray-500">Btn BG</label>
                 <input
+                  id="custom-btn-bg"
                   type="color"
                   bind:value={customBtnBg}
                   oninput={markCustomTheme}
@@ -614,8 +625,9 @@ Then pass theme="custom" to components.
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <label class="text-xs font-medium text-gray-500">Btn Border</label>
+                <label for="custom-btn-border-color" class="text-xs font-medium text-gray-500">Btn Border</label>
                 <input
+                  id="custom-btn-border-color"
                   type="color"
                   bind:value={customBtnBorderColor}
                   oninput={markCustomTheme}
@@ -684,7 +696,7 @@ Then pass theme="custom" to components.
             </button>
           </section>
         </div>
-      </aside>
+      </div>
     {/if}
 
     <!-- FORM COMPONENTS -->
