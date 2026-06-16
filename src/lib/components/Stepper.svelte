@@ -1,13 +1,17 @@
 <script>
   import "./stepper-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     steps = [],
     current = 0,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-stepper-${style}`);
   const themeClass = $derived(`theme-${theme}`);

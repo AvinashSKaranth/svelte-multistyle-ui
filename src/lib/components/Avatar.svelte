@@ -1,15 +1,19 @@
 <script>
   import "./avatar-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     src = "",
     alt = "",
     size = "md",
     fallback = "",
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-avatar-${style}`);
   const themeClass = $derived(`theme-${theme}`);

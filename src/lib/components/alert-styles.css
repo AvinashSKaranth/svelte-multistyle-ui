@@ -28,10 +28,10 @@
   line-height: 1;
   padding: 0;
 }
-.s-alert-info { border-color: #3b82f6; background: color-mix(in srgb, #3b82f6 8%, var(--t-surface)); }
-.s-alert-success { border-color: #22c55e; background: color-mix(in srgb, #22c55e 8%, var(--t-surface)); }
-.s-alert-warning { border-color: #eab308; background: color-mix(in srgb, #eab308 8%, var(--t-surface)); }
-.s-alert-error { border-color: #ef4444; background: color-mix(in srgb, #ef4444 8%, var(--t-surface)); }
+.s-alert-info { border-color: var(--t-info); background: color-mix(in srgb, var(--t-info) 8%, var(--t-surface)); }
+.s-alert-success { border-color: var(--t-success); background: color-mix(in srgb, var(--t-success) 8%, var(--t-surface)); }
+.s-alert-warning { border-color: var(--t-warning); background: color-mix(in srgb, var(--t-warning) 8%, var(--t-surface)); }
+.s-alert-error { border-color: var(--t-error); background: color-mix(in srgb, var(--t-error) 8%, var(--t-surface)); }
 
 /* ===== STYLE OVERRIDES ===== */
 

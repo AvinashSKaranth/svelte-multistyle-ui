@@ -1,0 +1,101 @@
+/* ===== BASE ===== */
+.s-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 999px;
+  border: var(--t-border-width) solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  cursor: default;
+}
+.s-chip-icon { font-size: 14px; line-height: 1; }
+.s-chip-label { line-height: 1.4; }
+
+/* Variants */
+.chip-filled.chip-primary {
+  background: color-mix(in srgb, var(--t-primary) 15%, var(--t-surface));
+  color: var(--t-primary);
+  border-color: transparent;
+}
+.chip-filled.chip-success { background: color-mix(in srgb, #22c55e 15%, var(--t-surface)); color: #16a34a; }
+.chip-filled.chip-warning { background: color-mix(in srgb, #eab308 15%, var(--t-surface)); color: #a16207; }
+.chip-filled.chip-error   { background: color-mix(in srgb, #ef4444 15%, var(--t-surface)); color: #dc2626; }
+.chip-filled.chip-neutral { background: color-mix(in srgb, #64748b 15%, var(--t-surface)); color: var(--t-text); }
+
+.chip-outlined.chip-primary {
+  background: transparent;
+  color: var(--t-primary);
+  border-color: color-mix(in srgb, var(--t-primary) 30%, transparent);
+}
+.chip-outlined.chip-success { background: transparent; color: #16a34a; border-color: color-mix(in srgb, #22c55e 30%, transparent); }
+.chip-outlined.chip-warning { background: transparent; color: #a16207; border-color: color-mix(in srgb, #eab308 30%, transparent); }
+.chip-outlined.chip-error   { background: transparent; color: #dc2626; border-color: color-mix(in srgb, #ef4444 30%, transparent); }
+.chip-outlined.chip-neutral { background: transparent; color: var(--t-text-hint); border-color: var(--t-border); }
+
+.chip-ghost.chip-primary { background: transparent; color: var(--t-primary); border-color: transparent; }
+.chip-ghost.chip-success { background: transparent; color: #16a34a; border-color: transparent; }
+.chip-ghost.chip-warning { background: transparent; color: #a16207; border-color: transparent; }
+.chip-ghost.chip-error   { background: transparent; color: #dc2626; border-color: transparent; }
+.chip-ghost.chip-neutral { background: transparent; color: var(--t-text-hint); border-color: transparent; }
+
+/* Sizes */
+.chip-sm { padding: 2px 8px; font-size: 11px; }
+.chip-md { padding: 4px 12px; font-size: 13px; }
+.chip-lg { padding: 6px 16px; font-size: 14px; }
+
+/* Dismiss */
+.s-chip-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  font-size: 13px;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.6;
+  padding: 0;
+  transition: opacity 0.15s;
+  border-radius: 50%;
+}
+.s-chip-dismiss:hover { opacity: 1; }
+
+/* ===== STYLE OVERRIDES ===== */
+
+/* Brutalist */
+.s-chip-brutalist { border-radius: 0; border: 2px solid var(--t-text); font-family: 'Courier New', monospace; }
+.s-chip-brutalist.chip-outlined { border-color: var(--t-text); }
+
+/* Pixel */
+.s-chip-pixel { border-radius: 0; border: 2px solid var(--t-primary); font-family: 'Courier New', monospace; }
+
+/* Neon */
+.s-chip-neon { border-color: var(--t-primary); box-shadow: 0 0 4px var(--t-primary); }
+
+/* Metro */
+.s-chip-metro { border-radius: 0; border: 2px solid var(--t-primary); font-weight: 600; }
+
+/* Bootstrap */
+.s-chip-bootstrap { border-radius: 6px; border: 1px solid var(--t-border); }
+
+/* Cartoon */
+.s-chip-cartoon { border-radius: 999px; border: 2px solid var(--t-text); box-shadow: 3px 3px 0 var(--t-primary); font-weight: 700; }
+
+/* Illustration */
+.s-chip-illustration { border-radius: 8px; border: 2px solid var(--t-text); box-shadow: 2px 2px 0 var(--t-border); font-style: italic; }
+
+/* Carbon */
+.s-chip-carbon { border-radius: 0; border: 1px solid var(--t-border); font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; }
+
+/* Liquid Glass */
+.s-chip-liquid-glass { border-radius: 999px; backdrop-filter: blur(16px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+
+/* Legacy iOS */
+.s-chip-legacy-ios { border-radius: 999px; border: 1px solid var(--t-border); background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8); }

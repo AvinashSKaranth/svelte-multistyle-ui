@@ -1,9 +1,10 @@
 <script>
   import "./button-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     variant = "filled",
     size = "md",
     disabled = false,
@@ -11,6 +12,9 @@
     onclick,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-button-${style}`);
   const themeClass = $derived(`theme-${theme}`);

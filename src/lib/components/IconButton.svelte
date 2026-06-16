@@ -1,9 +1,10 @@
 <script>
   import "./iconbutton-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     variant = "filled",
     size = "md",
     disabled = false,
@@ -12,6 +13,9 @@
     ariaLabel = "",
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-iconbtn-${style}`);
   const themeClass = $derived(`theme-${theme}`);

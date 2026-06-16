@@ -1,9 +1,10 @@
 <script>
   import "./input-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     type = "text",
     value = $bindable(""),
     placeholder = "",
@@ -32,6 +33,9 @@
     spellcheck = undefined,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   let focused = $state(false);
   let hasValue = $derived(

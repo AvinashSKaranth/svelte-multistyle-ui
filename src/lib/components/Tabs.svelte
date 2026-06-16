@@ -1,13 +1,17 @@
 <script>
   import "./tabs-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     tabs = [],
     active = $bindable(""),
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-tabs-${style}`);
   const themeClass = $derived(`theme-${theme}`);

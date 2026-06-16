@@ -1,15 +1,19 @@
 <script>
   import "./progressbar-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     value = 0,
     size = "md",
     animated = false,
     label = false,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-progressbar-${style}`);
   const themeClass = $derived(`theme-${theme}`);

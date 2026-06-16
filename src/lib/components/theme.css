@@ -22,6 +22,14 @@
   --t-text-hint: #7dd3fc;
   --t-text-primary: #0284c7;
   --t-text-secondary: #0891b2;
+  --t-info: #0ea5e9;
+  --t-success: #22c55e;
+  --t-warning: #eab308;
+  --t-error: #f43f5e;
+  --t-text-info: #0369a1;
+  --t-text-success: #15803d;
+  --t-text-warning: #a16207;
+  --t-text-error: #be123c;
   --t-surface-bg: #f0f9ff;
   --t-btn-bg: #0ea5e9;
   --t-btn-radius: 10px;
@@ -38,6 +46,14 @@
   --t-text-hint: #86efac;
   --t-text-primary: #16a34a;
   --t-text-secondary: #15803d;
+  --t-info: #06b6d4;
+  --t-success: #16a34a;
+  --t-warning: #eab308;
+  --t-error: #ef4444;
+  --t-text-info: #0e7490;
+  --t-text-success: #15803d;
+  --t-text-warning: #a16207;
+  --t-text-error: #b91c1c;
   --t-surface-bg: #f0fdf4;
   --t-btn-bg: #22c55e;
 }
@@ -53,6 +69,14 @@
   --t-text-hint: #fda4af;
   --t-text-primary: #e11d48;
   --t-text-secondary: #be123c;
+  --t-info: #fb7185;
+  --t-success: #22c55e;
+  --t-warning: #facc15;
+  --t-error: #e11d48;
+  --t-text-info: #be123c;
+  --t-text-success: #16a34a;
+  --t-text-warning: #a16207;
+  --t-text-error: #be123c;
   --t-surface-bg: #fff1f2;
   --t-btn-bg: #f43f5e;
   --t-btn-radius: 12px;
@@ -71,6 +95,14 @@
   --t-text-hint: #6366f1;
   --t-text-primary: #a5b4fc;
   --t-text-secondary: #818cf8;
+  --t-info: #818cf8;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #c4b5fd;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fecdd3;
   --t-surface-bg: #0f0d2e;
   --t-btn-bg: #818cf8;
 }
@@ -86,6 +118,14 @@
   --t-text-hint: #facc15;
   --t-text-primary: #ca8a04;
   --t-text-secondary: #a16207;
+  --t-info: #38bdf8;
+  --t-success: #22c55e;
+  --t-warning: #eab308;
+  --t-error: #ef4444;
+  --t-text-info: #0369a1;
+  --t-text-success: #15803d;
+  --t-text-warning: #a16207;
+  --t-text-error: #b91c1c;
   --t-surface-bg: #fefce8;
   --t-btn-bg: #eab308;
   --t-card-radius: 10px;
@@ -107,6 +147,14 @@
   --t-border-width: 1px;
   --t-btn-radius: 6px;
   --t-card-radius: 8px;
+  --t-info: #0ea5e9;
+  --t-success: #22c55e;
+  --t-warning: #facc15;
+  --t-error: #f43f5e;
+  --t-text-info: #0369a1;
+  --t-text-success: #15803d;
+  --t-text-warning: #a16207;
+  --t-text-error: #be123c;
 }
 
 /* 8. Candy — Hot pink, playful */
@@ -124,6 +172,14 @@
   --t-btn-bg: #ec4899;
   --t-btn-radius: 20px;
   --t-card-radius: 24px;
+  --t-info: #06b6d4;
+  --t-success: #22c55e;
+  --t-warning: #facc15;
+  --t-error: #ec4899;
+  --t-text-info: #0e7490;
+  --t-text-success: #15803d;
+  --t-text-warning: #a16207;
+  --t-text-error: #be123c;
 }
 
 /* 9. Storm — Dark native, cool gray */
@@ -143,6 +199,14 @@
   --t-border-width: 1px;
   --t-btn-radius: 6px;
   --t-card-radius: 10px;
+  --t-info: #0ea5e9;
+  --t-success: #22c55e;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #0369a1;
+  --t-text-success: #86efac;
+  --t-text-warning: #fde047;
+  --t-text-error: #fecdd3;
 }
 
 /* 10. Royal — Purple, dark native */
@@ -159,6 +223,14 @@
   --t-text-secondary: #8b5cf6;
   --t-surface-bg: #1e0a4e;
   --t-btn-bg: #7c3aed;
+  --t-info: #38bdf8;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #0369a1;
+  --t-text-success: #86efac;
+  --t-text-warning: #fde047;
+  --t-text-error: #fecdd3;
 }
 
 /* ===== DARK MODE OVERRIDES =====
@@ -185,6 +257,14 @@ html.dark .theme-candy {
 html.dark .theme-default {
   --t-text-primary: #60a5fa;
   --t-text-secondary: #93c5fd;
+  --t-info: #60a5fa;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #bfdbfe;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fecdd3;
 }
 
 html.dark .theme-ocean {
@@ -197,6 +277,14 @@ html.dark .theme-ocean {
   --t-text-primary: #38bdf8;
   --t-text-secondary: #22d3ee;
   --t-surface-bg: #082035;
+  --t-info: #38bdf8;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #7dd3fc;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fecdd3;
 }
 
 html.dark .theme-forest {
@@ -209,6 +297,14 @@ html.dark .theme-forest {
   --t-text-primary: #4ade80;
   --t-text-secondary: #22c55e;
   --t-surface-bg: #052e10;
+  --t-info: #06b6d4;
+  --t-success: #86efac;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #22d3ee;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fecdd3;
 }
 
 html.dark .theme-rose {
@@ -221,6 +317,14 @@ html.dark .theme-rose {
   --t-text-primary: #fb7185;
   --t-text-secondary: #f43f5e;
   --t-surface-bg: #14080c;
+  --t-info: #38bdf8;
+  --t-success: #86efac;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #7dd3fc;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fecdd3;
 }
 
 html.dark .theme-gold {
@@ -245,6 +349,14 @@ html.dark .theme-slate {
   --t-text-primary: #94a3b8;
   --t-text-secondary: #64748b;
   --t-surface-bg: #0a1120;
+  --t-info: #0ea5e9;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #f472b6;
+  --t-text-info: #7dd3fc;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fbcfe8;
 }
 
 html.dark .theme-candy {
@@ -257,6 +369,14 @@ html.dark .theme-candy {
   --t-text-primary: #f472b6;
   --t-text-secondary: #ec4899;
   --t-surface-bg: #14080f;
+  --t-info: #0ea5e9;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #7dd3fc;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fbcfe8;
 }
 
 html.dark .theme-midnight {
@@ -269,6 +389,14 @@ html.dark .theme-midnight {
   --t-text-primary: #a5b4fc;
   --t-text-secondary: #818cf8;
   --t-surface-bg: #080720;
+  --t-info: #0ea5e9;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #7dd3fc;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fbcfe8;
 }
 
 html.dark .theme-storm {
@@ -281,6 +409,14 @@ html.dark .theme-storm {
   --t-text-primary: #cbd5e1;
   --t-text-secondary: #94a3b8;
   --t-surface-bg: #060a12;
+  --t-info: #0ea5e9;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #7dd3fc;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fbcfe8;
 }
 
 html.dark .theme-royal {
@@ -293,4 +429,12 @@ html.dark .theme-royal {
   --t-text-primary: #a78bfa;
   --t-text-secondary: #8b5cf6;
   --t-surface-bg: #0f0525;
+  --t-info: #38bdf8;
+  --t-success: #4ade80;
+  --t-warning: #facc15;
+  --t-error: #fb7185;
+  --t-text-info: #7dd3fc;
+  --t-text-success: #bbf7d0;
+  --t-text-warning: #fef08a;
+  --t-text-error: #fbcfe8;
 }

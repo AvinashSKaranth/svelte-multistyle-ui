@@ -1,16 +1,20 @@
 <script>
   import "./modal-styles.css";
+  import { defaults } from "../config.js";
   import { fade, scale } from "svelte/transition";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     open = $bindable(false),
     title = "",
     children,
     onclose,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-modal-${style}`);
   const themeClass = $derived(`theme-${theme}`);

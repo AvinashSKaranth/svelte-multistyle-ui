@@ -21,6 +21,16 @@
   --t-text-primary: #2563eb;
   --t-text-secondary: #3b82f6;
 
+  /* Status palette */
+  --t-info: #3b82f6;
+  --t-success: #22c55e;
+  --t-warning: #eab308;
+  --t-error: #ef4444;
+  --t-text-info: #2563eb;
+  --t-text-success: #16a34a;
+  --t-text-warning: #a16207;
+  --t-text-error: #dc2626;
+
   /* Buttons */
   --t-btn-bg: #2563eb;
   --t-btn-border-color: transparent;

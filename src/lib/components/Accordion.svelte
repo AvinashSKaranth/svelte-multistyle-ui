@@ -1,14 +1,18 @@
 <script>
   import "./accordion-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     items = [],
     multiple = false,
     current = "",
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-accordion-${style}`);
   const themeClass = $derived(`theme-${theme}`);

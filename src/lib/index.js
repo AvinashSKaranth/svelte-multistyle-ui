@@ -1,3 +1,6 @@
+// Global configuration
+export { initMultistyleUI } from "./config.js";
+
 // Form Components
 export { default as Input } from "./components/Input.svelte";
 export { default as Button } from "./components/Button.svelte";
@@ -39,3 +42,15 @@ export { default as Alert } from "./components/Alert.svelte";
 
 // Advanced Components
 export { default as FAB } from "./components/FAB.svelte";
+
+// New Components
+export { default as Sheet } from "./components/Sheet.svelte";
+export { default as Toast } from "./components/Toast.svelte";
+export { default as DropdownMenu } from "./components/DropdownMenu.svelte";
+export { default as Popover } from "./components/Popover.svelte";
+export { default as Drawer } from "./components/Drawer.svelte";
+export { default as Chip } from "./components/Chip.svelte";
+export { default as ButtonGroup } from "./components/ButtonGroup.svelte";
+export { default as Rating } from "./components/Rating.svelte";
+export { default as Carousel } from "./components/Carousel.svelte";
+export { default as CommandPalette } from "./components/CommandPalette.svelte";

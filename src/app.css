@@ -220,6 +220,18 @@ body {
     linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(236,72,153,0.1) 30%, rgba(14,165,233,0.1) 60%, rgba(34,197,94,0.08) 100%),
     url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat fixed !important;
 }
+
+.component-code {
+  background: var(--t-surface);
+  border: 1px solid var(--t-card-border-color);
+  border-radius: calc(var(--t-card-radius) - 2px);
+  padding: 0.875rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--t-text);
+}
 html.dark .glass-page-bg {
   background:
     linear-gradient(135deg, rgba(30,0,60,0.6) 0%, rgba(10,10,40,0.5) 40%, rgba(0,20,50,0.5) 100%),

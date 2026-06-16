@@ -1,15 +1,19 @@
 <script>
   import "./searchinput-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     value = $bindable(""),
     placeholder = "Search...",
     label = "",
     disabled = false,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-searchinput-${style}`);
   const themeClass = $derived(`theme-${theme}`);

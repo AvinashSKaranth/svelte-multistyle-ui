@@ -1,9 +1,10 @@
 <script>
   import "./select-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     value = $bindable(""),
     options = [],
     placeholder = "Select...",
@@ -11,6 +12,9 @@
     disabled = false,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   let focused = $state(false);
   let hasValue = $derived(

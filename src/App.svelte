@@ -29,6 +29,19 @@
   import Spinner from "./lib/components/Spinner.svelte";
   import Skeleton from "./lib/components/Skeleton.svelte";
   import FAB from "./lib/components/FAB.svelte";
+  // New components
+  import Sheet from "./lib/components/Sheet.svelte";
+  import Toast from "./lib/components/Toast.svelte";
+  import DropdownMenu from "./lib/components/DropdownMenu.svelte";
+  import Popover from "./lib/components/Popover.svelte";
+  import Drawer from "./lib/components/Drawer.svelte";
+  import Chip from "./lib/components/Chip.svelte";
+  import ButtonGroup from "./lib/components/ButtonGroup.svelte";
+  import Rating from "./lib/components/Rating.svelte";
+  import Carousel from "./lib/components/Carousel.svelte";
+  import CommandPalette from "./lib/components/CommandPalette.svelte";
+
+  import { initMultistyleUI } from "./lib/config.js";
 
   const styles = [
     { value: "material", label: "Material Design" },
@@ -288,6 +301,11 @@
     root.classList.add(isDarkMode ? "dark" : "light");
   });
 
+  // Keep the global library defaults in sync with the demo controls
+  $effect(() => {
+    initMultistyleUI({ style: selectedStyle, theme: selectedTheme });
+  });
+
   // Demo state
   let inputVal = $state("");
   let textareaVal = $state("");
@@ -300,6 +318,9 @@
   let searchVal = $state("");
   let dateVal = $state("");
   let tabActive = $state("tab1");
+  let buttonTab = $state("preview");
+  let inputTab = $state("preview");
+  let alertTab = $state("preview");
   let accordionItems = [
     {
       id: "1",
@@ -319,6 +340,7 @@
     },
   ];
   let modalOpen = $state(false);
+  let modalSize = $state("medium");
   let paginationPage = $state(1);
   let progressVal = $state(65);
 
@@ -345,6 +367,60 @@
     `--t-primary:${customPrimary};--t-secondary:${customSecondary};--t-surface:${customSurface};--t-card-bg:${customCardBg};--t-card-border-color:${customCardBorderColor};--t-text:${customText};--t-text-hint:${customTextHint};--t-text-primary:${customTextPrimary};--t-text-secondary:${customTextSecondary};--t-surface-bg:${customSurfaceBg};--t-btn-bg:${customBtnBg};--t-btn-border-color:${customBtnBorderColor};--t-btn-radius:${customBtnRadius};--t-card-radius:${customCardRadius};`,
   );
 
+  // New component state
+  let sheetOpen = $state(false);
+  let sheetPosition = $state("right");
+  let drawerOpen = $state(false);
+  let drawerPosition = $state("left");
+  let dropdownItems = [
+    { label: "Profile", icon: "👤", onclick: () => alert("Profile clicked") },
+    { label: "Settings", icon: "⚙", onclick: () => alert("Settings clicked") },
+    { divider: true },
+    { label: "Help", icon: "❓", shortcut: "⌘H", onclick: () => alert("Help clicked") },
+    { label: "Logout", icon: "🚪", shortcut: "⌘Q", onclick: () => alert("Logout clicked") },
+  ];
+  let popoverOpen = $state(false);
+  let chipVals = $state(["React", "Svelte", "Vue"]);
+  let btnGroupVal = $state("day");
+  let btnGroupItems = [
+    { value: "day", label: "Day" },
+    { value: "week", label: "Week" },
+    { value: "month", label: "Month" },
+  ];
+  let ratingVal = $state(3);
+  let carouselSlides = [
+    { image: "https://picsum.photos/seed/ui1/800/400", caption: "Beautiful landscapes" },
+    { image: "https://picsum.photos/seed/ui2/800/400", caption: "Modern architecture" },
+    { image: "https://picsum.photos/seed/ui3/800/400", caption: "Urban cityscapes" },
+  ];
+  let cmdPaletteOpen = $state(false);
+  let cmdGroups = [
+    {
+      label: "Navigation",
+      items: [
+        { label: "Go to Dashboard", icon: "📊", shortcut: "⌘1", onclick: () => alert("Dashboard") },
+        { label: "Go to Projects", icon: "📁", shortcut: "⌘2", onclick: () => alert("Projects") },
+        { label: "Go to Settings", icon: "⚙", shortcut: "⌘,", onclick: () => alert("Settings") },
+      ]
+    },
+    {
+      label: "Actions",
+      items: [
+        { label: "New File", icon: "📄", shortcut: "⌘N", onclick: () => alert("New File") },
+        { label: "Search", icon: "🔍", shortcut: "⌘F", onclick: () => alert("Search") },
+        { label: "Toggle Dark Mode", icon: "🌙", shortcut: "⌘D", onclick: () => alert("Toggle Dark") },
+      ]
+    },
+  ];
+  // Toast management
+  let toasts = $state([]);
+  let toastPosition = $state("top-right");
+  function addToastMsg(msg, variant) {
+    const id = Date.now() + Math.random();
+    toasts = [...toasts, { id, message: msg, variant, duration: 3000 }];
+    setTimeout(() => { toasts = toasts.filter(t => t.id !== id); }, 3000);
+  }
+
   let settingsOpen = $state(false);
   let copyStatus = $state("");
 
@@ -365,6 +441,14 @@
   --t-btn-border-color: ${customBtnBorderColor};
   --t-btn-radius: ${customBtnRadius};
   --t-card-radius: ${customCardRadius};
+  --t-info: ${customPrimary};
+  --t-success: ${customPrimary};
+  --t-warning: ${customPrimary};
+  --t-error: ${customPrimary};
+  --t-text-info: ${customPrimary};
+  --t-text-success: ${customPrimary};
+  --t-text-warning: ${customPrimary};
+  --t-text-error: ${customPrimary};
 }
 
 html.dark .theme-custom {
@@ -382,6 +466,14 @@ html.dark .theme-custom {
   --t-btn-border-color: ${customBtnBorderColor};
   --t-btn-radius: ${customBtnRadius};
   --t-card-radius: ${customCardRadius};
+  --t-info: ${customPrimary};
+  --t-success: ${customPrimary};
+  --t-warning: ${customPrimary};
+  --t-error: ${customPrimary};
+  --t-text-info: ${customPrimary};
+  --t-text-success: ${customPrimary};
+  --t-text-warning: ${customPrimary};
+  --t-text-error: ${customPrimary};
 }
 
 /* Use it:
@@ -695,9 +787,83 @@ Then pass theme="custom" to components.
               Copy CSS
             </button>
           </section>
+
+          <section class="settings-panel">
+            <h3 class="settings-panel-title">How to use custom CSS</h3>
+            <ul class="settings-help-list text-sm text-gray-600 dark:text-gray-300 space-y-2">
+              <li>
+                <strong>Import order matters:</strong> load
+                <code>svelte-multistyle-ui/theme.css</code> first, then your
+                custom stylesheet. That way your tokens override the defaults.
+              </li>
+              <li>
+                <strong>Name your theme class:</strong> define
+                <code>.my-theme</code> (or use the generated
+                <code>.theme-custom</code>) and set any <code>--t-*</code>
+                tokens you want to change.
+              </li>
+              <li>
+                <strong>Apply it:</strong> pass
+                <code>theme="my-theme"</code> to components, or add
+                <code>class="my-theme"</code> to a parent element.
+              </li>
+              <li>
+                <strong>Start from scratch:</strong> import only
+                <code>svelte-multistyle-ui/theme-base.css</code> and define
+                every <code>.theme-*</code> class yourself.
+              </li>
+              <li>
+                <strong>Component overrides:</strong> target
+                <code>.s-&lt;component&gt;-&lt;style&gt;</code> classes
+                for one-off visual tweaks without touching tokens.
+              </li>
+            </ul>
+          </section>
         </div>
       </div>
     {/if}
+
+    <!-- GLOBAL DEFAULTS -->
+    <section>
+      <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
+        Global Defaults
+      </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Call once, use everywhere
+          </p>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            Pass <code>style</code> and <code>theme</code> to
+            <code>initMultistyleUI</code> once. Every component below inherits
+            those defaults, while explicit props still override them.
+          </p>
+          <pre class="component-code"><code>{`import { initMultistyleUI } from "svelte-multistyle-ui";
+
+initMultistyleUI({ style: "fluent", theme: "ocean" });
+
+<!-- No style/theme props needed -->
+<Button variant="filled">Save</Button>
+<Badge>New</Badge>`}</code></pre>
+        </Card>
+
+        <Card elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Live preview
+          </p>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            These components use the global defaults set by the header selects.
+          </p>
+          <div class="flex flex-wrap items-center gap-3">
+            <Button variant="filled"
+              >{#snippet children()}Default Button{/snippet}</Button
+            >
+            <Badge>{#snippet children()}Default Badge{/snippet}</Badge>
+            <Chip>{#snippet children()}Default Chip{/snippet}</Chip>
+          </div>
+        </Card>
+      </div>
+    </section>
 
     <!-- FORM COMPONENTS -->
     <section>
@@ -710,22 +876,53 @@ Then pass theme="custom" to components.
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Button
           </p>
-          <div class="flex flex-wrap gap-2">
-            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
-              >{#snippet children()}Filled{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="outlined">{#snippet children()}Outlined{/snippet}</Button
-            >
-            <Button style={selectedStyle} theme={selectedTheme} variant="text"
-              >{#snippet children()}Text{/snippet}</Button
-            >
-            <Button style={selectedStyle} theme={selectedTheme} variant="tonal"
-              >{#snippet children()}Tonal{/snippet}</Button
-            >
-          </div>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "Preview" },
+              { id: "code", label: "Code" },
+            ]}
+            bind:active={buttonTab}
+          />
+          {#if buttonTab === "preview"}
+            <div class="flex flex-wrap gap-2">
+              <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+                >{#snippet children()}Filled{/snippet}</Button
+              >
+              <Button
+                style={selectedStyle}
+                theme={selectedTheme}
+                variant="outlined">{#snippet children()}Outlined{/snippet}</Button
+              >
+              <Button style={selectedStyle} theme={selectedTheme} variant="text"
+                >{#snippet children()}Text{/snippet}</Button
+              >
+              <Button style={selectedStyle} theme={selectedTheme} variant="tonal"
+                >{#snippet children()}Tonal{/snippet}</Button
+              >
+            </div>
+          {:else}
+            <pre class="component-code"><code>{`<!-- Filled -->
+<Button style="material" theme="default" variant="filled">
+  {#snippet children()}Filled{/snippet}
+</Button>
+
+<!-- Outlined -->
+<Button style="material" theme="default" variant="outlined">
+  {#snippet children()}Outlined{/snippet}
+</Button>
+
+<!-- Text -->
+<Button style="material" theme="default" variant="text">
+  {#snippet children()}Text{/snippet}
+</Button>
+
+<!-- Tonal -->
+<Button style="material" theme="default" variant="tonal">
+  {#snippet children()}Tonal{/snippet}
+</Button>`}</code></pre>
+          {/if}
         </Card>
 
         <!-- IconButton -->
@@ -760,13 +957,32 @@ Then pass theme="custom" to components.
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Input
           </p>
-          <Input
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:value={inputVal}
-            label="Your name"
-            placeholder="Your name"
+            tabs={[
+              { id: "preview", label: "Preview" },
+              { id: "code", label: "Code" },
+            ]}
+            bind:active={inputTab}
           />
+          {#if inputTab === "preview"}
+            <Input
+              style={selectedStyle}
+              theme={selectedTheme}
+              bind:value={inputVal}
+              label="Your name"
+              placeholder="Your name"
+            />
+          {:else}
+            <pre class="component-code"><code>{`<Input
+  style="material"
+  theme="default"
+  bind:value={name}
+  label="Your name"
+  placeholder="Your name"
+/>`}</code></pre>
+          {/if}
         </Card>
 
         <!-- Textarea -->
@@ -978,17 +1194,56 @@ Then pass theme="custom" to components.
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Modal
           </p>
-          <Button
-            style={selectedStyle}
-            theme={selectedTheme}
-            variant="filled"
-            onclick={() => (modalOpen = true)}
-          >
-            {#snippet children()}Open Modal{/snippet}
-          </Button>
+          <div class="flex flex-wrap gap-2">
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                modalSize = "small";
+                modalOpen = true;
+              }}
+            >
+              {#snippet children()}Small{/snippet}
+            </Button>
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                modalSize = "medium";
+                modalOpen = true;
+              }}
+            >
+              {#snippet children()}Medium{/snippet}
+            </Button>
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                modalSize = "large";
+                modalOpen = true;
+              }}
+            >
+              {#snippet children()}Large{/snippet}
+            </Button>
+            <Button
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="filled"
+              onclick={() => {
+                modalSize = "full";
+                modalOpen = true;
+              }}
+            >
+              {#snippet children()}Full{/snippet}
+            </Button>
+          </div>
           <Modal
             style={selectedStyle}
             theme={selectedTheme}
+            size={modalSize}
             bind:open={modalOpen}
             title="Modal Title"
           >
@@ -1201,28 +1456,34 @@ Then pass theme="custom" to components.
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Alert - Info
           </p>
-          <Alert
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            variant="info"
-            title="Information"
-          >
-            {#snippet children()}This is an informational alert message.{/snippet}
-          </Alert>
+            tabs={[
+              { id: "preview", label: "Preview" },
+              { id: "code", label: "Code" },
+            ]}
+            bind:active={alertTab}
+          />
+          {#if alertTab === "preview"}
+            <Alert
+              style={selectedStyle}
+              theme={selectedTheme}
+              variant="info"
+              title="Information"
+            >
+              {#snippet children()}This is an informational alert message.{/snippet}
+            </Alert>
+          {:else}
+            <pre class="component-code"><code>{`<Alert style="material" theme="default" variant="info" title="Information">
+  {#snippet children()}This is an informational alert message.{/snippet}
+</Alert>`}</code></pre>
+          {/if}
         </Card>
         <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Alert - Success
           </p>
-          <Alert
-            style={selectedStyle}
-            theme={selectedTheme}
-            variant="success"
-            title="Success"
-            dismissible={true}
-          >
-            {#snippet children()}Operation completed successfully!{/snippet}
-          </Alert>
         </Card>
         <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
@@ -1252,6 +1513,326 @@ Then pass theme="custom" to components.
         </Card>
       </div>
     </section>
+
+    <!-- NEW COMPONENTS -->
+    <section>
+      <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
+        New Components
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Sheet -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Sheet (Slide-in Panel)
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { sheetPosition = "left"; sheetOpen = true; }}>
+              {#snippet children()}Left{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { sheetPosition = "right"; sheetOpen = true; }}>
+              {#snippet children()}Right{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { sheetPosition = "top"; sheetOpen = true; }}>
+              {#snippet children()}Top{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { sheetPosition = "bottom"; sheetOpen = true; }}>
+              {#snippet children()}Bottom{/snippet}
+            </Button>
+          </div>
+          <Sheet
+            style={selectedStyle}
+            theme={selectedTheme}
+            position={sheetPosition}
+            bind:open={sheetOpen}
+            title="Sheet Panel"
+          >
+            {#snippet children()}
+              <p>This sheet slides in from the <strong>{sheetPosition}</strong> with a smooth cubic-bezier animation.</p>
+              <p class="mt-4">Content can be anything — forms, navigation, details.</p>
+            {/snippet}
+          </Sheet>
+        </Card>
+
+        <!-- Drawer -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Drawer
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { drawerPosition = "left"; drawerOpen = true; }}>
+              {#snippet children()}Left{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { drawerPosition = "right"; drawerOpen = true; }}>
+              {#snippet children()}Right{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { drawerPosition = "top"; drawerOpen = true; }}>
+              {#snippet children()}Top{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => { drawerPosition = "bottom"; drawerOpen = true; }}>
+              {#snippet children()}Bottom{/snippet}
+            </Button>
+          </div>
+          <Drawer
+            style={selectedStyle}
+            theme={selectedTheme}
+            position={drawerPosition}
+            bind:open={drawerOpen}
+          >
+            {#snippet children()}
+              <div class="p-4">
+                <h3 class="text-lg font-semibold mb-4">Drawer Content</h3>
+                <p>This drawer slides in from the <strong>{drawerPosition}</strong> side.</p>
+                <nav class="mt-6 space-y-2">
+                  <a href="#" class="block p-2 rounded hover:bg-gray-100">🏠 Home</a>
+                  <a href="#" class="block p-2 rounded hover:bg-gray-100">📊 Dashboard</a>
+                  <a href="#" class="block p-2 rounded hover:bg-gray-100">⚙ Settings</a>
+                </nav>
+              </div>
+            {/snippet}
+          </Drawer>
+        </Card>
+
+        <!-- Dropdown Menu -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Dropdown Menu
+          </p>
+          <DropdownMenu
+            style={selectedStyle}
+            theme={selectedTheme}
+            items={dropdownItems}
+            position="bottom"
+          >
+            {#snippet children()}
+              <Button style={selectedStyle} theme={selectedTheme} variant="filled">
+                {#snippet children()}Menu ▾{/snippet}
+              </Button>
+            {/snippet}
+          </DropdownMenu>
+        </Card>
+
+        <!-- Popover -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Popover
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <Popover
+              style={selectedStyle}
+              theme={selectedTheme}
+              position="top"
+              bind:open={popoverOpen}
+            >
+              {#snippet children()}
+                <Button style={selectedStyle} theme={selectedTheme} variant="outlined">
+                  {#snippet children()}Top{/snippet}
+                </Button>
+              {/snippet}
+              {#snippet content()}
+                <div>
+                  <strong>Popover Title</strong>
+                  <p class="mt-1 text-sm">This is a popover with rich content.</p>
+                </div>
+              {/snippet}
+            </Popover>
+            <Popover
+              style={selectedStyle}
+              theme={selectedTheme}
+              position="bottom"
+            >
+              {#snippet children()}
+                <Button style={selectedStyle} theme={selectedTheme} variant="outlined">
+                  {#snippet children()}Bottom{/snippet}
+                </Button>
+              {/snippet}
+              {#snippet content()}
+                <p class="text-sm">Popover with an arrow indicator pointing upward.</p>
+              {/snippet}
+            </Popover>
+            <Popover
+              style={selectedStyle}
+              theme={selectedTheme}
+              position="right"
+              trigger="hover"
+            >
+              {#snippet children()}
+                <Button style={selectedStyle} theme={selectedTheme} variant="tonal">
+                  {#snippet children()}Hover{/snippet}
+                </Button>
+              {/snippet}
+              {#snippet content()}
+                <p class="text-sm">Triggered on hover!</p>
+              {/snippet}
+            </Popover>
+          </div>
+        </Card>
+
+        <!-- Chip / Tag -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Chip / Tag
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <Chip style={selectedStyle} theme={selectedTheme} color="primary">
+              {#snippet children()}Primary{/snippet}
+            </Chip>
+            <Chip style={selectedStyle} theme={selectedTheme} color="success">
+              {#snippet children()}Success{/snippet}
+            </Chip>
+            <Chip style={selectedStyle} theme={selectedTheme} color="warning">
+              {#snippet children()}Warning{/snippet}
+            </Chip>
+            <Chip style={selectedStyle} theme={selectedTheme} color="error" dismissible>
+              {#snippet children()}Dismiss{/snippet}
+            </Chip>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <Chip style={selectedStyle} theme={selectedTheme} variant="outlined" color="primary" icon="★">
+              {#snippet children()}Starred{/snippet}
+            </Chip>
+            <Chip style={selectedStyle} theme={selectedTheme} variant="ghost" color="neutral">
+              {#snippet children()}Ghost{/snippet}
+            </Chip>
+          </div>
+        </Card>
+
+        <!-- Button Group -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Button Group
+          </p>
+          <ButtonGroup
+            style={selectedStyle}
+            theme={selectedTheme}
+            items={btnGroupItems}
+            bind:value={btnGroupVal}
+            variant="outlined"
+          />
+          <p class="text-sm text-gray-500">Selected: {btnGroupVal}</p>
+        </Card>
+
+        <!-- Rating -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Rating
+          </p>
+          <Rating
+            style={selectedStyle}
+            theme={selectedTheme}
+            bind:value={ratingVal}
+            max={5}
+            showValue={true}
+          />
+          <Rating
+            style={selectedStyle}
+            theme={selectedTheme}
+            bind:value={ratingVal}
+            max={5}
+            precision="half"
+            size="lg"
+            showValue={true}
+          />
+        </Card>
+
+        <!-- Carousel -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3 md:col-span-2">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Carousel
+          </p>
+          <Carousel
+            style={selectedStyle}
+            theme={selectedTheme}
+            slides={carouselSlides}
+            autoPlay={true}
+            interval={3500}
+          />
+        </Card>
+      </div>
+    </section>
+
+    <!-- OVERLAY COMPONENTS -->
+    <section>
+      <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
+        Overlays
+      </h2>
+      <div class="flex flex-wrap gap-4">
+        <!-- Toast position selector -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Toast (Snackbar)
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <select
+              bind:value={toastPosition}
+              class="px-3 py-1.5 text-sm rounded border"
+            >
+              <option value="top-right">Top Right</option>
+              <option value="top-left">Top Left</option>
+              <option value="top-center">Top Center</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="bottom-left">Bottom Left</option>
+              <option value="bottom-center">Bottom Center</option>
+            </select>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => addToastMsg("Operation successful!", "success")}>
+              {#snippet children()}Success{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="filled"
+              onclick={() => addToastMsg("Something went wrong.", "error")}>
+              {#snippet children()}Error{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="tonal"
+              onclick={() => addToastMsg("Here is some info.", "info")}>
+              {#snippet children()}Info{/snippet}
+            </Button>
+            <Button style={selectedStyle} theme={selectedTheme} variant="outlined"
+              onclick={() => addToastMsg("Proceed with caution.", "warning")}>
+              {#snippet children()}Warning{/snippet}
+            </Button>
+          </div>
+        </Card>
+
+        <!-- Command Palette -->
+        <Card style={selectedStyle} theme={selectedTheme} elevated={true} class="space-y-3">
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Command Palette
+          </p>
+          <p class="text-sm">Press <kbd class="px-1.5 py-0.5 text-xs rounded border">⌘K</kbd> or click button.</p>
+          <Button
+            style={selectedStyle}
+            theme={selectedTheme}
+            variant="filled"
+            onclick={() => (cmdPaletteOpen = true)}
+          >
+            {#snippet children()}Open CmdK{/snippet}
+          </Button>
+          <CommandPalette
+            style={selectedStyle}
+            theme={selectedTheme}
+            groups={cmdGroups}
+            bind:open={cmdPaletteOpen}
+          />
+        </Card>
+      </div>
+    </section>
+
+    <!-- Toast Container (renders at top level) -->
+    <Toast
+      style={selectedStyle}
+      theme={selectedTheme}
+      position={toastPosition}
+      bind:toasts={toasts}
+    />
 
     <!-- FAB -->
     <FAB style={selectedStyle} theme={selectedTheme} position="bottom-right">

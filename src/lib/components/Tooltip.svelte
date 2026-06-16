@@ -1,14 +1,18 @@
 <script>
   import "./tooltip-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     text = "",
     position = "top",
     children,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-tooltip-${style}`);
   const themeClass = $derived(`theme-${theme}`);

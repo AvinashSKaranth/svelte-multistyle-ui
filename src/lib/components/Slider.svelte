@@ -1,9 +1,10 @@
 <script>
   import "./slider-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     value = $bindable(0),
     min = 0,
     max = 100,
@@ -12,6 +13,9 @@
     label = "",
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-slider-${style}`);
   const themeClass = $derived(`theme-${theme}`);

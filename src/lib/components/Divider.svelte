@@ -1,13 +1,17 @@
 <script>
   import "./divider-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     orientation = "horizontal",
     label = "",
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-divider-${style}`);
   const themeClass = $derived(`theme-${theme}`);

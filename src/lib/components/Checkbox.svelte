@@ -1,15 +1,19 @@
 <script>
   import "./checkbox-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     checked = $bindable(false),
     label = "",
     disabled = false,
     indeterminate = false,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-checkbox-${style}`);
   const themeClass = $derived(`theme-${theme}`);

@@ -1,15 +1,19 @@
 <script>
   import "./radio-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     value,
     group = $bindable(""),
     label = "",
     disabled = false,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   let isSelected = $derived(group === value);
 

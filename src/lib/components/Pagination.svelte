@@ -1,14 +1,18 @@
 <script>
   import "./pagination-styles.css";
+  import { defaults } from "../config.js";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     total = 0,
     perPage = 10,
     current = $bindable(1),
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-pagination-${style}`);
   const themeClass = $derived(`theme-${theme}`);

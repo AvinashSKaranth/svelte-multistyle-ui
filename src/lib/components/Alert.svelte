@@ -1,16 +1,20 @@
 <script>
   import "./alert-styles.css";
+  import { defaults } from "../config.js";
   import { slide } from "svelte/transition";
 
   let {
-    style = "material",
-    theme = "default",
+    style: styleProp,
+    theme: themeProp,
     variant = "info",
     title = "",
     children,
     dismissible = false,
     ...rest
   } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-alert-${style}`);
   const themeClass = $derived(`theme-${theme}`);

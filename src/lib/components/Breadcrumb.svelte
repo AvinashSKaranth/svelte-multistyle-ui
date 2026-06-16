@@ -1,7 +1,11 @@
 <script>
   import "./breadcrumb-styles.css";
+  import { defaults } from "../config.js";
 
-  let { style = "material", theme = "default", items = [], ...rest } = $props();
+  let { style: styleProp, theme: themeProp, items = [], ...rest } = $props();
+
+  const style = $derived(styleProp ?? defaults.style);
+  const theme = $derived(themeProp ?? defaults.theme);
 
   const styleClass = $derived(`s-breadcrumb-${style}`);
   const themeClass = $derived(`theme-${theme}`);

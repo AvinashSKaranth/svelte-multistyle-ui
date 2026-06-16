@@ -44,6 +44,12 @@
 .s-modal-close:hover { color: var(--t-text); }
 .s-modal-body { margin-top: 12px; }
 
+/* ===== SIZES ===== */
+.s-modal-small { max-width: 320px; }
+.s-modal-medium { max-width: 480px; }
+.s-modal-large { max-width: 720px; }
+.s-modal-full { max-width: 100%; width: 100%; }
+
 /* ===== STYLE OVERRIDES ===== */
 
 /* Brutalist */
