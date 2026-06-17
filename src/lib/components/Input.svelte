@@ -1,6 +1,6 @@
 <script>
   import "./input-styles.css";
-  import { defaults } from "../config.js";
+  import { defaults, iconClass } from "../config.js";
 
   let {
     style: styleProp,
@@ -10,6 +10,8 @@
     placeholder = "",
     label = "",
     disabled = false,
+    iconStart = undefined,
+    iconEnd = undefined,
     readonly = false,
     required = false,
     name = "",
@@ -43,6 +45,9 @@
   );
   let floated = $derived(focused || hasValue);
 
+  const hasIconStart = $derived(!!iconStart);
+  const hasIconEnd = $derived(!!iconEnd);
+
   const styleClass = $derived(`s-input-${style}`);
   const themeClass = $derived(`theme-${theme}`);
   const uid = Math.random().toString(36).slice(2, 9);
@@ -68,7 +73,12 @@
   class:focused
   class:has-value={hasValue}
   class:floated
+  class:has-icon-start={hasIconStart}
+  class:has-icon-end={hasIconEnd}
 >
+  {#if iconStart}
+    <span class="s-input-icon s-input-icon-start {iconClass}">{iconStart}</span>
+  {/if}
   {#if hasFloatingLabel}
     <label class="s-input-floating-label" for={internalId}>{displayLabel}</label>
   {/if}
@@ -102,6 +112,9 @@
     onblur={() => (focused = false)}
     {...rest}
   />
+  {#if iconEnd}
+    <span class="s-input-icon s-input-icon-end {iconClass}">{iconEnd}</span>
+  {/if}
   {#if style === "fluent"}
     <span class="s-input-fluent-border-indicator"></span>
   {/if}

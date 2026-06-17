@@ -1,6 +1,6 @@
 <script>
   import "./button-styles.css";
-  import { defaults } from "../config.js";
+  import { defaults, iconClass } from "../config.js";
 
   let {
     style: styleProp,
@@ -8,6 +8,7 @@
     variant = "filled",
     size = "md",
     disabled = false,
+    icon,
     children,
     onclick,
     ...rest
@@ -28,5 +29,6 @@
   {onclick}
   {...rest}
 >
+  {#if icon}<span class="s-button-icon {iconClass}">{icon}</span>{/if}
   {@render children?.()}
 </button>

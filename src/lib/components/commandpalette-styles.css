@@ -155,3 +155,8 @@
 
 /* Fluent */
 .s-cmdk-fluent { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+/* Borderless overlays — declared last to win source-order over base border. */
+.s-cmdk-material,
+.s-cmdk-material3,
+.s-cmdk-fluent { border: none; }

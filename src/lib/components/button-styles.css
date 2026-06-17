@@ -22,6 +22,7 @@
   opacity: 0.45;
   pointer-events: none;
 }
+.s-button-icon { display: inline-flex; font-size: 1.15em; line-height: 1; }
 
 /* ===== SIZES ===== */
 .s-button.btn-sm { padding: 6px 14px; font-size: 13px; }

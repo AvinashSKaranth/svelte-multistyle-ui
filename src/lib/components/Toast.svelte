@@ -1,6 +1,6 @@
 <script>
   import "./toast-styles.css";
-  import { defaults } from "../config.js";
+  import { defaults, iconClass } from "../config.js";
   import { fly } from "svelte/transition";
 
   let {
@@ -33,6 +33,14 @@
     "bottom-center":{ x: 0, y: 20 }
   };
 
+  function renderIcon(icon, variant) {
+    if (icon) {
+      if (icon.length === 1) return icon;
+      return `<span class="${iconClass}">${icon}</span>`;
+    }
+    return icons[variant] ?? "\u2139";
+  }
+
   function removeToast(id) {
     toasts = toasts.filter(t => t.id !== id);
   }
@@ -58,7 +66,7 @@
         }}
         role="alert"
       >
-        <span class="s-toast-icon">{icons[toast.variant] || "ℹ"}</span>
+        <span class="s-toast-icon">{@html renderIcon(toast.icon, toast.variant)}</span>
         <div class="s-toast-content">
           {#if toast.title}
             <div class="s-toast-title">{toast.title}</div>

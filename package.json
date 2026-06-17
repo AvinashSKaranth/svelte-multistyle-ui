@@ -34,8 +34,8 @@
     "svelte": "^5.0.0"
   },
   "devDependencies": {
-    "@sveltejs/package": "^2.5.7",
     "@playwright/test": "^1.50.1",
+    "@sveltejs/package": "^2.5.7",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "svelte": "^5.55.4",
@@ -54,5 +54,9 @@
     "cyberpunk",
     "multi-theme",
     "multi-style"
-  ]
+  ],
+  "dependencies": {
+    "dayjs": "^1.11.21",
+    "prismjs": "^1.30.0"
+  }
 }

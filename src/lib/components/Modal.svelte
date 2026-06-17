@@ -2,6 +2,7 @@
   import "./modal-styles.css";
   import { defaults } from "../config.js";
   import { fade, scale } from "svelte/transition";
+  import { portal } from "../actions/portal.js";
 
   let {
     style: styleProp,
@@ -33,6 +34,7 @@
 
 {#if open}
   <div
+    use:portal
     class="s-modal-overlay {styleClass} {themeClass}"
     transition:fade={{ duration: 200 }}
     onclick={handleBackdrop}

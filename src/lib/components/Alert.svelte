@@ -1,6 +1,6 @@
 <script>
   import "./alert-styles.css";
-  import { defaults } from "../config.js";
+  import { defaults, iconClass } from "../config.js";
   import { slide } from "svelte/transition";
 
   let {
@@ -8,6 +8,7 @@
     theme: themeProp,
     variant = "info",
     title = "",
+    icon: iconProp,
     children,
     dismissible = false,
     ...rest
@@ -19,23 +20,39 @@
   const styleClass = $derived(`s-alert-${style}`);
   const themeClass = $derived(`theme-${theme}`);
 
+  const defaultIcons = {
+    info: "ℹ",
+    success: "✓",
+    warning: "⚠",
+    error: "✕"
+  };
+
+  const icon = $derived(iconProp ?? defaultIcons[variant] ?? null);
+  const iconEl = $derived(icon && icon.length === 1 ? icon : null);
+  const iconName = $derived(icon && icon.length > 1 ? icon : null);
+
   let visible = $state(true);
 </script>
 
 {#if visible}
   <div
-    class="s-alert {styleClass} {themeClass} alert-{variant}"
+    class="s-alert {styleClass} {themeClass} s-alert-{variant}"
     role="alert"
     transition:slide={{ duration: 200 }}
     {...rest}
   >
-    <div class="alert-content">
-      {#if title}<strong class="alert-title">{title}</strong>{/if}
-      <div class="alert-body">{@render children?.()}</div>
+    {#if iconEl}
+      <span class="s-alert-icon">{iconEl}</span>
+    {:else if iconName}
+      <span class="s-alert-icon {iconClass}">{iconName}</span>
+    {/if}
+    <div class="s-alert-content">
+      {#if title}<strong class="s-alert-title">{title}</strong>{/if}
+      <div class="s-alert-body">{@render children?.()}</div>
     </div>
     {#if dismissible}
       <button
-        class="alert-dismiss"
+        class="s-alert-dismiss"
         onclick={() => (visible = false)}
         aria-label="Dismiss">&times;</button
       >

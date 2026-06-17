@@ -6,4 +6,4 @@
  * Per-component `style`/`theme` props still override these defaults.
  */
 
-export { defaults, initMultistyleUI } from "./config.svelte.js";
+export { defaults, initMultistyleUI, iconClass } from "./config.svelte.js";

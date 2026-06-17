@@ -1,7 +1,27 @@
+/* ===== TABLE WRAPPER ===== */
+.s-table-wrapper {
+  width: 100%;
+}
+
+.s-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.s-table-caption {
+  caption-side: top;
+  text-align: left;
+  padding: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t-text-hint);
+}
+
 /* ===== BASE ===== */
 /* Theme-controlled: colors, border-width. Style-controlled: shape. */
 .s-table {
   width: 100%;
+  min-width: max-content;
   border-collapse: collapse;
   font-size: 14px;
   color: var(--t-text);
@@ -12,13 +32,42 @@
   font-weight: 600;
   border-bottom: var(--t-border-width) solid var(--t-border);
   color: var(--t-text);
+  white-space: nowrap;
 }
 .s-table td {
   padding: 10px 14px;
   border-bottom: 1px solid var(--t-border);
 }
-.s-table.striped tr:nth-child(even) td {
-  background: color-mix(in srgb, var(--t-primary) 3%, var(--t-surface));
+
+/* ===== VARIANTS ===== */
+
+/* Striped — alternating row colors */
+.s-table-variant-striped tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
+}
+
+/* Hoverable — row highlight on hover */
+.s-table-variant-hoverable tbody tr {
+  transition: background 0.15s;
+}
+.s-table-variant-hoverable tbody tr:hover td {
+  background: color-mix(in srgb, var(--t-primary) 6%, var(--t-surface));
+}
+
+/* Bordered — full cell borders */
+.s-table-variant-bordered th,
+.s-table-variant-bordered td {
+  border: 1px solid var(--t-border);
+}
+.s-table-variant-bordered th {
+  border-bottom: var(--t-border-width) solid var(--t-border);
+}
+
+/* Compact — reduced cell padding for dense data */
+.s-table-variant-compact th,
+.s-table-variant-compact td {
+  padding: 6px 10px;
+  font-size: 13px;
 }
 
 /* ===== STYLE OVERRIDES ===== */

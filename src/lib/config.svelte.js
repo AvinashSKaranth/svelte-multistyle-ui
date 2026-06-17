@@ -15,6 +15,13 @@
 export const defaults = $state({ style: "material", theme: "default" });
 
 /**
+ * Icon library class used to render icon names.
+ * Change this to match your icon library's CSS class
+ * (e.g., "material-icons", "fas", "fa-regular").
+ */
+export const iconClass = "material-symbols-outlined";
+
+/**
  * Set the global default style and/or theme for all components.
  *
  * @param {Object} [options]
@@ -25,3 +32,4 @@ export function initMultistyleUI({ style = "material", theme = "default" } = {})
   defaults.style = style;
   defaults.theme = theme;
 }
+

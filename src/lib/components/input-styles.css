@@ -24,6 +24,44 @@
   white-space: nowrap;
 }
 
+/* ===== ICONS ===== */
+/* Icons are absolutely positioned 12px from the edge. The 1.2em is the icon's
+   own font-size (scales with the input font-size). The 8px is the gap between
+   the icon glyph and the input text — this gives a clean "margin" relationship. */
+.s-input-wrapper {
+  --input-icon-gap: 8px;
+}
+.s-input-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 1.2em;
+  line-height: 1;
+  color: var(--t-text-hint);
+}
+.s-input-icon-start {
+  left: 12px;
+}
+.s-input-icon-end {
+  right: 12px;
+}
+/* Push input text away from the icon: icon-offset(12px) + icon-size(1.2em) + gap(8px) */
+.has-icon-start input {
+  padding-left: calc(12px + 1.2em + var(--input-icon-gap)) !important;
+}
+.has-icon-end input {
+  padding-right: calc(12px + 1.2em + var(--input-icon-gap)) !important;
+}
+/* Also shift floating labels so they don't overlap with the start icon */
+.has-icon-start .s-input-floating-label {
+  left: calc(12px + 1.2em + var(--input-icon-gap)) !important;
+}
+
 /* ===== MATERIAL DESIGN — underline, rounded top, floating label ===== */
 .s-input-material input {
   padding: 24px 16px 8px;

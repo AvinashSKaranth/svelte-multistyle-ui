@@ -1,6 +1,6 @@
 <script>
   import "./iconbutton-styles.css";
-  import { defaults } from "../config.js";
+  import { defaults, iconClass } from "../config.js";
 
   let {
     style: styleProp,
@@ -8,6 +8,7 @@
     variant = "filled",
     size = "md",
     disabled = false,
+    icon,
     children,
     onclick,
     ariaLabel = "",
@@ -30,5 +31,9 @@
   aria-label={ariaLabel}
   {...rest}
 >
-  {@render children?.()}
+  {#if icon}
+    <span class="{iconClass}">{icon}</span>
+  {:else}
+    {@render children?.()}
+  {/if}
 </button>

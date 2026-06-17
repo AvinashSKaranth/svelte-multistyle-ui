@@ -80,10 +80,14 @@
 .s-modal-liquid-glass {
   border-radius: 16px;
   backdrop-filter: blur(24px) saturate(1.6);
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.35);
+  color: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2);
 }
+.s-modal-liquid-glass .demo-label,
+.s-modal-liquid-glass .text-muted,
+.s-modal-liquid-glass .text-hint { color: rgba(255,255,255,0.55); }
 
 /* Legacy iOS */
 .s-modal-legacy-ios {
@@ -92,3 +96,8 @@
   background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, var(--t-surface) 100%);
   box-shadow: 0 10px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
 }
+
+/* Borderless overlays — declared last to win source-order over base border. */
+.s-modal-material,
+.s-modal-material3,
+.s-modal-fluent { border: none; }

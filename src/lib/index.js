@@ -1,6 +1,9 @@
 // Global configuration
 export { initMultistyleUI } from "./config.js";
 
+// Actions
+export { portal } from "./actions/portal.js";
+
 // Form Components
 export { default as Input } from "./components/Input.svelte";
 export { default as Button } from "./components/Button.svelte";
@@ -12,7 +15,6 @@ export { default as Checkbox } from "./components/Checkbox.svelte";
 export { default as Radio } from "./components/Radio.svelte";
 export { default as Toggle } from "./components/Toggle.svelte";
 export { default as Slider } from "./components/Slider.svelte";
-export { default as SearchInput } from "./components/SearchInput.svelte";
 export { default as FileUpload } from "./components/FileUpload.svelte";
 export { default as DatePicker } from "./components/DatePicker.svelte";
 export { default as DropdownMenu } from "./components/DropdownMenu.svelte";

@@ -2,6 +2,7 @@
   import "./drawer-styles.css";
   import { defaults } from "../config.js";
   import { fade } from "svelte/transition";
+  import { portal } from "../actions/portal.js";
 
   let {
     style: styleProp,
@@ -49,6 +50,7 @@
 
 {#if open}
   <div
+    use:portal
     class="s-drawer-overlay"
     transition:fade={{ duration: 200 }}
     onclick={handleBackdrop}

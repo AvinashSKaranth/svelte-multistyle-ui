@@ -5,9 +5,9 @@
   let {
     style: styleProp,
     theme: themeProp,
-    columns = [],
-    rows = [],
-    striped = false,
+    data = null,
+    variant = "plain",
+    caption: summary,
     ...rest
   } = $props();
 
@@ -16,25 +16,44 @@
 
   const styleClass = $derived(`s-table-${style}`);
   const themeClass = $derived(`theme-${theme}`);
+  const variantClass = $derived(`s-table-variant-${variant}`);
+
+  // Derive column headers from the keys of the first data row
+  const columns = $derived(
+    data && data.length > 0
+      ? Object.keys(data[0]).map((key) => ({
+          key,
+          label: key
+        }))
+      : []
+  );
 </script>
 
-<div class="s-table-wrapper {styleClass} {themeClass}" {...rest}>
-  <table class="s-table" class:striped>
-    <thead>
-      <tr>
-        {#each columns as col}
-          <th>{col.label}</th>
-        {/each}
-      </tr>
-    </thead>
-    <tbody>
-      {#each rows as row}
+<div
+  class="s-table-wrapper {styleClass} {themeClass} {variantClass}"
+  {...rest}
+>
+  <div class="s-table-scroll">
+    <table class="s-table">
+      {#if summary}
+        <caption class="s-table-caption">{summary}</caption>
+      {/if}
+      <thead>
         <tr>
           {#each columns as col}
-            <td>{row[col.key] ?? ""}</td>
+            <th>{col.label}</th>
           {/each}
         </tr>
-      {/each}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {#each data ?? [] as row}
+          <tr>
+            {#each columns as col}
+              <td>{row[col.key] ?? ""}</td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
 </div>

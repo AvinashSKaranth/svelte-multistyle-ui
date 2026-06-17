@@ -9,12 +9,12 @@
   import Radio from "./lib/components/Radio.svelte";
   import Toggle from "./lib/components/Toggle.svelte";
   import Slider from "./lib/components/Slider.svelte";
-  import SearchInput from "./lib/components/SearchInput.svelte";
   import FileUpload from "./lib/components/FileUpload.svelte";
   import DatePicker from "./lib/components/DatePicker.svelte";
   import Card from "./lib/components/Card.svelte";
   import Divider from "./lib/components/Divider.svelte";
   import Tabs from "./lib/components/Tabs.svelte";
+  import Carousel from "./lib/components/Carousel.svelte";
   import Accordion from "./lib/components/Accordion.svelte";
   import Modal from "./lib/components/Modal.svelte";
   import Breadcrumb from "./lib/components/Breadcrumb.svelte";
@@ -36,6 +36,12 @@
   import ButtonGroup from "./lib/components/ButtonGroup.svelte";
   import Rating from "./lib/components/Rating.svelte";
   import CommandPalette from "./lib/components/CommandPalette.svelte";
+
+  import Prism from 'prismjs';
+
+  function highlight(code) {
+    return Prism.highlight(code, Prism.languages.markup, 'markup');
+  }
 
   import { initMultistyleUI } from "./lib/config.js";
 
@@ -310,12 +316,67 @@
   let radioVal = $state("a");
   let toggleVal = $state(true);
   let sliderVal = $state(50);
-  let searchVal = $state("");
   let dateVal = $state("");
   let tabActive = $state("tab1");
+
+  // Code preview tab states
   let buttonTab = $state("preview");
   let inputTab = $state("preview");
+  let iconBtnTab = $state("preview");
+  let textareaTab = $state("preview");
+  let selectTab = $state("preview");
+  let multiSelectTab = $state("preview");
+  let checkboxTab = $state("preview");
+  let radioTab = $state("preview");
+  let toggleTab = $state("preview");
+  let sliderTab = $state("preview");
+  let datePickerTab = $state("preview");
+  let fileUploadTab = $state("preview");
+  let dropdownTab = $state("preview");
+  let cardTab = $state("preview");
+  let dividerTab = $state("preview");
+  let carouselTab = $state("preview");
+  let accordionTab = $state("preview");
+  let modalTab = $state("preview");
+  let drawerTab = $state("preview");
+  let cmdPaletteTab = $state("preview");
+  let breadcrumbTab = $state("preview");
+  let paginationTab = $state("preview");
+  let stepperTab = $state("preview");
+  let avatarTab = $state("preview");
+  let chipTab = $state("preview");
+  let tooltipTab = $state("preview");
+  let progressBarTab = $state("preview");
+  let spinnerTab = $state("preview");
+  let skeletonTab = $state("preview");
+  let tableTab = $state("preview");
   let alertTab = $state("preview");
+  let alertVariant = $state("info");
+  let toastTab = $state("preview");
+  let ratingTab = $state("preview");
+  let popoverTab = $state("preview");
+  let fabTab = $state("preview");
+  let tabsDemoTab = $state("preview");
+  let btnGroupTab = $state("preview");
+
+  let carouselSlides = [
+    {
+      image: "https://picsum.photos/seed/welcome/600/300",
+      alt: "Welcome slide",
+      caption: "Explore the component gallery"
+    },
+    {
+      image: "https://picsum.photos/seed/styles/600/300",
+      alt: "Styles slide",
+      caption: "13 visual design languages"
+    },
+    {
+      image: "https://picsum.photos/seed/themes/600/300",
+      alt: "Themes slide",
+      caption: "10 color themes available"
+    },
+  ];
+
   let accordionItems = [
     {
       id: "1",
@@ -347,15 +408,10 @@
     { value: "opt3", label: "Option Three" },
   ];
 
-  const tableColumns = [
-    { key: "name", label: "Name" },
-    { key: "role", label: "Role" },
-    { key: "status", label: "Status" },
-  ];
-  const tableRows = [
-    { name: "Alice", role: "Engineer", status: "Active" },
-    { name: "Bob", role: "Designer", status: "Away" },
-    { name: "Carol", role: "Manager", status: "Active" },
+  const tableData = [
+    { Name: "Alice", Role: "Engineer", Status: "Active" },
+    { Name: "Bob", Role: "Designer", Status: "Away" },
+    { Name: "Carol", Role: "Manager", Status: "Active" },
   ];
 
   const radiusOptions = ["0px", "2px", "4px", "8px", "16px", "32px", "9999px"];
@@ -390,6 +446,11 @@
     { value: "month", label: "Month" },
   ];
   let ratingVal = $state(3);
+  async function copyCode(code) {
+    await navigator.clipboard.writeText(code);
+    addToastMsg("Copied!", "success");
+  }
+
   let cmdPaletteOpen = $state(false);
   let cmdGroups = [
     {
@@ -443,9 +504,9 @@
   // Toast management
   let toasts = $state([]);
   let toastPosition = $state("top-right");
-  function addToastMsg(msg, variant) {
+  function addToastMsg(msg, variant, icon) {
     const id = Date.now() + Math.random();
-    toasts = [...toasts, { id, message: msg, variant, duration: 3000 }];
+    toasts = [...toasts, { id, message: msg, variant, duration: 3000, icon }];
     setTimeout(() => {
       toasts = toasts.filter((t) => t.id !== id);
     }, 3000);
@@ -560,6 +621,19 @@ Then pass theme="custom" to components.
     </div>
   </header>
 
+  {#snippet codeBlock(id, code)}
+    <div class="component-code-wrapper">
+      <button
+        type="button"
+        class="copy-btn"
+        onclick={() => copyCode(code)}
+      >
+        Copy
+      </button>
+      <pre class="component-code"><code>{@html highlight(code)}</code></pre>
+    </div>
+  {/snippet}
+
   <main class="max-w-7xl mx-auto p-6 space-y-10">
     {#if settingsOpen}
       <div
@@ -588,7 +662,7 @@ Then pass theme="custom" to components.
           >
         </div>
         <div class="settings-content">
-          <section class="settings-panel">
+          <Card style={selectedStyle} theme={selectedTheme} class="settings-panel">
             <h3 class="settings-panel-title">Theme Editor</h3>
             <p class="text-sm text-gray-500">
               First edit switches the theme dropdown to Custom.
@@ -792,9 +866,9 @@ Then pass theme="custom" to components.
                 </div>
               </div>
             </div>
-          </section>
+          </Card>
 
-          <section class="settings-panel">
+          <Card style={selectedStyle} theme={selectedTheme} class="settings-panel">
             <div class="flex items-center justify-between gap-3">
               <h3 class="settings-panel-title">Custom CSS</h3>
               {#if copyStatus}<span class="settings-copy-status"
@@ -812,9 +886,9 @@ Then pass theme="custom" to components.
               class="settings-copy-button"
               onclick={copyCustomCss}>Copy CSS</button
             >
-          </section>
+          </Card>
 
-          <section class="settings-panel">
+          <Card style={selectedStyle} theme={selectedTheme} class="settings-panel">
             <h3 class="settings-panel-title">How to use custom CSS</h3>
             <ul
               class="settings-help-list text-sm text-gray-600 dark:text-gray-300 space-y-2"
@@ -844,37 +918,10 @@ Then pass theme="custom" to components.
                 visual tweaks.
               </li>
             </ul>
-          </section>
+          </Card>
         </div>
       </div>
     {/if}
-
-    <!-- GLOBAL DEFAULTS -->
-    <section>
-      <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
-        Global Defaults
-      </h2>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card elevated={true} class="space-y-3">
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Call once, use everywhere
-          </p>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
-            Pass <code>style</code> and <code>theme</code> to
-            <code>initMultistyleUI</code> once. Every component below inherits those
-            defaults.
-          </p>
-          <pre class="component-code"><code
-              >{`import { initMultistyleUI } from "svelte-multistyle-ui";
-
-initMultistyleUI({ style: "fluent", theme: "ocean" });
-
-<Button variant="filled">Save</Button>
-<Chip>New</Chip>`}</code
-            ></pre>
-        </Card>
-      </div>
-    </section>
 
     <!-- FORM COMPONENTS -->
     <section>
@@ -896,37 +943,57 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             style={selectedStyle}
             theme={selectedTheme}
             tabs={[
-              { id: "preview", label: "Preview" },
-              { id: "code", label: "Code" },
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
             ]}
             bind:active={buttonTab}
           />
           {#if buttonTab === "preview"}
             <div class="flex flex-wrap gap-2">
-              <Button
-                style={selectedStyle}
-                theme={selectedTheme}
-                variant="filled">{#snippet children()}Filled{/snippet}</Button
+              <Button variant="filled"
+                >{#snippet children()}Filled{/snippet}</Button
               >
-              <Button
-                style={selectedStyle}
-                theme={selectedTheme}
-                variant="outlined"
+              <Button variant="outlined"
                 >{#snippet children()}Outlined{/snippet}</Button
               >
-              <Button style={selectedStyle} theme={selectedTheme} variant="text"
+              <Button variant="text"
                 >{#snippet children()}Text{/snippet}</Button
               >
-              <Button
-                style={selectedStyle}
-                theme={selectedTheme}
-                variant="tonal">{#snippet children()}Tonal{/snippet}</Button
+              <Button variant="tonal"
+                >{#snippet children()}Tonal{/snippet}</Button
+              >
+            </div>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <Button variant="filled" icon="add"
+                >{#snippet children()}Add{/snippet}</Button
+              >
+              <Button variant="outlined" icon="edit"
+                >{#snippet children()}Edit{/snippet}</Button
+              >
+              <Button variant="tonal" icon="delete"
+                >{#snippet children()}Delete{/snippet}</Button
               >
             </div>
           {:else}
-            <pre class="component-code"><code
-                >{`<!-- Filled -->\n<Button style="material" theme="default" variant="filled">\n  {#snippet children()}Filled{/snippet}\n</Button>\n\n<!-- Outlined -->\n<Button style="material" theme="default" variant="outlined">\n  {#snippet children()}Outlined{/snippet}\n</Button>\n\n<!-- Text -->\n<Button style="material" theme="default" variant="text">\n  {#snippet children()}Text{/snippet}\n</Button>\n\n<!-- Tonal -->\n<Button style="material" theme="default" variant="tonal">\n  {#snippet children()}Tonal{/snippet}\n</Button>`}</code
-              ></pre>
+            {@render codeBlock('btn', `<Button
+  variant="filled"
+>
+  Click
+</Button>
+
+<Button variant="outlined">Click</Button>
+
+<Button variant="text">Click</Button>
+
+<Button variant="tonal">Click</Button>
+
+<!-- With icons — just the icon name; the class is auto-applied: -->
+<Button
+  variant="filled"
+  icon="add"
+>
+  Add
+</Button>`)}
           {/if}
         </Card>
 
@@ -940,26 +1007,40 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Icon Button
           </p>
-          <div class="flex gap-3 items-center">
-            <IconButton
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              ariaLabel="Heart">{#snippet children()}♥{/snippet}</IconButton
-            >
-            <IconButton
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="outlined"
-              ariaLabel="Star">{#snippet children()}★{/snippet}</IconButton
-            >
-            <IconButton
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="tonal"
-              ariaLabel="Plus">{#snippet children()}+{/snippet}</IconButton
-            >
-          </div>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={iconBtnTab}
+          />
+          {#if iconBtnTab === "preview"}
+            <div class="flex gap-3 items-center">
+              <IconButton variant="filled" ariaLabel="Favorite" icon="favorite" />
+              <IconButton variant="outlined" ariaLabel="Star" icon="star" />
+              <IconButton variant="tonal" ariaLabel="Add" icon="add" />
+            </div>
+          {:else}
+            {@render codeBlock('iconBtn', `<IconButton
+  variant="filled"
+  ariaLabel="Favorite"
+  icon="favorite"
+/>
+
+<IconButton
+  variant="outlined"
+  ariaLabel="Star"
+  icon="star"
+/>
+
+<IconButton
+  variant="tonal"
+  ariaLabel="Add"
+  icon="add"
+/>`)}
+          {/if}
         </Card>
 
         <!-- Input -->
@@ -976,23 +1057,50 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             style={selectedStyle}
             theme={selectedTheme}
             tabs={[
-              { id: "preview", label: "Preview" },
-              { id: "code", label: "Code" },
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
             ]}
             bind:active={inputTab}
           />
           {#if inputTab === "preview"}
-            <Input
-              style={selectedStyle}
-              theme={selectedTheme}
-              bind:value={inputVal}
-              label="Your name"
-              placeholder="Your name"
-            />
+            <div class="space-y-3">
+              <Input
+                bind:value={inputVal}
+                label="Your name"
+                placeholder="Your name"
+              />
+              <Input
+                bind:value={inputVal}
+                placeholder="Search..."
+                iconStart="search"
+              />
+              <Input
+                bind:value={inputVal}
+                placeholder="Password"
+                iconStart="lock"
+                iconEnd="visibility"
+                type="password"
+              />
+            </div>
           {:else}
-            <pre class="component-code"><code
-                >{`<Input style="material" theme="default" bind:value={name} label="Your name" placeholder="Your name" />`}</code
-              ></pre>
+            {@render codeBlock('input', `<Input
+  bind:value={name}
+  label="Your name"
+  placeholder="Your name"
+/>
+
+<!-- With icons at start/end: -->
+<Input
+  placeholder="Search..."
+  iconStart="search"
+/>
+
+<Input
+  placeholder="Password"
+  iconStart="lock"
+  iconEnd="visibility"
+  type="password"
+/>`)}
           {/if}
         </Card>
 
@@ -1006,15 +1114,31 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Textarea
           </p>
-          <Textarea
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:value={textareaVal}
-            label="Message"
-            placeholder="Message"
-            rows={3}
-            maxlength={200}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={textareaTab}
           />
+          {#if textareaTab === "preview"}
+            <Textarea
+              bind:value={textareaVal}
+              label="Message"
+              placeholder="Message"
+              rows={3}
+              maxlength={200}
+            />
+          {:else}
+            {@render codeBlock('textarea', `<Textarea
+  bind:value={msg}
+  label="Message"
+  rows={4}
+  maxlength={200}
+/>`)}
+          {/if}
         </Card>
 
         <!-- Select -->
@@ -1027,14 +1151,30 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Select
           </p>
-          <Select
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:value={selectVal}
-            options={selectOptions}
-            label="Choose"
-            placeholder="Choose"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={selectTab}
           />
+          {#if selectTab === "preview"}
+            <Select
+              bind:value={selectVal}
+              options={selectOptions}
+              label="Choose"
+              placeholder="Choose"
+            />
+          {:else}
+            {@render codeBlock('select', `<Select
+  bind:value={val}
+  options={options}
+  label="Choose"
+  placeholder="Choose"
+/>`)}
+          {/if}
         </Card>
 
         <!-- MultiSelect -->
@@ -1047,13 +1187,28 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Multi-Select
           </p>
-          <MultiSelect
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:selected={multiSelectVal}
-            options={selectOptions}
-            placeholder="Pick items"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={multiSelectTab}
           />
+          {#if multiSelectTab === "preview"}
+            <MultiSelect
+              bind:selected={multiSelectVal}
+              options={selectOptions}
+              placeholder="Pick items"
+            />
+          {:else}
+            {@render codeBlock('multiSelect', `<MultiSelect
+  bind:selected={selected}
+  options={options}
+  placeholder="Pick items"
+/>`)}
+          {/if}
         </Card>
 
         <!-- Checkbox -->
@@ -1066,12 +1221,23 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Checkbox
           </p>
-          <Checkbox
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:checked={checkVal}
-            label="Accept terms"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={checkboxTab}
           />
+          {#if checkboxTab === "preview"}
+            <Checkbox bind:checked={checkVal} label="Accept terms" />
+          {:else}
+            {@render codeBlock('checkbox', `<Checkbox
+  bind:checked={accepted}
+  label="Accept terms"
+/>`)}
+          {/if}
         </Card>
 
         <!-- Radio -->
@@ -1084,22 +1250,25 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Radio
           </p>
-          <div class="flex gap-4">
-            <Radio
-              style={selectedStyle}
-              theme={selectedTheme}
-              value="a"
-              bind:group={radioVal}
-              label="Alpha"
-            />
-            <Radio
-              style={selectedStyle}
-              theme={selectedTheme}
-              value="b"
-              bind:group={radioVal}
-              label="Beta"
-            />
-          </div>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={radioTab}
+          />
+          {#if radioTab === "preview"}
+            <div class="flex gap-4">
+              <Radio value="a" bind:group={radioVal} label="Alpha" />
+              <Radio value="b" bind:group={radioVal} label="Beta" />
+            </div>
+          {:else}
+            {@render codeBlock('radio', `<Radio value="a" bind:group={val} label="Alpha" />
+
+<Radio value="b" bind:group={val} label="Beta" />`)}
+          {/if}
         </Card>
 
         <!-- Toggle -->
@@ -1112,12 +1281,23 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Toggle Switch
           </p>
-          <Toggle
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:checked={toggleVal}
-            label="Notifications"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={toggleTab}
           />
+          {#if toggleTab === "preview"}
+            <Toggle bind:checked={toggleVal} label="Notifications" />
+          {:else}
+            {@render codeBlock('toggle', `<Toggle
+  bind:checked={enabled}
+  label="Notifications"
+/>`)}
+          {/if}
         </Card>
 
         <!-- Slider -->
@@ -1130,32 +1310,30 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Slider
           </p>
-          <Slider
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:value={sliderVal}
-            min={0}
-            max={100}
-            label="Volume"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={sliderTab}
           />
-        </Card>
-
-        <!-- Search Input -->
-        <Card
-          style={selectedStyle}
-          theme={selectedTheme}
-          elevated={true}
-          class="space-y-3"
-        >
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Search Input
-          </p>
-          <SearchInput
-            style={selectedStyle}
-            theme={selectedTheme}
-            bind:value={searchVal}
-            placeholder="Search..."
-          />
+          {#if sliderTab === "preview"}
+            <Slider
+              bind:value={sliderVal}
+              min={0}
+              max={100}
+              label="Volume"
+            />
+          {:else}
+            {@render codeBlock('slider', `<Slider
+  bind:value={val}
+  min={0}
+  max={100}
+  label="Volume"
+/>`)}
+          {/if}
         </Card>
 
         <!-- Date Picker -->
@@ -1168,12 +1346,77 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Date Picker
           </p>
-          <DatePicker
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:value={dateVal}
-            label="Date"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={datePickerTab}
           />
+          {#if datePickerTab === "preview"}
+            <div class="space-y-4">
+              <DatePicker
+                bind:value={dateVal}
+                label="Date (ISO)"
+                placeholder="Pick a date"
+              />
+              <DatePicker
+                bind:value={dateVal}
+                format="DD/MM/YYYY"
+                displayFormat="MMM DD, YYYY"
+                label="Custom format"
+                placeholder="DD/MM/YYYY"
+              />
+              <DatePicker
+                bind:value={dateVal}
+                format="YYYY-MM-DD hh:mm"
+                displayFormat="MMM DD, YYYY hh:mm"
+                label="With time"
+                placeholder="YYYY-MM-DD hh:mm"
+              />
+              <DatePicker
+                bind:value={dateVal}
+                label="Date range (min/max)"
+                min="2025-01-01"
+                max="2025-12-31"
+                placeholder="Pick a date in 2025"
+              />
+            </div>
+          {:else}
+            {@render codeBlock('datePicker', `<script>
+  let date = $state("2025-06-15");
+</script>
+
+<!-- Default: save as ISO (YYYY-MM-DD) -->
+<DatePicker bind:value={date} label="Date" />
+
+<!-- Custom save & display formats:
+     value stores as DD/MM/YYYY but shows as "Jun 15, 2025" -->
+<DatePicker
+  bind:value={date}
+  format="DD/MM/YYYY"
+  displayFormat="MMM DD, YYYY"
+  label="Custom format"
+/>
+
+<!-- With time: when format includes hh/mm, time picker appears -->
+<DatePicker
+  bind:value={date}
+  format="YYYY-MM-DD hh:mm"
+  displayFormat="MMM DD, YYYY hh:mm"
+  label="With time"
+/>
+
+<!-- Restrict with min/max (values use the same format as the format prop): -->
+<DatePicker
+  bind:value={date}
+  min="2025-01-01"
+  max="2025-12-31"
+  label="Date range"
+/>`)}
+          {/if}
         </Card>
 
         <!-- File Upload -->
@@ -1186,12 +1429,23 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             File Upload
           </p>
-          <FileUpload
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            label="Upload file"
-            accept="image/*"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={fileUploadTab}
           />
+          {#if fileUploadTab === "preview"}
+            <FileUpload label="Upload file" accept="image/*" />
+          {:else}
+            {@render codeBlock('fileUpload', `<FileUpload
+  label="Upload file"
+  accept="image/*"
+/>`)}
+          {/if}
         </Card>
 
         <!-- Dropdown Menu -->
@@ -1204,49 +1458,135 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Dropdown Menu
           </p>
-          <div class="flex flex-wrap gap-2">
-            <DropdownMenu
-              style={selectedStyle}
-              theme={selectedTheme}
-              items={dropdownItems}
-              variant="primary"
-              position="bottom"
-            >
-              {#snippet children()}<Button
-                  style={selectedStyle}
-                  theme={selectedTheme}
-                  variant="filled"
-                  >{#snippet children()}Primary{/snippet}</Button
-                >{/snippet}
-            </DropdownMenu>
-            <DropdownMenu
-              style={selectedStyle}
-              theme={selectedTheme}
-              items={dropdownItems.slice(0, 2)}
-              variant="secondary"
-              position="bottom"
-            >
-              {#snippet children()}<Button
-                  style={selectedStyle}
-                  theme={selectedTheme}
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={dropdownTab}
+          />
+          {#if dropdownTab === "preview"}
+            <div class="flex flex-wrap gap-2">
+              <DropdownMenu
+                items={dropdownItems}
+                variant="primary"
+                position="bottom"
+              >
+                {#snippet children()}<Button variant="filled"
+                    >{#snippet children()}Primary{/snippet}</Button
+                  >{/snippet}
+              </DropdownMenu>
+              <DropdownMenu
+                items={dropdownItems.slice(0, 2)}
+                variant="secondary"
+                position="bottom"
+              >
+                {#snippet children()}<Button variant="outlined"
+                    >{#snippet children()}Secondary{/snippet}</Button
+                  >{/snippet}
+              </DropdownMenu>
+              <DropdownMenu
+                items={dropdownItems.slice(0, 3)}
+                variant="success"
+                position="bottom"
+              >
+                {#snippet children()}<Button variant="tonal"
+                    >{#snippet children()}Success{/snippet}</Button
+                  >{/snippet}
+              </DropdownMenu>
+            </div>
+          {:else}
+            {@render codeBlock('dropdown', `<DropdownMenu
+  items={items}
+  variant="primary"
+  position="bottom"
+>
+  <Button variant="filled">Menu</Button>
+</DropdownMenu>
+
+<DropdownMenu
+  items={items}
+  variant="secondary"
+  position="bottom"
+>
+  <Button variant="outlined">Menu</Button>
+</DropdownMenu>`)}
+          {/if}
+        </Card>
+
+        <!-- ButtonGroup -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Button Group
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={btnGroupTab}
+          />
+          {#if btnGroupTab === "preview"}
+            <div class="flex flex-col gap-2">
+              <p class="demo-label text-xs font-semibold">Horizontal</p>
+              <ButtonGroup
+                items={btnGroupItems}
+                bind:value={btnGroupVal}
+                variant="outlined"
+              />
+              <p class="demo-label text-xs font-semibold">Filled Variant</p>
+              <ButtonGroup
+                items={[
+                  { value: "left", label: "Left" },
+                  { value: "center", label: "Center" },
+                  { value: "right", label: "Right" },
+                ]}
+                bind:value={btnGroupVal}
+                variant="filled"
+              />
+              <p class="demo-label text-xs font-semibold">Vertical</p>
+              <div class="flex justify-center">
+                <ButtonGroup
+                  items={[
+                    { value: "sm", label: "S", icon: "🔽" },
+                    { value: "md", label: "M", icon: "⏸" },
+                    { value: "lg", label: "L", icon: "🔼" },
+                  ]}
+                  bind:value={btnGroupVal}
                   variant="outlined"
-                  >{#snippet children()}Secondary{/snippet}</Button
-                >{/snippet}
-            </DropdownMenu>
-            <DropdownMenu
-              style={selectedStyle}
-              theme={selectedTheme}
-              items={dropdownItems.slice(0, 3)}
-              variant="success"
-              position="bottom"
-            >
-              {#snippet children()}<Button
-                  style={selectedStyle}
-                  theme={selectedTheme}
-                  variant="tonal">{#snippet children()}Success{/snippet}</Button
-                >{/snippet}
-            </DropdownMenu>
-          </div>
+                  orientation="vertical"
+                />
+              </div>
+            </div>
+          {:else}
+            {@render codeBlock('btnGroup', `<ButtonGroup
+  items={items}
+  bind:value={val}
+  variant="outlined"
+/>
+
+<ButtonGroup
+  items={items}
+  bind:value={val}
+  variant="filled"
+/>
+
+<ButtonGroup
+  items={items}
+  bind:value={val}
+  variant="outlined"
+  orientation="vertical"
+/>`)}
+          {/if}
         </Card>
       </div>
     </section>
@@ -1257,6 +1597,7 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         Layout Components
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1266,14 +1607,30 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Card
           </p>
-          <Card style={selectedStyle} theme={selectedTheme} elevated={true}
-            >{#snippet children()}<p style="margin:0">
-                This is a card component with elevated shadow and themed
-                styling.
-              </p>{/snippet}</Card
-          >
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={cardTab}
+          />
+          {#if cardTab === "preview"}
+            <Card elevated={true}
+              >{#snippet children()}<p style="margin:0">
+                  This is a card component with elevated shadow and themed
+                  styling.
+                </p>{/snippet}</Card
+            >
+          {:else}
+            {@render codeBlock('card', `<Card elevated={true}>
+  <p>Content inside the card.</p>
+</Card>`)}
+          {/if}
         </Card>
 
+        <!-- Divider -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1283,11 +1640,25 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Divider
           </p>
-          <p class="demo-text text-sm">Above</p>
-          <Divider style={selectedStyle} theme={selectedTheme} label="OR" />
-          <p class="demo-text text-sm">Below</p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={dividerTab}
+          />
+          {#if dividerTab === "preview"}
+            <p class="demo-text text-sm">Above</p>
+            <Divider label="OR" />
+            <p class="demo-text text-sm">Below</p>
+          {:else}
+            {@render codeBlock('divider', `<Divider label="OR" />`)}
+          {/if}
         </Card>
 
+        <!-- Tabs -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1301,14 +1672,35 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
             style={selectedStyle}
             theme={selectedTheme}
             tabs={[
-              { id: "tab1", label: "Overview" },
-              { id: "tab2", label: "Features" },
-              { id: "tab3", label: "Pricing" },
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
             ]}
-            bind:active={tabActive}
+            bind:active={tabsDemoTab}
           />
+          {#if tabsDemoTab === "preview"}
+            <Tabs
+              style={selectedStyle}
+              theme={selectedTheme}
+              tabs={[
+                { id: "tab1", label: "Overview" },
+                { id: "tab2", label: "Features" },
+                { id: "tab3", label: "Pricing" },
+              ]}
+              bind:active={tabActive}
+            />
+          {:else}
+            {@render codeBlock('tabs', `<Tabs
+  tabs={[
+    { id: "tab1", label: "Overview" },
+    { id: "tab2", label: "Features" },
+    { id: "tab3", label: "Pricing" }
+  ]}
+  bind:active={activeTab}
+/>`)}
+          {/if}
         </Card>
 
+        <!-- Accordion -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1318,14 +1710,71 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Accordion
           </p>
-          <Accordion
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            items={accordionItems}
-            current="1"
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={accordionTab}
           />
+          {#if accordionTab === "preview"}
+            <Accordion items={accordionItems} current="1" />
+          {:else}
+            {@render codeBlock('accordion', `<Accordion
+  items={items}
+  current="1"
+/>`)}
+          {/if}
         </Card>
 
+        <!-- Carousel -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Carousel
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={carouselTab}
+          />
+          {#if carouselTab === "preview"}
+            <Carousel slides={carouselSlides} autoPlay={true} interval={4000} />
+          {:else}
+            {@render codeBlock('carousel', `<script>
+  let slides = [
+    {
+      image: "https://picsum.photos/seed/welcome/600/300",
+      alt: "Welcome slide",
+      caption: "Explore the component gallery"
+    },
+    {
+      image: "https://picsum.photos/seed/styles/600/300",
+      alt: "Styles slide",
+      caption: "13 visual design languages"
+    },
+    {
+      image: "https://picsum.photos/seed/themes/600/300",
+      alt: "Themes slide",
+      caption: "10 color themes available"
+    }
+  ];
+</script>
+<Carousel slides={slides} autoPlay={true} interval={4000} />`)}
+          {/if}
+        </Card>
+
+        <!-- Modal -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1335,56 +1784,62 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Modal
           </p>
-          <div class="flex flex-wrap gap-2">
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                modalSize = "small";
-                modalOpen = true;
-              }}>{#snippet children()}Small{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                modalSize = "medium";
-                modalOpen = true;
-              }}>{#snippet children()}Medium{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                modalSize = "large";
-                modalOpen = true;
-              }}>{#snippet children()}Large{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                modalSize = "full";
-                modalOpen = true;
-              }}>{#snippet children()}Full{/snippet}</Button
-            >
-          </div>
-          <Modal
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            size={modalSize}
-            bind:open={modalOpen}
-            title="Modal Title"
-            >{#snippet children()}<p style="margin:0">
-                This is a modal dialog with themed styling.
-              </p>{/snippet}</Modal
-          >
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={modalTab}
+          />
+          {#if modalTab === "preview"}
+            <div class="flex flex-wrap gap-2">
+              <Button
+                variant="filled"
+                onclick={() => {
+                  modalSize = "small";
+                  modalOpen = true;
+                }}>{#snippet children()}Small{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => {
+                  modalSize = "medium";
+                  modalOpen = true;
+                }}>{#snippet children()}Medium{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => {
+                  modalSize = "large";
+                  modalOpen = true;
+                }}>{#snippet children()}Large{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => {
+                  modalSize = "full";
+                  modalOpen = true;
+                }}>{#snippet children()}Full{/snippet}</Button
+              >
+            </div>
+            <Modal
+              size={modalSize}
+              bind:open={modalOpen}
+              title="Modal Title"
+              >{#snippet children()}<p style="margin:0">
+                  This is a modal dialog with themed styling.
+                </p>{/snippet}</Modal
+            >
+          {:else}
+            {@render codeBlock('modal', `<Modal bind:open={isOpen} title="Modal Title" size="medium">
+  <p>Content inside modal.</p>
+</Modal>`)}
+          {/if}
         </Card>
 
+        <!-- Drawer -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1394,65 +1849,73 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Drawer
           </p>
-          <div class="flex flex-wrap gap-2">
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                drawerPosition = "left";
-                drawerOpen = true;
-              }}>{#snippet children()}Left{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                drawerPosition = "right";
-                drawerOpen = true;
-              }}>{#snippet children()}Right{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                drawerPosition = "top";
-                drawerOpen = true;
-              }}>{#snippet children()}Top{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => {
-                drawerPosition = "bottom";
-                drawerOpen = true;
-              }}>{#snippet children()}Bottom{/snippet}</Button
-            >
-          </div>
-          <Drawer
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            position={drawerPosition}
-            bind:open={drawerOpen}
-            >{#snippet children()}<div class="p-4">
-                <h3 class="text-lg font-semibold mb-4">Drawer Content</h3>
-                <p>Slides from {drawerPosition} side.</p>
-                <nav class="mt-6 space-y-2">
-                  <a href="#" class="block p-2 rounded hover:bg-gray-100"
-                    >🏠 Home</a
-                  ><a href="#" class="block p-2 rounded hover:bg-gray-100"
-                    >📊 Dashboard</a
-                  ><a href="#" class="block p-2 rounded hover:bg-gray-100"
-                    >⚙ Settings</a
-                  >
-                </nav>
-              </div>{/snippet}</Drawer
-          >
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={drawerTab}
+          />
+          {#if drawerTab === "preview"}
+            <div class="flex flex-wrap gap-2">
+              <Button
+                variant="filled"
+                onclick={() => {
+                  drawerPosition = "left";
+                  drawerOpen = true;
+                }}>{#snippet children()}Left{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => {
+                  drawerPosition = "right";
+                  drawerOpen = true;
+                }}>{#snippet children()}Right{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => {
+                  drawerPosition = "top";
+                  drawerOpen = true;
+                }}>{#snippet children()}Top{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => {
+                  drawerPosition = "bottom";
+                  drawerOpen = true;
+                }}>{#snippet children()}Bottom{/snippet}</Button
+              >
+            </div>
+            <Drawer
+              style={selectedStyle}
+              theme={selectedTheme}
+              position={drawerPosition}
+              bind:open={drawerOpen}
+              >{#snippet children()}<div class="p-4">
+                  <h3 class="text-lg font-semibold mb-4">Drawer Content</h3>
+                  <p>Slides from {drawerPosition} side.</p>
+                  <nav class="mt-6 space-y-2">
+                    <a href="#" class="drawer-nav-link block p-2 rounded"
+                      >🏠 Home</a
+                    ><a href="#" class="drawer-nav-link block p-2 rounded"
+                      >📊 Dashboard</a
+                    ><a href="#" class="drawer-nav-link block p-2 rounded"
+                      >⚙ Settings</a
+                    >
+                  </nav>
+                </div>{/snippet}</Drawer
+            >
+          {:else}
+            {@render codeBlock('drawer', `<Drawer position="left" bind:open={isOpen}>
+  <div>Drawer content here</div>
+</Drawer>`)}
+          {/if}
         </Card>
 
+        <!-- Command Palette -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1462,23 +1925,36 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Command Palette
           </p>
-          <p class="text-sm">
-            Press <kbd class="px-1.5 py-0.5 text-xs rounded border">⌘K</kbd> or click
-            button.
-          </p>
-          <Button
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            variant="filled"
-            onclick={() => (cmdPaletteOpen = true)}
-            >{#snippet children()}Open CmdK{/snippet}</Button
-          >
-          <CommandPalette
-            style={selectedStyle}
-            theme={selectedTheme}
-            groups={cmdGroups}
-            bind:open={cmdPaletteOpen}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={cmdPaletteTab}
           />
+          {#if cmdPaletteTab === "preview"}
+            <p class="text-sm">
+              Press <kbd class="px-1.5 py-0.5 text-xs rounded border">⌘K</kbd> or click
+              button.
+            </p>
+            <Button
+              variant="filled"
+              onclick={() => (cmdPaletteOpen = true)}
+              >{#snippet children()}Open CmdK{/snippet}</Button
+            >
+            <CommandPalette
+              groups={cmdGroups}
+              bind:open={cmdPaletteOpen}
+            />
+          {:else}
+            {@render codeBlock('cmdPalette', `<CommandPalette
+  groups={groups}
+  bind:open={isOpen}
+  placeholder="Type a command..."
+/>`)}
+          {/if}
         </Card>
       </div>
     </section>
@@ -1489,6 +1965,7 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         Navigation Components
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Breadcrumb -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1498,16 +1975,35 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Breadcrumb
           </p>
-          <Breadcrumb
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            items={[
-              { label: "Home", href: "#" },
-              { label: "Products", href: "#" },
-              { label: "Details" },
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
             ]}
+            bind:active={breadcrumbTab}
           />
+          {#if breadcrumbTab === "preview"}
+            <Breadcrumb
+              items={[
+                { label: "Home", href: "#" },
+                { label: "Products", href: "#" },
+                { label: "Details" },
+              ]}
+            />
+          {:else}
+            {@render codeBlock('breadcrumb', `<Breadcrumb
+  items={[
+    { label: "Home", href: "#" },
+    { label: "Products", href: "#" },
+    { label: "Details" }
+  ]}
+/>`)}
+          {/if}
         </Card>
+
+        <!-- Pagination -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1517,14 +2013,31 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Pagination
           </p>
-          <Pagination
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            total={50}
-            perPage={10}
-            bind:current={paginationPage}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={paginationTab}
           />
+          {#if paginationTab === "preview"}
+            <Pagination
+              total={50}
+              perPage={10}
+              bind:current={paginationPage}
+            />
+          {:else}
+            {@render codeBlock('pagination', `<Pagination
+  total={50}
+  perPage={10}
+  bind:current={page}
+/>`)}
+          {/if}
         </Card>
+
+        <!-- Stepper -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1534,17 +2047,36 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Stepper
           </p>
-          <Stepper
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            steps={[
-              { label: "Account" },
-              { label: "Profile" },
-              { label: "Review" },
-              { label: "Done" },
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
             ]}
-            current={2}
+            bind:active={stepperTab}
           />
+          {#if stepperTab === "preview"}
+            <Stepper
+              steps={[
+                { label: "Account" },
+                { label: "Profile" },
+                { label: "Review" },
+                { label: "Done" },
+              ]}
+              current={2}
+            />
+          {:else}
+            {@render codeBlock('stepper', `<Stepper
+  steps={[
+    { label: "Account" },
+    { label: "Profile" },
+    { label: "Review" },
+    { label: "Done" }
+  ]}
+  current={2}
+/>`)}
+          {/if}
         </Card>
       </div>
     </section>
@@ -1555,6 +2087,7 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         Data Display
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Avatar -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1564,28 +2097,31 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Avatar
           </p>
-          <div class="flex gap-3 items-center">
-            <Avatar
-              style={selectedStyle}
-              theme={selectedTheme}
-              size="sm"
-              fallback="AB"
-            />
-            <Avatar
-              style={selectedStyle}
-              theme={selectedTheme}
-              size="md"
-              fallback="CD"
-            />
-            <Avatar
-              style={selectedStyle}
-              theme={selectedTheme}
-              size="lg"
-              fallback="EF"
-            />
-          </div>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={avatarTab}
+          />
+          {#if avatarTab === "preview"}
+            <div class="flex gap-3 items-center">
+              <Avatar size="sm" fallback="AB" />
+              <Avatar size="md" fallback="CD" />
+              <Avatar size="lg" fallback="EF" />
+            </div>
+          {:else}
+            {@render codeBlock('avatar', `<Avatar size="sm" fallback="AB" />
+
+<Avatar size="md" fallback="CD" />
+
+<Avatar size="lg" fallback="EF" />`)}
+          {/if}
         </Card>
 
+        <!-- Chip -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1595,49 +2131,63 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Chip
           </p>
-          <div class="flex flex-wrap gap-2">
-            <Chip
-              style={selectedStyle}
-              theme={selectedTheme}
-              color="primary"
-              variant="filled">{#snippet children()}Primary{/snippet}</Chip
-            >
-            <Chip
-              style={selectedStyle}
-              theme={selectedTheme}
-              color="success"
-              variant="filled">{#snippet children()}Success{/snippet}</Chip
-            >
-            <Chip
-              style={selectedStyle}
-              theme={selectedTheme}
-              color="warning"
-              variant="filled">{#snippet children()}Warning{/snippet}</Chip
-            >
-            <Chip
-              style={selectedStyle}
-              theme={selectedTheme}
-              color="error"
-              variant="filled">{#snippet children()}Error{/snippet}</Chip
-            >
-          </div>
-          <div class="flex flex-wrap gap-2 mt-2">
-            <Chip
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="outlined"
-              color="primary"
-              icon="★">{#snippet children()}Starred{/snippet}</Chip
-            >
-            <Chip
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="ghost"
-              color="neutral">{#snippet children()}Ghost{/snippet}</Chip
-            >
-          </div>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={chipTab}
+          />
+          {#if chipTab === "preview"}
+            <div class="flex flex-wrap gap-2">
+              <Chip color="primary" variant="filled"
+                >{#snippet children()}Primary{/snippet}</Chip
+              >
+              <Chip color="success" variant="filled"
+                >{#snippet children()}Success{/snippet}</Chip
+              >
+              <Chip color="warning" variant="filled"
+                >{#snippet children()}Warning{/snippet}</Chip
+              >
+              <Chip color="error" variant="filled"
+                >{#snippet children()}Error{/snippet}</Chip
+              >
+            </div>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <Chip
+                variant="outlined"
+                color="primary"
+                icon="★"
+                >{#snippet children()}Starred{/snippet}</Chip
+              >
+              <Chip variant="ghost" color="neutral"
+                >{#snippet children()}Ghost{/snippet}</Chip
+              >
+            </div>
+          {:else}
+            {@render codeBlock('chip', `<Chip color="primary" variant="filled">Label</Chip>
+
+<Chip color="success" variant="filled">Label</Chip>
+
+<Chip color="warning" variant="filled">Label</Chip>
+
+<Chip color="error" variant="filled">Label</Chip>
+
+<Chip
+  variant="outlined"
+  color="primary"
+  icon="★"
+>
+  Starred
+</Chip>
+
+<Chip variant="ghost" color="neutral">Ghost</Chip>`)}
+          {/if}
         </Card>
 
+        <!-- Tooltip -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1647,16 +2197,29 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Tooltip
           </p>
-          <Tooltip
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            text="This is a tooltip!"
-            >{#snippet children()}<span
-                class="demo-text text-sm underline cursor-help">Hover me</span
-              >{/snippet}</Tooltip
-          >
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={tooltipTab}
+          />
+          {#if tooltipTab === "preview"}
+            <Tooltip text="This is a tooltip!"
+              >{#snippet children()}<span
+                  class="demo-text text-sm underline cursor-help">Hover me</span
+                >{/snippet}</Tooltip
+            >
+          {:else}
+            {@render codeBlock('tooltip', `<Tooltip text="This is a tooltip!">
+  <span>Hover me</span>
+</Tooltip>`)}
+          {/if}
         </Card>
 
+        <!-- Progress Bar -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1666,15 +2229,31 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Progress Bar
           </p>
-          <ProgressBar
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            value={progressVal}
-            animated={true}
-            label={true}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={progressBarTab}
           />
+          {#if progressBarTab === "preview"}
+            <ProgressBar
+              value={progressVal}
+              animated={true}
+              label={true}
+            />
+          {:else}
+            {@render codeBlock('progress', `<ProgressBar
+  value={65}
+  animated={true}
+  label={true}
+/>`)}
+          {/if}
         </Card>
 
+        <!-- Spinner -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1684,13 +2263,31 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Spinner
           </p>
-          <div class="flex gap-4 items-center">
-            <Spinner style={selectedStyle} theme={selectedTheme} size="sm" />
-            <Spinner style={selectedStyle} theme={selectedTheme} size="md" />
-            <Spinner style={selectedStyle} theme={selectedTheme} size="lg" />
-          </div>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={spinnerTab}
+          />
+          {#if spinnerTab === "preview"}
+            <div class="flex gap-4 items-center">
+              <Spinner size="sm" />
+              <Spinner size="md" />
+              <Spinner size="lg" />
+            </div>
+          {:else}
+            {@render codeBlock('spinner', `<Spinner size="sm" />
+
+<Spinner size="md" />
+
+<Spinner size="lg" />`)}
+          {/if}
         </Card>
 
+        <!-- Skeleton -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1700,33 +2297,57 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Skeleton
           </p>
-          <div class="flex gap-3 items-center">
-            <Skeleton
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="circle"
-              width="40px"
-              height="40px"
-            />
-            <div class="flex-1 space-y-2">
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={skeletonTab}
+          />
+          {#if skeletonTab === "preview"}
+            <div class="flex gap-3 items-center">
               <Skeleton
-                style={selectedStyle}
-                theme={selectedTheme}
-                variant="text"
-                width="80%"
-                height="14px"
+                variant="circle"
+                width="40px"
+                height="40px"
               />
-              <Skeleton
-                style={selectedStyle}
-                theme={selectedTheme}
-                variant="text"
-                width="60%"
-                height="14px"
-              />
+              <div class="flex-1 space-y-2">
+                <Skeleton
+                  variant="text"
+                  width="80%"
+                  height="14px"
+                />
+                <Skeleton
+                  variant="text"
+                  width="60%"
+                  height="14px"
+                />
+              </div>
             </div>
-          </div>
+          {:else}
+            {@render codeBlock('skeleton', `<Skeleton
+  variant="circle"
+  width="40px"
+  height="40px"
+/>
+
+<Skeleton
+  variant="text"
+  width="80%"
+  height="14px"
+/>
+
+<Skeleton
+  variant="text"
+  width="60%"
+  height="14px"
+/>`)}
+          {/if}
         </Card>
 
+        <!-- Table -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1736,13 +2357,33 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Table
           </p>
-          <Table
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            columns={tableColumns}
-            rows={tableRows}
-            striped={true}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={tableTab}
           />
+          {#if tableTab === "preview"}
+            <Table data={tableData} variant="striped" />
+          {:else}
+            {@render codeBlock('table', `<script>
+  // Data keys become column headers automatically.
+  // Multi-word keys work too:
+  // { "First Name": "Alice", "Job Title": "Engineer", Status: "Active" }
+  const data = [
+    { Name: "Alice", Role: "Engineer", Status: "Active" },
+    { Name: "Bob", Role: "Designer", Status: "Away" },
+    { Name: "Carol", Role: "Manager", Status: "Active" },
+  ];
+</script>
+
+<Table data={data} variant="striped" />
+
+<!-- Variants: "plain", "striped", "hoverable", "bordered", "compact" -->`)}
+          {/if}
         </Card>
       </div>
     </section>
@@ -1753,6 +2394,7 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
         Feedback
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Alert -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1760,83 +2402,69 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           class="space-y-3"
         >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Alert - Info
+            Alert
           </p>
           <Tabs
             style={selectedStyle}
             theme={selectedTheme}
             tabs={[
-              { id: "preview", label: "Preview" },
-              { id: "code", label: "Code" },
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
             ]}
             bind:active={alertTab}
           />
           {#if alertTab === "preview"}
+            <div class="flex flex-wrap gap-2 mb-3">
+              {#each ["default", "info", "success", "warning", "error"] as v}
+                <button
+                  type="button"
+                  class="px-3 py-1.5 text-xs font-semibold rounded border transition-colors"
+                  class:bg-indigo-500={alertVariant === v}
+                  class:text-white={alertVariant === v}
+                  class:border-indigo-500={alertVariant === v}
+                  onclick={() => (alertVariant = v)}
+                >{v}</button>
+              {/each}
+            </div>
             <Alert
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="info"
-              title="Information"
-              >{#snippet children()}This is an informational alert message.{/snippet}</Alert
+              variant={alertVariant}
+              title={alertVariant.charAt(0).toUpperCase() + alertVariant.slice(1)}
+              icon={alertVariant === "default" ? null : (
+                alertVariant === "info" ? "info" :
+                alertVariant === "success" ? "check_circle" :
+                alertVariant === "warning" ? "warning" : "error"
+              )}
+              dismissible
             >
+              {#snippet children()}
+                {#if alertVariant === "info"}
+                  This is an informational alert message.
+                {:else if alertVariant === "success"}
+                  Operation completed successfully.
+                {:else if alertVariant === "warning"}
+                  Please review before proceeding.
+                {:else}
+                  Something went wrong. Please try again.
+                {/if}
+              {/snippet}
+            </Alert>
           {:else}
-            <pre class="component-code"><code
-                >{`<Alert style="material" theme="default" variant="info" title="Information">\n  {#snippet children()}This is an informational alert message.{/snippet}\n</Alert>`}</code
-              ></pre>
+            {@render codeBlock('alert', `<script>
+  let variant = $state("info");
+</script>
+
+<!-- Icons auto-select based on variant.
+     Pass icon="info" to use Material Icons instead.
+     Default icons: info→ℹ, success→✓, warning→⚠, error→✕ -->
+<Alert variant={variant} title="Title" dismissible>
+  Alert message here.
+</Alert>
+
+<!-- Variants: default, info, success, warning, error -->`)}
           {/if}
         </Card>
-        <Card
-          style={selectedStyle}
-          theme={selectedTheme}
-          elevated={true}
-          class="space-y-3"
-        >
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Alert - Success
-          </p>
-          <Alert
-            style={selectedStyle}
-            theme={selectedTheme}
-            variant="success"
-            title="Success"
-            >{#snippet children()}Operation completed successfully.{/snippet}</Alert
-          >
-        </Card>
-        <Card
-          style={selectedStyle}
-          theme={selectedTheme}
-          elevated={true}
-          class="space-y-3"
-        >
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Alert - Warning
-          </p>
-          <Alert
-            style={selectedStyle}
-            theme={selectedTheme}
-            variant="warning"
-            title="Warning"
-            >{#snippet children()}Please review before proceeding.{/snippet}</Alert
-          >
-        </Card>
-        <Card
-          style={selectedStyle}
-          theme={selectedTheme}
-          elevated={true}
-          class="space-y-3"
-        >
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Alert - Error
-          </p>
-          <Alert
-            style={selectedStyle}
-            theme={selectedTheme}
-            variant="error"
-            title="Error"
-            >{#snippet children()}Something went wrong. Please try again.{/snippet}</Alert
-          >
-        </Card>
 
+        <!-- Toast -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1846,52 +2474,72 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Toast
           </p>
-          <div class="flex flex-wrap gap-2">
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => addToastMsg("Toast message", "info")}
-              >{#snippet children()}Info{/snippet}</Button
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={toastTab}
+          />
+          {#if toastTab === "preview"}
+            <div class="flex flex-wrap gap-2">
+              <Button
+                variant="filled"
+                onclick={() => addToastMsg("Toast message", "info", "info")}
+                >{#snippet children()}Info{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => addToastMsg("Saved successfully", "success", "check_circle")}
+                >{#snippet children()}Success{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => addToastMsg("Review before continuing", "warning", "warning")}
+                >{#snippet children()}Warning{/snippet}</Button
+              >
+              <Button
+                variant="filled"
+                onclick={() => addToastMsg("Something failed", "error", "error")}
+                >{#snippet children()}Error{/snippet}</Button
+              >
+            </div>
+            <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+              Toast Position
+            </p>
+            <select
+              bind:value={toastPosition}
+              class="px-3 py-1.5 text-sm rounded border header-select"
             >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => addToastMsg("Saved successfully", "success")}
-              >{#snippet children()}Success{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => addToastMsg("Review before continuing", "warning")}
-              >{#snippet children()}Warning{/snippet}</Button
-            >
-            <Button
-              style={selectedStyle}
-              theme={selectedTheme}
-              variant="filled"
-              onclick={() => addToastMsg("Something failed", "error")}
-              >{#snippet children()}Error{/snippet}</Button
-            >
-          </div>
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Toast Position
-          </p>
-          <select
-            bind:value={toastPosition}
-            class="px-3 py-1.5 text-sm rounded border header-select"
-          >
-            <option value="top-right">Top Right</option>
-            <option value="top-left">Top Left</option>
-            <option value="top-center">Top Center</option>
-            <option value="bottom-right">Bottom Right</option>
-            <option value="bottom-left">Bottom Left</option>
-            <option value="bottom-center">Bottom Center</option>
-          </select>
+              <option value="top-right">Top Right</option>
+              <option value="top-left">Top Left</option>
+              <option value="top-center">Top Center</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="bottom-left">Bottom Left</option>
+              <option value="bottom-center">Bottom Center</option>
+            </select>
+          {:else}
+            {@render codeBlock('toast', `<script>
+  let toasts = $state([]);
+
+  function addToast(msg, variant, icon) {
+    const id = Date.now() + Math.random();
+    toasts = [...toasts, { id, message: msg, variant, duration: 3000, icon }];
+    setTimeout(() => toasts = toasts.filter(t => t.id !== id), 3000);
+  }
+</script>
+
+<Toast bind:toasts position="top-right" />
+
+<!-- Icon is auto-wrapped with the configured icon class.
+     Pass icon="info" for Material Icons,
+     or omit it for defaults: info→ℹ, success→✓, warning→⚠, error→✕. -->`)}
+          {/if}
         </Card>
 
+        <!-- Rating -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1901,15 +2549,27 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Rating
           </p>
-          <Rating
+          <Tabs
             style={selectedStyle}
             theme={selectedTheme}
-            bind:value={ratingVal}
-            max={5}
-            showValue={true}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={ratingTab}
           />
+          {#if ratingTab === "preview"}
+            <Rating bind:value={ratingVal} max={5} showValue={true} />
+          {:else}
+            {@render codeBlock('rating', `<Rating
+  bind:value={val}
+  max={5}
+  showValue={true}
+/>`)}
+          {/if}
         </Card>
 
+        <!-- Popover -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -1919,39 +2579,47 @@ initMultistyleUI({ style: "fluent", theme: "ocean" });
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
             Popover
           </p>
-          <div class="flex flex-wrap gap-2">
-            <Popover
-              style={selectedStyle}
-              theme={selectedTheme}
-              position="top"
-              bind:open={popoverOpen}
-            >
-              {#snippet children()}<Button
-                  style={selectedStyle}
-                  theme={selectedTheme}
-                  variant="outlined">{#snippet children()}Top{/snippet}</Button
-                >{/snippet}
-              {#snippet content()}<div>
-                  <strong>Popover Title</strong>
-                  <p class="mt-1 text-sm">Rich content popover.</p>
-                </div>{/snippet}
-            </Popover>
-            <Popover
-              style={selectedStyle}
-              theme={selectedTheme}
-              position="bottom"
-            >
-              {#snippet children()}<Button
-                  style={selectedStyle}
-                  theme={selectedTheme}
-                  variant="outlined"
-                  >{#snippet children()}Bottom{/snippet}</Button
-                >{/snippet}
-              {#snippet content()}<p class="text-sm">
-                  Popover with arrow indicator.
-                </p>{/snippet}
-            </Popover>
-          </div>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={popoverTab}
+          />
+          {#if popoverTab === "preview"}
+            <div class="flex flex-wrap gap-2">
+              <Popover
+                position="top"
+                bind:open={popoverOpen}
+              >
+                {#snippet children()}<Button variant="outlined"
+                    >{#snippet children()}Top{/snippet}</Button
+                  >{/snippet}
+                {#snippet content()}<div>
+                    <strong>Popover Title</strong>
+                    <p class="mt-1 text-sm">Rich content popover.</p>
+                  </div>{/snippet}
+              </Popover>
+              <Popover position="bottom">
+                {#snippet children()}<Button
+                    variant="outlined"
+                    >{#snippet children()}Bottom{/snippet}</Button
+                  >{/snippet}
+                {#snippet content()}<p class="text-sm">
+                    Popover with arrow indicator.
+                  </p>{/snippet}
+              </Popover>
+            </div>
+          {:else}
+            {@render codeBlock('popover', `<Popover position="top" bind:open={isOpen}>
+  <Button variant="outlined">Trigger</Button>
+</Popover>
+<Popover position="bottom">
+  <Button variant="outlined">Bottom</Button>
+</Popover>`)}
+          {/if}
         </Card>
       </div>
     </section>
