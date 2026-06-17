@@ -2244,6 +2244,10 @@ Then pass theme="custom" to components.
               animated={true}
               label={true}
             />
+            <ProgressBar
+              value={-1}
+              label={true}
+            />
           {:else}
             {@render codeBlock('progress', `<ProgressBar
   value={65}

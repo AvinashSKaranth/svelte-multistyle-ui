@@ -32,15 +32,33 @@
 .s-datepicker-wrapper.disabled { opacity: 0.45; pointer-events: none; }
 .s-datepicker-wrapper.disabled input { cursor: default; }
 
-.s-datepicker-label {
+/* ===== FLOATING LABEL =====
+ * Mirrors Input.svelte: only the floating styles render this label (see
+ * DatePicker.svelte `floatingStyles`). It sits inside the border and floats up
+ * when the field is focused or has a value. Per-style positions below.
+ */
+.s-dp-floating-label {
   position: absolute;
+  pointer-events: none;
   left: 14px;
-  top: -8px;
-  font-size: 12px;
-  color: var(--t-primary);
-  background: var(--t-surface);
-  padding: 0 4px;
+  top: 16px;
+  font-size: 15px;
+  color: var(--t-text-hint);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left center;
+  white-space: nowrap;
   z-index: 1;
+}
+
+/* Floating-label styles get extra top padding so the date text clears the label */
+.s-datepicker-material input,
+.s-datepicker-material3 input,
+.s-datepicker-fluent input,
+.s-datepicker-bootstrap input,
+.s-datepicker-carbon input,
+.s-datepicker-legacy-ios input {
+  padding-top: 24px;
+  padding-bottom: 8px;
 }
 
 .s-datepicker-trigger-icon {
@@ -353,9 +371,139 @@
   }
 }
 
-/* ===== STYLE OVERRIDES ===== */
+/* ===== STYLE OVERRIDES =====
+ * Each style differentiates the WHOLE calendar — input, overlay, header, day /
+ * month / year cells, selected + today states, and time picker — not just the
+ * outer box. Shape & interaction language are style-controlled (may ignore theme
+ * radius/shadow when the design language requires it); colors stay on theme tokens.
+ *
+ * Material is the base look defined above; the other styles override from there.
+ */
 
-/* Brutalist */
+/* ----- Material (label only; shape is the base look) ----- */
+.s-datepicker-material .s-dp-floating-label {
+  left: 14px;
+  top: 16px;
+  font-size: 15px;
+  color: var(--t-border);
+}
+.s-datepicker-material.floated .s-dp-floating-label {
+  transform: translateY(-12px) scale(0.75);
+  color: var(--t-primary);
+}
+.s-datepicker-material:not(.focused).has-value .s-dp-floating-label {
+  color: var(--t-border);
+}
+
+/* ----- Material 3 ----- pill cells, outlined today, larger radii */
+.s-datepicker-material3 input {
+  border: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius);
+  box-shadow: none;
+}
+.s-datepicker-material3 input:focus,
+.s-datepicker-material3.s-datepicker-open input {
+  border-color: var(--t-primary);
+  border-width: calc(var(--t-border-width) + 0.5px);
+  box-shadow: none;
+}
+.s-datepicker-material3 .s-datepicker-overlay {
+  border-radius: 16px;
+  box-shadow: var(--t-shadow-lg);
+}
+.s-datepicker-material3 .s-dp-nav-btn { border-radius: 999px; }
+.s-datepicker-material3 .s-dp-day,
+.s-datepicker-material3 .s-dp-month,
+.s-datepicker-material3 .s-dp-year {
+  border-radius: 999px;
+}
+.s-datepicker-material3 .s-dp-day:hover,
+.s-datepicker-material3 .s-dp-month:hover,
+.s-datepicker-material3 .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 12%, var(--t-surface));
+}
+.s-datepicker-material3 .s-dp-today {
+  color: var(--t-primary);
+  box-shadow: inset 0 0 0 1.5px var(--t-primary);
+}
+.s-datepicker-material3 .s-dp-selected,
+.s-datepicker-material3 .s-dp-month.s-dp-selected,
+.s-datepicker-material3 .s-dp-year.s-dp-selected {
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 999px;
+}
+.s-datepicker-material3 .s-dp-selected:hover {
+  background: color-mix(in srgb, var(--t-primary) 85%, #000);
+  color: #fff;
+}
+.s-datepicker-material3 .s-dp-floating-label {
+  left: 14px;
+  top: 16px;
+  font-size: 15px;
+  color: var(--t-border);
+  background: transparent;
+  padding: 0 4px;
+}
+.s-datepicker-material3.floated .s-dp-floating-label {
+  transform: translateY(-24px) scale(0.75);
+  color: var(--t-primary);
+  background: var(--t-surface);
+}
+.s-datepicker-material3:not(.focused).has-value .s-dp-floating-label {
+  color: var(--t-border);
+  background: var(--t-surface);
+  transform: translateY(-24px) scale(0.75);
+}
+
+/* ----- Fluent ----- clean lines, subtle elevation, square-ish cells */
+.s-datepicker-fluent input {
+  border: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.s-datepicker-fluent input:focus,
+.s-datepicker-fluent.s-datepicker-open input {
+  border-color: var(--t-primary);
+  box-shadow: 0 0 0 1px var(--t-primary);
+}
+.s-datepicker-fluent .s-datepicker-overlay {
+  border-radius: var(--t-card-radius);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12), var(--t-shadow-lg);
+}
+.s-datepicker-fluent .s-dp-day { border-radius: 4px; }
+.s-datepicker-fluent .s-dp-day:hover { background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface)); }
+.s-datepicker-fluent .s-dp-today {
+  color: var(--t-primary);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--t-primary);
+}
+.s-datepicker-fluent .s-dp-selected,
+.s-datepicker-fluent .s-dp-month.s-dp-selected,
+.s-datepicker-fluent .s-dp-year.s-dp-selected {
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 4px;
+}
+.s-datepicker-fluent .s-dp-month,
+.s-datepicker-fluent .s-dp-year { border-radius: 4px; }
+.s-datepicker-fluent .s-dp-floating-label {
+  left: 12px;
+  top: 15px;
+  font-size: 14px;
+  color: var(--t-border);
+}
+.s-datepicker-fluent.floated .s-dp-floating-label {
+  transform: translateY(-9px) scale(0.78);
+  color: var(--t-primary);
+  font-weight: 600;
+}
+.s-datepicker-fluent:not(.focused).has-value .s-dp-floating-label {
+  color: var(--t-text);
+  font-weight: 400;
+}
+
+/* ----- Brutalist ----- monospace, hard edges, offset shadow, solid blocks */
 .s-datepicker-brutalist input {
   font-family: 'Courier New', monospace;
   font-weight: bold;
@@ -367,8 +515,51 @@
   border-radius: 0;
   box-shadow: 6px 6px 0 var(--t-text);
 }
+.s-datepicker-brutalist .s-dp-nav-btn { border-radius: 0; font-family: 'Courier New', monospace; }
+.s-datepicker-brutalist .s-dp-header-label {
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  border-radius: 0;
+}
+.s-datepicker-brutalist .s-dp-weekday {
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+}
+.s-datepicker-brutalist .s-dp-day,
+.s-datepicker-brutalist .s-dp-month,
+.s-datepicker-brutalist .s-dp-year {
+  border-radius: 0;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+.s-datepicker-brutalist .s-dp-day:hover,
+.s-datepicker-brutalist .s-dp-month:hover,
+.s-datepicker-brutalist .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 14%, var(--t-surface));
+}
+.s-datepicker-brutalist .s-dp-today {
+  color: var(--t-text);
+  box-shadow: inset 0 0 0 2px var(--t-text);
+}
+.s-datepicker-brutalist .s-dp-selected,
+.s-datepicker-brutalist .s-dp-month.s-dp-selected,
+.s-datepicker-brutalist .s-dp-year.s-dp-selected {
+  background: var(--t-text);
+  color: var(--t-surface);
+  border-radius: 0;
+}
+.s-datepicker-brutalist .s-dp-selected:hover {
+  background: var(--t-text);
+  color: var(--t-surface);
+}
+.s-datepicker-brutalist .s-dp-time-input {
+  border-radius: 0;
+  border-color: var(--t-text);
+  font-family: 'Courier New', monospace;
+}
+.s-datepicker-brutalist .s-dp-done-btn { border-radius: 0; font-family: 'Courier New', monospace; }
 
-/* Pixel */
+/* ----- Pixel ----- monospace, 0 radius, bevel insets, stepped motion */
 .s-datepicker-pixel input {
   font-family: 'Courier New', monospace;
   border: var(--t-border-width) solid var(--t-primary);
@@ -378,8 +569,38 @@
   border-radius: 0;
   image-rendering: pixelated;
 }
+.s-datepicker-pixel .s-dp-nav-btn { border-radius: 0; font-family: 'Courier New', monospace; transition: background 0.1s steps(2); }
+.s-datepicker-pixel .s-dp-day,
+.s-datepicker-pixel .s-dp-month,
+.s-datepicker-pixel .s-dp-year {
+  border-radius: 0;
+  font-family: 'Courier New', monospace;
+  transition: background 0.1s steps(2);
+}
+.s-datepicker-pixel .s-dp-day:hover,
+.s-datepicker-pixel .s-dp-month:hover,
+.s-datepicker-pixel .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 16%, var(--t-surface));
+}
+.s-datepicker-pixel .s-dp-today {
+  color: var(--t-primary);
+  box-shadow: inset 1.5px 1.5px 0 var(--t-primary), inset -1.5px -1.5px 0 var(--t-primary);
+}
+.s-datepicker-pixel .s-dp-selected,
+.s-datepicker-pixel .s-dp-month.s-dp-selected,
+.s-datepicker-pixel .s-dp-year.s-dp-selected {
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 0;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.3), inset 2px 2px 0 rgba(255,255,255,0.15);
+}
+.s-datepicker-pixel .s-dp-time-input {
+  border-radius: 0;
+  border-color: var(--t-primary);
+  font-family: 'Courier New', monospace;
+}
 
-/* Neon */
+/* ----- Neon ----- glowing outline, neon text, no flat fills */
 .s-datepicker-neon input {
   border-color: var(--t-primary);
   box-shadow: 0 0 5px var(--t-primary);
@@ -388,11 +609,45 @@
   border-color: var(--t-primary);
   box-shadow: 0 0 12px var(--t-shadow), 0 0 25px var(--t-shadow);
 }
-.s-datepicker-neon .s-dp-selected {
+.s-datepicker-neon .s-dp-nav-btn:hover { box-shadow: 0 0 8px var(--t-primary); color: var(--t-primary); }
+.s-datepicker-neon .s-dp-header-label:hover { text-shadow: 0 0 8px var(--t-primary); }
+.s-datepicker-neon .s-dp-weekday { color: color-mix(in srgb, var(--t-primary) 60%, var(--t-text-hint)); }
+.s-datepicker-neon .s-dp-day:hover {
+  background: color-mix(in srgb, var(--t-primary) 10%, transparent);
+  box-shadow: 0 0 6px var(--t-primary);
+  color: var(--t-primary);
+}
+.s-datepicker-neon .s-dp-today {
+  color: var(--t-primary);
+  text-shadow: 0 0 8px var(--t-primary);
+  box-shadow: inset 0 0 0 1.5px var(--t-primary), 0 0 8px var(--t-primary);
+}
+.s-datepicker-neon .s-dp-selected,
+.s-datepicker-neon .s-dp-month.s-dp-selected,
+.s-datepicker-neon .s-dp-year.s-dp-selected {
+  background: var(--t-surface);
+  color: var(--t-primary);
+  box-shadow: 0 0 8px var(--t-primary), inset 0 0 0 1.5px var(--t-primary);
+  text-shadow: 0 0 6px var(--t-primary);
+}
+.s-datepicker-neon .s-dp-selected:hover {
+  background: var(--t-surface);
+  color: var(--t-primary);
+}
+.s-datepicker-neon .s-dp-month:hover,
+.s-datepicker-neon .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 10%, transparent);
+  color: var(--t-primary);
+}
+.s-datepicker-neon .s-dp-time-input {
+  border-color: var(--t-primary);
+  box-shadow: 0 0 4px var(--t-primary);
+}
+.s-datepicker-neon .s-dp-time-input:focus {
   box-shadow: 0 0 8px var(--t-primary);
 }
 
-/* Metro */
+/* ----- Metro ----- flat, square, primary border, bold, no shadow */
 .s-datepicker-metro input {
   border-radius: 0;
   border: var(--t-border-width) solid var(--t-primary);
@@ -404,8 +659,36 @@
   box-shadow: none;
   border-color: var(--t-primary);
 }
+.s-datepicker-metro .s-dp-nav-btn { border-radius: 0; }
+.s-datepicker-metro .s-dp-nav-btn:hover { background: var(--t-primary); color: #fff; }
+.s-datepicker-metro .s-dp-header-label { text-transform: uppercase; font-weight: 700; border-radius: 0; }
+.s-datepicker-metro .s-dp-weekday { text-transform: uppercase; font-weight: 700; }
+.s-datepicker-metro .s-dp-day,
+.s-datepicker-metro .s-dp-month,
+.s-datepicker-metro .s-dp-year {
+  border-radius: 0;
+}
+.s-datepicker-metro .s-dp-day:hover,
+.s-datepicker-metro .s-dp-month:hover,
+.s-datepicker-metro .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface));
+}
+.s-datepicker-metro .s-dp-today {
+  color: var(--t-primary);
+  box-shadow: inset 0 0 0 2px var(--t-primary);
+}
+.s-datepicker-metro .s-dp-selected,
+.s-datepicker-metro .s-dp-month.s-dp-selected,
+.s-datepicker-metro .s-dp-year.s-dp-selected {
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 0;
+}
+.s-datepicker-metro .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: #fff; }
+.s-datepicker-metro .s-dp-time-input { border-radius: 0; border-color: var(--t-primary); }
+.s-datepicker-metro .s-dp-done-btn { border-radius: 0; }
 
-/* Bootstrap */
+/* ----- Bootstrap ----- soft 6px radius, subtle borders, focus ring */
 .s-datepicker-bootstrap input {
   border-radius: 6px;
   border: var(--t-border-width) solid var(--t-border);
@@ -416,8 +699,42 @@
   border-color: var(--t-card-border-color);
   box-shadow: var(--t-shadow-lg);
 }
+.s-datepicker-bootstrap .s-dp-day { border-radius: 4px; }
+.s-datepicker-bootstrap .s-dp-day:hover { background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface)); }
+.s-datepicker-bootstrap .s-dp-today {
+  color: var(--t-primary);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1.5px var(--t-primary);
+}
+.s-datepicker-bootstrap .s-dp-selected,
+.s-datepicker-bootstrap .s-dp-month.s-dp-selected,
+.s-datepicker-bootstrap .s-dp-year.s-dp-selected {
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 4px;
+}
+.s-datepicker-bootstrap .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: #fff; }
+.s-datepicker-bootstrap .s-dp-month,
+.s-datepicker-bootstrap .s-dp-year { border-radius: 4px; }
+.s-datepicker-bootstrap .s-dp-month:hover,
+.s-datepicker-bootstrap .s-dp-year:hover { background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface)); }
+.s-datepicker-bootstrap .s-dp-time-input { border-radius: 4px; }
+.s-datepicker-bootstrap .s-dp-time-input:focus { box-shadow: 0 0 0 3px var(--t-shadow); }
+.s-datepicker-bootstrap .s-dp-floating-label {
+  left: 12px;
+  top: 15px;
+  font-size: 15px;
+  color: var(--t-text-hint);
+}
+.s-datepicker-bootstrap.floated .s-dp-floating-label {
+  transform: translateY(-10px) scale(0.75);
+  color: var(--t-primary);
+}
+.s-datepicker-bootstrap:not(.focused).has-value .s-dp-floating-label {
+  color: var(--t-text-hint);
+}
 
-/* Cartoon */
+/* ----- Cartoon ----- big rounded corners, offset shadow, bouncy */
 .s-datepicker-cartoon input {
   border-radius: 16px;
   border: var(--t-border-width) solid var(--t-text);
@@ -428,8 +745,42 @@
   border-radius: 16px;
   box-shadow: 5px 5px 0 var(--t-primary);
 }
+.s-datepicker-cartoon .s-dp-nav-btn { border-radius: 12px; font-weight: 700; }
+.s-datepicker-cartoon .s-dp-nav-btn:hover { transform: translate(-1px,-1px); }
+.s-datepicker-cartoon .s-dp-header-label { font-weight: 700; border-radius: 10px; }
+.s-datepicker-cartoon .s-dp-day,
+.s-datepicker-cartoon .s-dp-month,
+.s-datepicker-cartoon .s-dp-year {
+  border-radius: 12px;
+  font-weight: 700;
+}
+.s-datepicker-cartoon .s-dp-day:hover,
+.s-datepicker-cartoon .s-dp-month:hover,
+.s-datepicker-cartoon .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 14%, var(--t-surface));
+}
+.s-datepicker-cartoon .s-dp-today {
+  color: var(--t-primary);
+  box-shadow: inset 0 0 0 2px var(--t-text);
+}
+.s-datepicker-cartoon .s-dp-selected,
+.s-datepicker-cartoon .s-dp-month.s-dp-selected,
+.s-datepicker-cartoon .s-dp-year.s-dp-selected {
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--t-text);
+}
+.s-datepicker-cartoon .s-dp-selected:hover {
+  background: var(--t-primary);
+  color: #fff;
+  transform: translate(-1px,-1px);
+  box-shadow: 4px 4px 0 var(--t-text);
+}
+.s-datepicker-cartoon .s-dp-time-input { border-radius: 12px; font-weight: 700; }
+.s-datepicker-cartoon .s-dp-done-btn { border-radius: 14px; font-weight: 700; }
 
-/* Illustration */
+/* ----- Illustration ----- italic, soft 8px radius, offset shadow */
 .s-datepicker-illustration input {
   border-radius: 8px;
   border: var(--t-border-width) solid var(--t-text);
@@ -440,8 +791,34 @@
   border-radius: 8px;
   box-shadow: 4px 4px 0 var(--t-card-border-color);
 }
+.s-datepicker-illustration .s-dp-header-label { font-style: italic; border-radius: 6px; }
+.s-datepicker-illustration .s-dp-day,
+.s-datepicker-illustration .s-dp-month,
+.s-datepicker-illustration .s-dp-year {
+  border-radius: 6px;
+  font-style: italic;
+}
+.s-datepicker-illustration .s-dp-day:hover,
+.s-datepicker-illustration .s-dp-month:hover,
+.s-datepicker-illustration .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 12%, var(--t-surface));
+}
+.s-datepicker-illustration .s-dp-today {
+  color: var(--t-primary);
+  box-shadow: inset 0 0 0 1.5px var(--t-primary);
+}
+.s-datepicker-illustration .s-dp-selected,
+.s-datepicker-illustration .s-dp-month.s-dp-selected,
+.s-datepicker-illustration .s-dp-year.s-dp-selected {
+  background: var(--t-primary);
+  color: #fff;
+  border-radius: 6px;
+  font-style: italic;
+}
+.s-datepicker-illustration .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: #fff; }
+.s-datepicker-illustration .s-dp-time-input { border-radius: 6px; font-style: italic; }
 
-/* Carbon */
+/* ----- Carbon ----- square, IBM Plex, bottom-bar accent (no fill) */
 .s-datepicker-carbon input {
   border-radius: 0;
   border: var(--t-border-width) solid var(--t-border);
@@ -449,17 +826,75 @@
   font-family: 'IBM Plex Sans', sans-serif;
   box-shadow: none;
 }
+.s-datepicker-carbon input:focus,
+.s-datepicker-carbon.s-datepicker-open input {
+  border-bottom-color: var(--t-primary);
+  box-shadow: none;
+}
 .s-datepicker-carbon .s-datepicker-overlay {
   border-radius: 0;
   border-color: var(--t-card-border-color);
   box-shadow: var(--t-shadow-lg);
 }
+.s-datepicker-carbon .s-dp-header-label { font-family: 'IBM Plex Sans', sans-serif; border-radius: 0; }
+.s-datepicker-carbon .s-dp-header-label:hover { box-shadow: inset 0 -2px 0 var(--t-primary); }
+.s-datepicker-carbon .s-dp-weekday { font-family: 'IBM Plex Sans', sans-serif; }
+.s-datepicker-carbon .s-dp-day,
+.s-datepicker-carbon .s-dp-month,
+.s-datepicker-carbon .s-dp-year {
+  border-radius: 0;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.s-datepicker-carbon .s-dp-day:hover,
+.s-datepicker-carbon .s-dp-month:hover,
+.s-datepicker-carbon .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 6%, var(--t-surface));
+}
+.s-datepicker-carbon .s-dp-today {
+  color: var(--t-primary);
+  font-weight: 700;
+  box-shadow: inset 0 -2px 0 var(--t-primary);
+}
+.s-datepicker-carbon .s-dp-selected,
+.s-datepicker-carbon .s-dp-month.s-dp-selected,
+.s-datepicker-carbon .s-dp-year.s-dp-selected {
+  background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
+  color: var(--t-primary);
+  font-weight: 700;
+  border-radius: 0;
+  box-shadow: inset 0 -2px 0 var(--t-primary);
+}
+.s-datepicker-carbon .s-dp-selected:hover {
+  background: color-mix(in srgb, var(--t-primary) 12%, var(--t-surface));
+  color: var(--t-primary);
+}
+.s-datepicker-carbon .s-dp-time-input {
+  border-radius: 0;
+  border-bottom-width: 2px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.s-datepicker-carbon .s-dp-floating-label {
+  left: 14px;
+  top: 8px;
+  font-size: 12px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--t-text-hint);
+  transform: none;
+}
+.s-datepicker-carbon.floated .s-dp-floating-label {
+  transform: none;
+  color: var(--t-text-hint);
+}
+.s-datepicker-carbon.focused .s-dp-floating-label {
+  color: var(--t-primary);
+}
 
-/* Liquid Glass */
+/* ----- Liquid Glass ----- translucent, frosted, glass cells */
 .s-datepicker-liquid-glass {
   background: rgba(255,255,255,0.1);
   border-radius: 16px;
   backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
 }
@@ -471,12 +906,46 @@
 .s-datepicker-liquid-glass .s-datepicker-overlay {
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(30px) saturate(1.8);
+  -webkit-backdrop-filter: blur(30px) saturate(1.8);
   border: 1px solid rgba(255,255,255,0.25);
   border-radius: 16px;
   box-shadow: var(--t-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.2);
 }
+.s-datepicker-liquid-glass .s-dp-nav-btn { border-radius: 999px; }
+.s-datepicker-liquid-glass .s-dp-day,
+.s-datepicker-liquid-glass .s-dp-month,
+.s-datepicker-liquid-glass .s-dp-year {
+  border-radius: 999px;
+}
+.s-datepicker-liquid-glass .s-dp-day:hover,
+.s-datepicker-liquid-glass .s-dp-month:hover,
+.s-datepicker-liquid-glass .s-dp-year:hover {
+  background: rgba(255,255,255,0.18);
+}
+.s-datepicker-liquid-glass .s-dp-today {
+  color: var(--t-primary);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6), 0 0 0 1.5px var(--t-primary);
+}
+.s-datepicker-liquid-glass .s-dp-selected,
+.s-datepicker-liquid-glass .s-dp-month.s-dp-selected,
+.s-datepicker-liquid-glass .s-dp-year.s-dp-selected {
+  background: color-mix(in srgb, var(--t-primary) 45%, transparent);
+  color: #fff;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45), 0 2px 8px var(--t-shadow);
+}
+.s-datepicker-liquid-glass .s-dp-selected:hover {
+  background: color-mix(in srgb, var(--t-primary) 55%, transparent);
+  color: #fff;
+}
+.s-datepicker-liquid-glass .s-dp-time-input {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.25);
+  border-radius: 999px;
+}
+.s-datepicker-liquid-glass .s-dp-time-input:focus { box-shadow: 0 0 0 2px var(--t-primary); }
 
-/* Legacy iOS */
+/* ----- Legacy iOS ----- skeuomorphic, gradient fills, inset highlights */
 .s-datepicker-legacy-ios input {
   border-radius: 10px;
   border: var(--t-border-width) solid var(--t-border);
@@ -487,4 +956,56 @@
   border-radius: 12px;
   border-color: var(--t-card-border-color);
   box-shadow: var(--t-shadow-lg);
+}
+.s-datepicker-legacy-ios .s-dp-nav-btn { border-radius: 8px; }
+.s-datepicker-legacy-ios .s-dp-header-label { font-weight: 700; border-radius: 8px; }
+.s-datepicker-legacy-ios .s-dp-day,
+.s-datepicker-legacy-ios .s-dp-month,
+.s-datepicker-legacy-ios .s-dp-year {
+  border-radius: 10px;
+  font-weight: 600;
+}
+.s-datepicker-legacy-ios .s-dp-day:hover,
+.s-datepicker-legacy-ios .s-dp-month:hover,
+.s-datepicker-legacy-ios .s-dp-year:hover {
+  background: color-mix(in srgb, var(--t-primary) 12%, var(--t-surface));
+}
+.s-datepicker-legacy-ios .s-dp-today {
+  color: var(--t-primary);
+  box-shadow: inset 0 0 0 1.5px var(--t-primary), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+.s-datepicker-legacy-ios .s-dp-selected,
+.s-datepicker-legacy-ios .s-dp-month.s-dp-selected,
+.s-datepicker-legacy-ios .s-dp-year.s-dp-selected {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--t-primary) 80%, #fff) 0%, var(--t-primary) 100%);
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 1px 2px var(--t-shadow);
+}
+.s-datepicker-legacy-ios .s-dp-selected:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--t-primary) 80%, #fff) 0%, color-mix(in srgb, var(--t-primary) 85%, #000) 100%);
+  color: #fff;
+}
+.s-datepicker-legacy-ios .s-dp-time-input {
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.s-datepicker-legacy-ios .s-dp-done-btn {
+  border-radius: 10px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--t-primary) 80%, #fff) 0%, var(--t-primary) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), var(--t-shadow-xs);
+}
+.s-datepicker-legacy-ios .s-dp-floating-label {
+  left: 14px;
+  top: 16px;
+  font-size: 15px;
+  color: var(--t-text-hint);
+}
+.s-datepicker-legacy-ios.floated .s-dp-floating-label {
+  transform: translateY(-10px) scale(0.75);
+  color: var(--t-primary);
+}
+.s-datepicker-legacy-ios:not(.focused).has-value .s-dp-floating-label {
+  color: var(--t-text-hint);
 }

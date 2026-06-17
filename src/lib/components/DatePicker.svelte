@@ -58,6 +58,14 @@
   );
   const inputPlaceholder = $derived(placeholder || dispFormat.toLowerCase());
 
+  // Floating-label support — mirrors Input.svelte so the label sits inside the
+  // border (floats up on focus/value) for outlined styles, and renders no
+  // in-field label for the non-floating styles, exactly like Input.
+  const floatingStyles = ["material", "material3", "fluent", "carbon", "bootstrap", "legacy-ios"];
+  const hasFloatingLabel = $derived(floatingStyles.includes(style) && !!label);
+  const hasValue = $derived(!!value);
+  const floated = $derived(open || hasValue);
+
   const minDate = $derived(min ? parseDate(min, format) : null);
   const maxDate = $derived(max ? parseDate(max, format) : null);
 
@@ -221,19 +229,22 @@
 <div
   class="s-datepicker-wrapper {styleClass} {themeClass}"
   class:s-datepicker-open={open}
+  class:focused={open}
+  class:floated={floated}
+  class:has-value={hasValue}
   class:disabled
   bind:this={wrapperEl}
   {...rest}
 >
-  {#if label}
-    <label class="s-datepicker-label" for={internalId}>{label}</label>
+  {#if hasFloatingLabel}
+    <label class="s-dp-floating-label" for={internalId}>{label}</label>
   {/if}
   <input
     id={internalId}
     type="text"
     readonly
     value={displayValue}
-    placeholder={inputPlaceholder}
+    placeholder={hasFloatingLabel ? "" : inputPlaceholder}
     {disabled}
     onfocus={() => { if (!disabled) open = true; }}
     onclick={() => { if (!disabled) open = true; }}
