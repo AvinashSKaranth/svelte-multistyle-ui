@@ -27,6 +27,9 @@ export { default as Accordion } from "./components/Accordion.svelte";
 export { default as Modal } from "./components/Modal.svelte";
 export { default as Drawer } from "./components/Drawer.svelte";
 export { default as CommandPalette } from "./components/CommandPalette.svelte";
+export { default as Row } from "./components/Row.svelte";
+export { default as Column } from "./components/Column.svelte";
+export { default as Grid } from "./components/Grid.svelte";
 
 // Navigation Components
 export { default as Breadcrumb } from "./components/Breadcrumb.svelte";

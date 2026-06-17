@@ -36,6 +36,9 @@
   import ButtonGroup from "./lib/components/ButtonGroup.svelte";
   import Rating from "./lib/components/Rating.svelte";
   import CommandPalette from "./lib/components/CommandPalette.svelte";
+  import Row from "./lib/components/Row.svelte";
+  import Column from "./lib/components/Column.svelte";
+  import Grid from "./lib/components/Grid.svelte";
 
   import Prism from 'prismjs';
 
@@ -318,6 +321,17 @@
   let sliderVal = $state(50);
   let dateVal = $state("");
   let tabActive = $state("tab1");
+
+  // Top-level category tabs (replace scrolling sections)
+  const categoryTabs = [
+    { id: "form", label: "Form" },
+    { id: "layout", label: "Layout" },
+    { id: "navigation", label: "Navigation" },
+    { id: "datadisplay", label: "Data Display" },
+    { id: "feedback", label: "Feedback" },
+  ];
+  let activeCat = $state("form");
+  let layoutTab = $state("preview");
 
   // Code preview tab states
   let buttonTab = $state("preview");
@@ -923,8 +937,17 @@ Then pass theme="custom" to components.
       </div>
     {/if}
 
+    <div class="category-tabs">
+      <Tabs
+        style={selectedStyle}
+        theme={selectedTheme}
+        tabs={categoryTabs}
+        bind:active={activeCat}
+      />
+    </div>
+
     <!-- FORM COMPONENTS -->
-    <section>
+    <section class:hidden={activeCat !== "form"}>
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Form Components
       </h2>
@@ -1592,10 +1615,94 @@ Then pass theme="custom" to components.
     </section>
 
     <!-- LAYOUT COMPONENTS -->
-    <section>
+    <section class:hidden={activeCat !== "layout"}>
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Layout Components
       </h2>
+      <div class="mb-6">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Row / Column / Grid
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={layoutTab}
+          />
+          {#if layoutTab === "preview"}
+            <Column gap="12px" fill>
+              <div>
+                <p style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;">
+                  Row — gap 8px, align center
+                </p>
+                <Row gap="8px" align="center">
+                  <Button variant="filled"
+                    >{#snippet children()}One{/snippet}</Button
+                  >
+                  <Button variant="outlined"
+                    >{#snippet children()}Two{/snippet}</Button
+                  >
+                  <Button variant="tonal"
+                    >{#snippet children()}Three{/snippet}</Button
+                  >
+                </Row>
+              </div>
+              <div>
+                <p style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;">
+                  Column — gap 8px, fill
+                </p>
+                <Column gap="8px" fill>
+                  <Button variant="filled"
+                    >{#snippet children()}Top{/snippet}</Button
+                  >
+                  <Button variant="outlined"
+                    >{#snippet children()}Bottom{/snippet}</Button
+                  >
+                </Column>
+              </div>
+              <div>
+                <p style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;">
+                  Grid — columns 3, gap 8px
+                </p>
+                <Grid columns={3} gap="8px">
+                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">1</div>
+                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">2</div>
+                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">3</div>
+                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">4</div>
+                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">5</div>
+                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">6</div>
+                </Grid>
+              </div>
+            </Column>
+          {:else}
+            {@render codeBlock('layout', `<Row gap="8px" align="center">
+  <Button>One</Button>
+  <Button>Two</Button>
+  <Button>Three</Button>
+</Row>
+
+<Column gap="8px" fill>
+  <Button>Top</Button>
+  <Button>Bottom</Button>
+</Column>
+
+<Grid columns={3} gap="8px">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</Grid>`)}
+          {/if}
+        </Card>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Card -->
         <Card
@@ -1960,7 +2067,7 @@ Then pass theme="custom" to components.
     </section>
 
     <!-- NAVIGATION COMPONENTS -->
-    <section>
+    <section class:hidden={activeCat !== "navigation"}>
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Navigation Components
       </h2>
@@ -2082,7 +2189,7 @@ Then pass theme="custom" to components.
     </section>
 
     <!-- DATA DISPLAY -->
-    <section>
+    <section class:hidden={activeCat !== "datadisplay"}>
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Data Display
       </h2>
@@ -2393,7 +2500,7 @@ Then pass theme="custom" to components.
     </section>
 
     <!-- FEEDBACK -->
-    <section>
+    <section class:hidden={activeCat !== "feedback"}>
       <h2 class="demo-section-title text-2xl font-semibold mb-6 border-b pb-2">
         Feedback
       </h2>
