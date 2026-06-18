@@ -8,5 +8,17 @@ export default defineConfig({
   build: {
     outDir: "docs",
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        // Plain, stable filenames (no content hash) so the static export
+        // is easy to host and reference directly.
+        entryFileNames: "script.js",
+        chunkFileNames: "chunks/[name].js",
+        assetFileNames: (assetInfo) =>
+          assetInfo.name && assetInfo.name.endsWith(".css")
+            ? "style.css"
+            : "assets/[name][extname]",
+      },
+    },
   },
 });
