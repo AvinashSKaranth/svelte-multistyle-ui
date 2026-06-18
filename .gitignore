@@ -10,6 +10,7 @@ test-results/*
 .svelte-kit/*
 .codegraph/*
 node_modules
+dist
 dist-ssr
 *.local
 

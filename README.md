@@ -128,8 +128,8 @@ This repository contains a Vite demo app in `src/App.svelte` that renders every 
 ```bash
 pnpm install
 pnpm dev          # start the demo
-pnpm build        # build the demo to dist/
-pnpm build:lib    # build the library for publishing
+pnpm build        # build the demo (static HTML/CSS/JS) to docs/
+pnpm build:lib    # build the library for publishing (to dist/)
 pnpm preview      # preview the production demo
 pnpm test         # run Playwright visual tests
 pnpm test:ui      # open the Playwright UI runner
