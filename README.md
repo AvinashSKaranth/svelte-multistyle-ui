@@ -84,7 +84,7 @@ A Svelte action for portaling content to `document.body`:
 The library exports the following components from `svelte-multistyle-ui`:
 
 - Actions: `Button`, `IconButton`, `FAB`, `ButtonGroup`, `DropdownMenu`, `Popover`
-- Form: `Input`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `Radio`, `Toggle`, `Slider`, `FileUpload`, `DatePicker`
+- Form: `Input`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `Radio`, `Toggle`, `Slider`, `FileUpload`, `DatePicker`, `SortableList`
 - Layout: `Card`, `Divider`, `Tabs`, `Accordion`, `Modal`, `Drawer`, `CommandPalette`, `Row`, `Column`, `Grid`
 - Navigation: `Breadcrumb`, `Pagination`, `Stepper`
 - Data display: `Avatar`, `Chip`, `Tooltip`, `ProgressBar`, `Table`, `Spinner`, `Skeleton`, `Rating`

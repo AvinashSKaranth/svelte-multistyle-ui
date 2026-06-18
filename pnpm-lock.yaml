@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@thisux/sveltednd':
+        specifier: ^0.4.1
+        version: 0.4.1(svelte@5.55.4)
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
@@ -294,6 +297,11 @@ packages:
     resolution: {integrity: sha512-mEiF5HO1QqCLXoNEfXVA1Tzo+cYsrqV7w9Juj2wdUFyW07JRenqMG225MvPwr3ZD9N1bFQj46X7r33iHxLUW0w==}
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
+
+  '@thisux/sveltednd@0.4.1':
+    resolution: {integrity: sha512-qRcwstSmYOoGD9h0hPDI6Tm4nBXeMJpCs3vrOhnImi1ObL/D2ScfAmIbL9bMN1l2V51AVvD5l/G/ZJkx8iRbTA==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -813,6 +821,10 @@ snapshots:
       '@tailwindcss/oxide': 4.2.2
       tailwindcss: 4.2.2
       vite: 8.0.9(jiti@2.6.1)
+
+  '@thisux/sveltednd@0.4.1(svelte@5.55.4)':
+    dependencies:
+      svelte: 5.55.4
 
   '@tybys/wasm-util@0.10.1':
     dependencies:

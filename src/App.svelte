@@ -29,8 +29,8 @@
   import Skeleton from "./lib/components/Skeleton.svelte";
   import FAB from "./lib/components/FAB.svelte";
   import Toast from "./lib/components/Toast.svelte";
-  import DropdownMenu from "./lib/components/DropdownMenu.svelte";
-  import Popover from "./lib/components/Popover.svelte";
+  import SortableList from "./lib/components/SortableList.svelte";
+  import DropdownMenu from "./lib/components/DropdownMenu.svelte";  import Popover from "./lib/components/Popover.svelte";
   import Drawer from "./lib/components/Drawer.svelte";
   import Chip from "./lib/components/Chip.svelte";
   import ButtonGroup from "./lib/components/ButtonGroup.svelte";
@@ -374,6 +374,7 @@
   let fabTab = $state("preview");
   let tabsDemoTab = $state("preview");
   let btnGroupTab = $state("preview");
+  let sortableListTab = $state("preview");
   let barChartTab = $state("preview");
   let lineChartTab = $state("preview");
   let pieChartTab = $state("preview");
@@ -471,6 +472,23 @@
     { value: "week", label: "Week" },
     { value: "month", label: "Month" },
   ];
+  let sortableItems = $state([
+    { id: "1", label: "Design Review" },
+    { id: "2", label: "Frontend Development" },
+    { id: "3", label: "API Integration" },
+    { id: "4", label: "QA Testing" },
+    { id: "5", label: "Deployment" },
+  ]);
+  let sortableNested = $state([
+    { id: "n1", label: "Project Alpha", children: [
+      { id: "n1a", label: "Setup" },
+      { id: "n1b", label: "Design" },
+    ]},
+    { id: "n2", label: "Project Beta", children: [
+      { id: "n2a", label: "Research" },
+    ]},
+    { id: "n3", label: "Project Gamma", children: [] },
+  ]);
   let ratingVal = $state(3);
   async function copyCode(code) {
     await navigator.clipboard.writeText(code);
@@ -1668,6 +1686,99 @@ Then pass theme="custom" to components.
   variant="outlined"
   orientation="vertical"
 />`,
+            )}
+          {/if}
+        </Card>
+      </div>
+
+      <!-- Sortable List -->
+      <div class="mt-6">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Sortable List
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={sortableListTab}
+          />
+          {#if sortableListTab === "preview"}
+            <div class="space-y-6">
+              <div>
+                <p class="demo-label text-xs font-semibold">Horizontal</p>
+                <SortableList items={sortableItems} direction="horizontal" onUpdate={(v) => sortableItems = v}>
+                  {#snippet children(item)}
+                    <span>{item.label}</span>
+                  {/snippet}
+                </SortableList>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p class="demo-label text-xs font-semibold">Vertical</p>
+                  <SortableList items={sortableItems} direction="vertical" onUpdate={(v) => sortableItems = v}>
+                    {#snippet children(item)}
+                      <span>{item.label}</span>
+                    {/snippet}
+                  </SortableList>
+                </div>
+                <div>
+                  <p class="demo-label text-xs font-semibold">Nested</p>
+                  <SortableList items={sortableNested} type="parent" direction="vertical" onUpdate={(v) => sortableNested = v}>
+                    {#snippet children(item)}
+                      <div class="flex-1">
+                        <span>{item.label}</span>
+                        {#if item.children?.length}
+                          <div class="mt-2">
+                            <SortableList items={item.children} type="child" direction="vertical" onUpdate={(v) => item.children = v}>
+                              {#snippet children(child)}
+                                <span>{child.label}</span>
+                              {/snippet}
+                            </SortableList>
+                          </div>
+                        {/if}
+                      </div>
+                    {/snippet}
+                  </SortableList>
+                </div>
+              </div>
+            </div>
+          {:else}
+            {@render codeBlock(
+              "sortableList",
+              `<SortableList items={items} direction="vertical" onUpdate={(v) => items = v}>
+  {#snippet children(item)}
+    <span>{item.label}</span>
+  {/snippet}
+</SortableList>
+
+<SortableList items={items} direction="horizontal" onUpdate={(v) => items = v}>
+  {#snippet children(item)}
+    <span>{item.label}</span>
+  {/snippet}
+</SortableList>
+
+<!-- Nested: Each parent item renders its own SortableList -->
+<SortableList items={nestedItems} type="parent" direction="vertical">
+  {#snippet children(item)}
+    <span>{item.label}</span>
+    {#if item.children?.length}
+      <SortableList items={item.children} type="child" direction="vertical">
+        {#snippet children(child)}
+          <span>{child.label}</span>
+        {/snippet}
+      </SortableList>
+    {/if}
+  {/snippet}
+</SortableList>`,
             )}
           {/if}
         </Card>

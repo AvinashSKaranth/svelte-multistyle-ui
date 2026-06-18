@@ -5,6 +5,7 @@ export { initMultistyleUI } from "./config.js";
 export { portal } from "./actions/portal.js";
 
 // Form Components
+export { default as SortableList } from "./components/SortableList.svelte";
 export { default as Input } from "./components/Input.svelte";
 export { default as Button } from "./components/Button.svelte";
 export { default as IconButton } from "./components/IconButton.svelte";
