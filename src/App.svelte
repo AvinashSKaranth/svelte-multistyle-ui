@@ -58,7 +58,7 @@
     return Prism.highlight(code, Prism.languages.markup, "markup");
   }
 
-  import { initMultistyleUI } from "./lib/config.js";
+  import { defaults, initMultistyleUI } from "./lib/config.js";
 
   const styles = [
     { value: "material", label: "Material Design" },
@@ -257,9 +257,6 @@
   let selectedStyle = $state(urlParams.get("style") || "material");
   let selectedTheme = $state(urlParams.get("theme") || "default");
   let mode = $state(urlParams.get("mode") || "system");
-  let systemDark = $state(
-    window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
 
   // Theme editor state
   let customPrimary = $state("#6366f1");
@@ -298,28 +295,20 @@
     }
   });
 
-  // Track system dark-mode preference live
-  $effect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = (e) => (systemDark = e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  });
-
   const isDarkMode = $derived(
-    mode === "dark" || (mode === "system" && systemDark),
+    defaults.mode === "dark" || (defaults.mode === "system" && defaults.systemDark)
   );
+
+  // Keep the global library defaults in sync with the demo controls
+  $effect(() => {
+    initMultistyleUI({ style: selectedStyle, theme: selectedTheme, mode });
+  });
 
   // Apply effective mode to document
   $effect(() => {
     const root = document.documentElement;
     root.classList.remove("dark", "light");
     root.classList.add(isDarkMode ? "dark" : "light");
-  });
-
-  // Keep the global library defaults in sync with the demo controls
-  $effect(() => {
-    initMultistyleUI({ style: selectedStyle, theme: selectedTheme });
   });
 
   // Demo state
