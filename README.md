@@ -2,6 +2,8 @@
 
 A multi-style, multi-theme **Svelte 5** component library. Every component can render in more than a dozen visual design languages (styles) and switch between several color palettes (themes) via two simple props.
 
+**Live demo:** https://avinashskaranth.github.io/svelte-multistyle-ui/
+
 ## Features
 
 - **Svelte 5 native** — uses runes (`$props`, `$state`, `$derived`, `$effect`) and snippets (`{@render children?.()}`).
@@ -20,6 +22,14 @@ pnpm add svelte-multistyle-ui
 ```
 
 > Requires Svelte `^5.0.0` and Chart.js `^4.5.1` as peer dependencies (Chart.js is only needed if you use the chart components).
+
+## LLM skill
+
+This repo ships a LLM skill (in [`/skill`](./skill)) that teaches your coding agent the library's API — every component's props, all styles/themes, and how to write custom `--t-*` themes. Add it to your own project so Claude can help you build with this library:
+
+```bash
+npx skills add https://github.com/AvinashSKaranth/svelte-multistyle-ui/skill
+```
 
 ## Quick start
 
@@ -46,12 +56,12 @@ Import the theme stylesheet once in your app, then use any component:
 Import `initMultistyleUI` once in your app (e.g. `+layout.svelte` or `App.svelte`) to set the default `style`, `theme`, and color `mode` for every component at once. Per-component `style`/`theme` props still override these defaults.
 
 ```js
-import { initMultistyleUI } from 'svelte-multistyle-ui';
+import { initMultistyleUI } from "svelte-multistyle-ui";
 
 initMultistyleUI({
-  style: 'material',   // visual design system
-  theme: 'ocean',      // color theme preset
-  mode: 'system',      // "system" | "light" | "dark"
+  style: "material", // visual design system
+  theme: "ocean", // color theme preset
+  mode: "system", // "system" | "light" | "dark"
 });
 ```
 
@@ -90,7 +100,7 @@ You can also import individual files from `svelte-multistyle-ui/components/<Comp
 Import the full preset bundle:
 
 ```js
-import 'svelte-multistyle-ui/theme.css';
+import "svelte-multistyle-ui/theme.css";
 ```
 
 Themes are applied by adding a `theme-{name}` class to a container (usually `<html>` or a wrapping element). Light and dark variants are selected with `html.light` / `html.dark`.
@@ -100,7 +110,7 @@ Themes are applied by adding a `theme-{name}` class to a container (usually `<ht
 Import only the token defaults and define your own presets:
 
 ```css
-@import 'svelte-multistyle-ui/theme-base.css';
+@import "svelte-multistyle-ui/theme-base.css";
 
 .theme-brand {
   --t-primary: #7c3aed;

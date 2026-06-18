@@ -5,6 +5,8 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [svelte(), tailwindcss()],
+  // Relative asset paths so the static export works from any subfolder/host.
+  base: "./",
   build: {
     outDir: "docs",
     emptyOutDir: true,
