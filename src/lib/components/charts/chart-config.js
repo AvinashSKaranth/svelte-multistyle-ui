@@ -47,13 +47,17 @@ Chart.register(
 // Safety patch: ensure setLineDash always receives a valid array.
 // Chart.js v4 can pass undefined/null internal values that throw "cannot be
 // converted to a sequence" in some browser environments.
-const origSetLineDash = CanvasRenderingContext2D.prototype.setLineDash;
-CanvasRenderingContext2D.prototype.setLineDash = function (segments) {
-  if (!segments || typeof segments !== "object" || typeof segments[Symbol.iterator] !== "function") {
-    return origSetLineDash.call(this, []);
-  }
-  return origSetLineDash.call(this, segments);
-};
+// Guarded so the module stays safe during SSR (CanvasRenderingContext2D is
+// only available in the browser).
+if (typeof CanvasRenderingContext2D !== "undefined") {
+  const origSetLineDash = CanvasRenderingContext2D.prototype.setLineDash;
+  CanvasRenderingContext2D.prototype.setLineDash = function (segments) {
+    if (!segments || typeof segments !== "object" || typeof segments[Symbol.iterator] !== "function") {
+      return origSetLineDash.call(this, []);
+    }
+    return origSetLineDash.call(this, segments);
+  };
+}
 
 /**
  * Read theme tokens from a DOM element's computed style.
