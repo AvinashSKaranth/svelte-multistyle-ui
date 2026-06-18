@@ -19,7 +19,7 @@ npm install svelte-multistyle-ui
 pnpm add svelte-multistyle-ui
 ```
 
-> Requires Svelte `^5.0.0` as a peer dependency.
+> Requires Svelte `^5.0.0` and Chart.js `^4.5.1` as peer dependencies (Chart.js is only needed if you use the chart components).
 
 ## Quick start
 
@@ -41,18 +41,47 @@ Import the theme stylesheet once in your app, then use any component:
 </Card>
 ```
 
+## Global configuration
+
+Import `initMultistyleUI` once in your app (e.g. `+layout.svelte` or `App.svelte`) to set the default `style`, `theme`, and color `mode` for every component at once. Per-component `style`/`theme` props still override these defaults.
+
+```js
+import { initMultistyleUI } from 'svelte-multistyle-ui';
+
+initMultistyleUI({
+  style: 'material',   // visual design system
+  theme: 'ocean',      // color theme preset
+  mode: 'system',      // "system" | "light" | "dark"
+});
+```
+
+`defaults` (a reactive `$state` object) and `iconClass` (the CSS class used to render icon names — defaults to `material-symbols-outlined`) are also exported for advanced use.
+
+## Actions
+
+A Svelte action for portaling content to `document.body`:
+
+```svelte
+<script>
+  import { portal } from 'svelte-multistyle-ui';
+</script>
+
+<div use:portal>Portaled content</div>
+```
+
 ## Components
 
 The library exports the following components from `svelte-multistyle-ui`:
 
-- Actions: `Button`, `IconButton`, `FAB`
-- Form: `Input`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `Radio`, `Toggle`, `Slider`, `SearchInput`, `DatePicker`, `FileUpload`
-- Layout: `Card`, `Divider`, `Tabs`, `Accordion`, `Modal`
+- Actions: `Button`, `IconButton`, `FAB`, `ButtonGroup`, `DropdownMenu`, `Popover`
+- Form: `Input`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `Radio`, `Toggle`, `Slider`, `FileUpload`, `DatePicker`
+- Layout: `Card`, `Divider`, `Tabs`, `Accordion`, `Modal`, `Drawer`, `CommandPalette`, `Row`, `Column`, `Grid`
 - Navigation: `Breadcrumb`, `Pagination`, `Stepper`
-- Data display: `Avatar`, `Badge`, `Tooltip`, `ProgressBar`, `Table`, `Spinner`, `Skeleton`
-- Feedback: `Alert`
+- Data display: `Avatar`, `Chip`, `Tooltip`, `ProgressBar`, `Table`, `Spinner`, `Skeleton`, `Rating`
+- Feedback: `Alert`, `Toast`
+- Charts: `BarChart`, `LineChart`, `PieChart`, `DoughnutChart`, `RadarChart`, `PolarAreaChart`, `ScatterChart`, `BubbleChart`, `StackedBarChart`, `StackedLineChart`, `ComboChart`
 
-You can also import individual files from `svelte-multistyle-ui/components/<Component>.svelte`.
+You can also import individual files from `svelte-multistyle-ui/components/<Component>.svelte`, and chart components from `svelte-multistyle-ui/charts/<Chart>.svelte`.
 
 ## Theming
 
