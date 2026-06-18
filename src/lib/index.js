@@ -52,5 +52,18 @@ export { default as Rating } from "./components/Rating.svelte";
 export { default as Popover } from "./components/Popover.svelte";
 export { default as Toast } from "./components/Toast.svelte";
 
+// Chart Components
+export { default as BarChart } from "./components/charts/BarChart.svelte";
+export { default as LineChart } from "./components/charts/LineChart.svelte";
+export { default as PieChart } from "./components/charts/PieChart.svelte";
+export { default as DoughnutChart } from "./components/charts/DoughnutChart.svelte";
+export { default as RadarChart } from "./components/charts/RadarChart.svelte";
+export { default as PolarAreaChart } from "./components/charts/PolarAreaChart.svelte";
+export { default as ScatterChart } from "./components/charts/ScatterChart.svelte";
+export { default as BubbleChart } from "./components/charts/BubbleChart.svelte";
+export { default as StackedBarChart } from "./components/charts/StackedBarChart.svelte";
+export { default as StackedLineChart } from "./components/charts/StackedLineChart.svelte";
+export { default as ComboChart } from "./components/charts/ComboChart.svelte";
+
 // Advanced Components
 export { default as FAB } from "./components/FAB.svelte";

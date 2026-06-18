@@ -40,10 +40,22 @@
   import Column from "./lib/components/Column.svelte";
   import Grid from "./lib/components/Grid.svelte";
 
-  import Prism from 'prismjs';
+  // Chart Components
+  import BarChart from "./lib/components/charts/BarChart.svelte";
+  import LineChart from "./lib/components/charts/LineChart.svelte";
+  import PieChart from "./lib/components/charts/PieChart.svelte";
+  import DoughnutChart from "./lib/components/charts/DoughnutChart.svelte";
+  import RadarChart from "./lib/components/charts/RadarChart.svelte";
+  import PolarAreaChart from "./lib/components/charts/PolarAreaChart.svelte";
+  import ScatterChart from "./lib/components/charts/ScatterChart.svelte";
+  import BubbleChart from "./lib/components/charts/BubbleChart.svelte";
+  import StackedBarChart from "./lib/components/charts/StackedBarChart.svelte";
+  import StackedLineChart from "./lib/components/charts/StackedLineChart.svelte";
+
+  import Prism from "prismjs";
 
   function highlight(code) {
-    return Prism.highlight(code, Prism.languages.markup, 'markup');
+    return Prism.highlight(code, Prism.languages.markup, "markup");
   }
 
   import { initMultistyleUI } from "./lib/config.js";
@@ -329,6 +341,7 @@
     { id: "navigation", label: "Navigation" },
     { id: "datadisplay", label: "Data Display" },
     { id: "feedback", label: "Feedback" },
+    { id: "charts", label: "Charts" },
   ];
   let activeCat = $state("form");
   let layoutTab = $state("preview");
@@ -372,22 +385,32 @@
   let fabTab = $state("preview");
   let tabsDemoTab = $state("preview");
   let btnGroupTab = $state("preview");
+  let barChartTab = $state("preview");
+  let lineChartTab = $state("preview");
+  let pieChartTab = $state("preview");
+  let doughnutChartTab = $state("preview");
+  let radarChartTab = $state("preview");
+  let polarAreaChartTab = $state("preview");
+  let scatterChartTab = $state("preview");
+  let bubbleChartTab = $state("preview");
+  let stackedBarChartTab = $state("preview");
+  let stackedLineChartTab = $state("preview");
 
   let carouselSlides = [
     {
       image: "https://picsum.photos/seed/welcome/600/300",
       alt: "Welcome slide",
-      caption: "Explore the component gallery"
+      caption: "Explore the component gallery",
     },
     {
       image: "https://picsum.photos/seed/styles/600/300",
       alt: "Styles slide",
-      caption: "13 visual design languages"
+      caption: "13 visual design languages",
     },
     {
       image: "https://picsum.photos/seed/themes/600/300",
       alt: "Themes slide",
-      caption: "10 color themes available"
+      caption: "10 color themes available",
     },
   ];
 
@@ -637,11 +660,7 @@ Then pass theme="custom" to components.
 
   {#snippet codeBlock(id, code)}
     <div class="component-code-wrapper">
-      <button
-        type="button"
-        class="copy-btn"
-        onclick={() => copyCode(code)}
-      >
+      <button type="button" class="copy-btn" onclick={() => copyCode(code)}>
         Copy
       </button>
       <pre class="component-code"><code>{@html highlight(code)}</code></pre>
@@ -676,7 +695,11 @@ Then pass theme="custom" to components.
           >
         </div>
         <div class="settings-content">
-          <Card style={selectedStyle} theme={selectedTheme} class="settings-panel">
+          <Card
+            style={selectedStyle}
+            theme={selectedTheme}
+            class="settings-panel"
+          >
             <h3 class="settings-panel-title">Theme Editor</h3>
             <p class="text-sm text-gray-500">
               First edit switches the theme dropdown to Custom.
@@ -882,7 +905,11 @@ Then pass theme="custom" to components.
             </div>
           </Card>
 
-          <Card style={selectedStyle} theme={selectedTheme} class="settings-panel">
+          <Card
+            style={selectedStyle}
+            theme={selectedTheme}
+            class="settings-panel"
+          >
             <div class="flex items-center justify-between gap-3">
               <h3 class="settings-panel-title">Custom CSS</h3>
               {#if copyStatus}<span class="settings-copy-status"
@@ -902,7 +929,11 @@ Then pass theme="custom" to components.
             >
           </Card>
 
-          <Card style={selectedStyle} theme={selectedTheme} class="settings-panel">
+          <Card
+            style={selectedStyle}
+            theme={selectedTheme}
+            class="settings-panel"
+          >
             <h3 class="settings-panel-title">How to use custom CSS</h3>
             <ul
               class="settings-help-list text-sm text-gray-600 dark:text-gray-300 space-y-2"
@@ -979,8 +1010,7 @@ Then pass theme="custom" to components.
               <Button variant="outlined"
                 >{#snippet children()}Outlined{/snippet}</Button
               >
-              <Button variant="text"
-                >{#snippet children()}Text{/snippet}</Button
+              <Button variant="text">{#snippet children()}Text{/snippet}</Button
               >
               <Button variant="tonal"
                 >{#snippet children()}Tonal{/snippet}</Button
@@ -998,7 +1028,9 @@ Then pass theme="custom" to components.
               >
             </div>
           {:else}
-            {@render codeBlock('btn', `<Button
+            {@render codeBlock(
+              "btn",
+              `<Button
   variant="filled"
 >
   Click
@@ -1016,7 +1048,8 @@ Then pass theme="custom" to components.
   icon="add"
 >
   Add
-</Button>`)}
+</Button>`,
+            )}
           {/if}
         </Card>
 
@@ -1041,12 +1074,18 @@ Then pass theme="custom" to components.
           />
           {#if iconBtnTab === "preview"}
             <div class="flex gap-3 items-center">
-              <IconButton variant="filled" ariaLabel="Favorite" icon="favorite" />
+              <IconButton
+                variant="filled"
+                ariaLabel="Favorite"
+                icon="favorite"
+              />
               <IconButton variant="outlined" ariaLabel="Star" icon="star" />
               <IconButton variant="tonal" ariaLabel="Add" icon="add" />
             </div>
           {:else}
-            {@render codeBlock('iconBtn', `<IconButton
+            {@render codeBlock(
+              "iconBtn",
+              `<IconButton
   variant="filled"
   ariaLabel="Favorite"
   icon="favorite"
@@ -1062,7 +1101,8 @@ Then pass theme="custom" to components.
   variant="tonal"
   ariaLabel="Add"
   icon="add"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1106,7 +1146,9 @@ Then pass theme="custom" to components.
               />
             </div>
           {:else}
-            {@render codeBlock('input', `<Input
+            {@render codeBlock(
+              "input",
+              `<Input
   bind:value={name}
   label="Your name"
   placeholder="Your name"
@@ -1123,7 +1165,8 @@ Then pass theme="custom" to components.
   iconStart="lock"
   iconEnd="visibility"
   type="password"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1155,12 +1198,15 @@ Then pass theme="custom" to components.
               maxlength={200}
             />
           {:else}
-            {@render codeBlock('textarea', `<Textarea
+            {@render codeBlock(
+              "textarea",
+              `<Textarea
   bind:value={msg}
   label="Message"
   rows={4}
   maxlength={200}
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1191,12 +1237,15 @@ Then pass theme="custom" to components.
               placeholder="Choose"
             />
           {:else}
-            {@render codeBlock('select', `<Select
+            {@render codeBlock(
+              "select",
+              `<Select
   bind:value={val}
   options={options}
   label="Choose"
   placeholder="Choose"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1226,11 +1275,14 @@ Then pass theme="custom" to components.
               placeholder="Pick items"
             />
           {:else}
-            {@render codeBlock('multiSelect', `<MultiSelect
+            {@render codeBlock(
+              "multiSelect",
+              `<MultiSelect
   bind:selected={selected}
   options={options}
   placeholder="Pick items"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1256,10 +1308,13 @@ Then pass theme="custom" to components.
           {#if checkboxTab === "preview"}
             <Checkbox bind:checked={checkVal} label="Accept terms" />
           {:else}
-            {@render codeBlock('checkbox', `<Checkbox
+            {@render codeBlock(
+              "checkbox",
+              `<Checkbox
   bind:checked={accepted}
   label="Accept terms"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1288,9 +1343,12 @@ Then pass theme="custom" to components.
               <Radio value="b" bind:group={radioVal} label="Beta" />
             </div>
           {:else}
-            {@render codeBlock('radio', `<Radio value="a" bind:group={val} label="Alpha" />
+            {@render codeBlock(
+              "radio",
+              `<Radio value="a" bind:group={val} label="Alpha" />
 
-<Radio value="b" bind:group={val} label="Beta" />`)}
+<Radio value="b" bind:group={val} label="Beta" />`,
+            )}
           {/if}
         </Card>
 
@@ -1316,10 +1374,13 @@ Then pass theme="custom" to components.
           {#if toggleTab === "preview"}
             <Toggle bind:checked={toggleVal} label="Notifications" />
           {:else}
-            {@render codeBlock('toggle', `<Toggle
+            {@render codeBlock(
+              "toggle",
+              `<Toggle
   bind:checked={enabled}
   label="Notifications"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1343,19 +1404,17 @@ Then pass theme="custom" to components.
             bind:active={sliderTab}
           />
           {#if sliderTab === "preview"}
-            <Slider
-              bind:value={sliderVal}
-              min={0}
-              max={100}
-              label="Volume"
-            />
+            <Slider bind:value={sliderVal} min={0} max={100} label="Volume" />
           {:else}
-            {@render codeBlock('slider', `<Slider
+            {@render codeBlock(
+              "slider",
+              `<Slider
   bind:value={val}
   min={0}
   max={100}
   label="Volume"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1408,7 +1467,9 @@ Then pass theme="custom" to components.
               />
             </div>
           {:else}
-            {@render codeBlock('datePicker', `<script>
+            {@render codeBlock(
+              "datePicker",
+              `<script>
   let date = $state("2025-06-15");
 </script>
 
@@ -1438,7 +1499,8 @@ Then pass theme="custom" to components.
   min="2025-01-01"
   max="2025-12-31"
   label="Date range"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1464,10 +1526,13 @@ Then pass theme="custom" to components.
           {#if fileUploadTab === "preview"}
             <FileUpload label="Upload file" accept="image/*" />
           {:else}
-            {@render codeBlock('fileUpload', `<FileUpload
+            {@render codeBlock(
+              "fileUpload",
+              `<FileUpload
   label="Upload file"
   accept="image/*"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1521,7 +1586,9 @@ Then pass theme="custom" to components.
               </DropdownMenu>
             </div>
           {:else}
-            {@render codeBlock('dropdown', `<DropdownMenu
+            {@render codeBlock(
+              "dropdown",
+              `<DropdownMenu
   items={items}
   variant="primary"
   position="bottom"
@@ -1535,7 +1602,8 @@ Then pass theme="custom" to components.
   position="bottom"
 >
   <Button variant="outlined">Menu</Button>
-</DropdownMenu>`)}
+</DropdownMenu>`,
+            )}
           {/if}
         </Card>
 
@@ -1591,7 +1659,9 @@ Then pass theme="custom" to components.
               </div>
             </div>
           {:else}
-            {@render codeBlock('btnGroup', `<ButtonGroup
+            {@render codeBlock(
+              "btnGroup",
+              `<ButtonGroup
   items={items}
   bind:value={val}
   variant="outlined"
@@ -1608,7 +1678,8 @@ Then pass theme="custom" to components.
   bind:value={val}
   variant="outlined"
   orientation="vertical"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
       </div>
@@ -1641,7 +1712,9 @@ Then pass theme="custom" to components.
           {#if layoutTab === "preview"}
             <Column gap="12px" fill>
               <div>
-                <p style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;">
+                <p
+                  style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;"
+                >
                   Row — gap 8px, align center
                 </p>
                 <Row gap="8px" align="center">
@@ -1657,7 +1730,9 @@ Then pass theme="custom" to components.
                 </Row>
               </div>
               <div>
-                <p style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;">
+                <p
+                  style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;"
+                >
                   Column — gap 8px, fill
                 </p>
                 <Column gap="8px" fill>
@@ -1670,21 +1745,49 @@ Then pass theme="custom" to components.
                 </Column>
               </div>
               <div>
-                <p style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;">
+                <p
+                  style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;"
+                >
                   Grid — columns 3, gap 8px
                 </p>
                 <Grid columns={3} gap="8px">
-                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">1</div>
-                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">2</div>
-                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">3</div>
-                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">4</div>
-                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">5</div>
-                  <div style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);">6</div>
+                  <div
+                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
+                  >
+                    1
+                  </div>
+                  <div
+                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
+                  >
+                    2
+                  </div>
+                  <div
+                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
+                  >
+                    3
+                  </div>
+                  <div
+                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
+                  >
+                    4
+                  </div>
+                  <div
+                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
+                  >
+                    5
+                  </div>
+                  <div
+                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
+                  >
+                    6
+                  </div>
                 </Grid>
               </div>
             </Column>
           {:else}
-            {@render codeBlock('layout', `<Row gap="8px" align="center">
+            {@render codeBlock(
+              "layout",
+              `<Row gap="8px" align="center">
   <Button>One</Button>
   <Button>Two</Button>
   <Button>Three</Button>
@@ -1699,7 +1802,8 @@ Then pass theme="custom" to components.
   <div>1</div>
   <div>2</div>
   <div>3</div>
-</Grid>`)}
+</Grid>`,
+            )}
           {/if}
         </Card>
       </div>
@@ -1731,9 +1835,12 @@ Then pass theme="custom" to components.
                 </p>{/snippet}</Card
             >
           {:else}
-            {@render codeBlock('card', `<Card elevated={true}>
+            {@render codeBlock(
+              "card",
+              `<Card elevated={true}>
   <p>Content inside the card.</p>
-</Card>`)}
+</Card>`,
+            )}
           {/if}
         </Card>
 
@@ -1761,7 +1868,7 @@ Then pass theme="custom" to components.
             <Divider label="OR" />
             <p class="demo-text text-sm">Below</p>
           {:else}
-            {@render codeBlock('divider', `<Divider label="OR" />`)}
+            {@render codeBlock("divider", `<Divider label="OR" />`)}
           {/if}
         </Card>
 
@@ -1796,14 +1903,17 @@ Then pass theme="custom" to components.
               bind:active={tabActive}
             />
           {:else}
-            {@render codeBlock('tabs', `<Tabs
+            {@render codeBlock(
+              "tabs",
+              `<Tabs
   tabs={[
     { id: "tab1", label: "Overview" },
     { id: "tab2", label: "Features" },
     { id: "tab3", label: "Pricing" }
   ]}
   bind:active={activeTab}
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1829,10 +1939,13 @@ Then pass theme="custom" to components.
           {#if accordionTab === "preview"}
             <Accordion items={accordionItems} current="1" />
           {:else}
-            {@render codeBlock('accordion', `<Accordion
+            {@render codeBlock(
+              "accordion",
+              `<Accordion
   items={items}
   current="1"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -1858,7 +1971,9 @@ Then pass theme="custom" to components.
           {#if carouselTab === "preview"}
             <Carousel slides={carouselSlides} autoPlay={true} interval={4000} />
           {:else}
-            {@render codeBlock('carousel', `<script>
+            {@render codeBlock(
+              "carousel",
+              `<script>
   let slides = [
     {
       image: "https://picsum.photos/seed/welcome/600/300",
@@ -1877,7 +1992,8 @@ Then pass theme="custom" to components.
     }
   ];
 </script>
-<Carousel slides={slides} autoPlay={true} interval={4000} />`)}
+<Carousel slides={slides} autoPlay={true} interval={4000} />`,
+            )}
           {/if}
         </Card>
 
@@ -1931,18 +2047,18 @@ Then pass theme="custom" to components.
                 }}>{#snippet children()}Full{/snippet}</Button
               >
             </div>
-            <Modal
-              size={modalSize}
-              bind:open={modalOpen}
-              title="Modal Title"
+            <Modal size={modalSize} bind:open={modalOpen} title="Modal Title"
               >{#snippet children()}<p style="margin:0">
                   This is a modal dialog with themed styling.
                 </p>{/snippet}</Modal
             >
           {:else}
-            {@render codeBlock('modal', `<Modal bind:open={isOpen} title="Modal Title" size="medium">
+            {@render codeBlock(
+              "modal",
+              `<Modal bind:open={isOpen} title="Modal Title" size="medium">
   <p>Content inside modal.</p>
-</Modal>`)}
+</Modal>`,
+            )}
           {/if}
         </Card>
 
@@ -2016,9 +2132,12 @@ Then pass theme="custom" to components.
                 </div>{/snippet}</Drawer
             >
           {:else}
-            {@render codeBlock('drawer', `<Drawer position="left" bind:open={isOpen}>
+            {@render codeBlock(
+              "drawer",
+              `<Drawer position="left" bind:open={isOpen}>
   <div>Drawer content here</div>
-</Drawer>`)}
+</Drawer>`,
+            )}
           {/if}
         </Card>
 
@@ -2043,24 +2162,22 @@ Then pass theme="custom" to components.
           />
           {#if cmdPaletteTab === "preview"}
             <p class="text-sm">
-              Press <kbd class="px-1.5 py-0.5 text-xs rounded border">⌘K</kbd> or click
-              button.
+              Press <kbd class="px-1.5 py-0.5 text-xs rounded border">⌘K</kbd> or
+              click button.
             </p>
-            <Button
-              variant="filled"
-              onclick={() => (cmdPaletteOpen = true)}
+            <Button variant="filled" onclick={() => (cmdPaletteOpen = true)}
               >{#snippet children()}Open CmdK{/snippet}</Button
             >
-            <CommandPalette
-              groups={cmdGroups}
-              bind:open={cmdPaletteOpen}
-            />
+            <CommandPalette groups={cmdGroups} bind:open={cmdPaletteOpen} />
           {:else}
-            {@render codeBlock('cmdPalette', `<CommandPalette
+            {@render codeBlock(
+              "cmdPalette",
+              `<CommandPalette
   groups={groups}
   bind:open={isOpen}
   placeholder="Type a command..."
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
       </div>
@@ -2100,13 +2217,16 @@ Then pass theme="custom" to components.
               ]}
             />
           {:else}
-            {@render codeBlock('breadcrumb', `<Breadcrumb
+            {@render codeBlock(
+              "breadcrumb",
+              `<Breadcrumb
   items={[
     { label: "Home", href: "#" },
     { label: "Products", href: "#" },
     { label: "Details" }
   ]}
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -2130,17 +2250,16 @@ Then pass theme="custom" to components.
             bind:active={paginationTab}
           />
           {#if paginationTab === "preview"}
-            <Pagination
-              total={50}
-              perPage={10}
-              bind:current={paginationPage}
-            />
+            <Pagination total={50} perPage={10} bind:current={paginationPage} />
           {:else}
-            {@render codeBlock('pagination', `<Pagination
+            {@render codeBlock(
+              "pagination",
+              `<Pagination
   total={50}
   perPage={10}
   bind:current={page}
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -2174,7 +2293,9 @@ Then pass theme="custom" to components.
               current={2}
             />
           {:else}
-            {@render codeBlock('stepper', `<Stepper
+            {@render codeBlock(
+              "stepper",
+              `<Stepper
   steps={[
     { label: "Account" },
     { label: "Profile" },
@@ -2182,7 +2303,8 @@ Then pass theme="custom" to components.
     { label: "Done" }
   ]}
   current={2}
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
       </div>
@@ -2220,11 +2342,14 @@ Then pass theme="custom" to components.
               <Avatar size="lg" fallback="EF" />
             </div>
           {:else}
-            {@render codeBlock('avatar', `<Avatar size="sm" fallback="AB" />
+            {@render codeBlock(
+              "avatar",
+              `<Avatar size="sm" fallback="AB" />
 
 <Avatar size="md" fallback="CD" />
 
-<Avatar size="lg" fallback="EF" />`)}
+<Avatar size="lg" fallback="EF" />`,
+            )}
           {/if}
         </Card>
 
@@ -2263,10 +2388,7 @@ Then pass theme="custom" to components.
               >
             </div>
             <div class="flex flex-wrap gap-2 mt-2">
-              <Chip
-                variant="outlined"
-                color="primary"
-                icon="★"
+              <Chip variant="outlined" color="primary" icon="★"
                 >{#snippet children()}Starred{/snippet}</Chip
               >
               <Chip variant="ghost" color="neutral"
@@ -2274,7 +2396,9 @@ Then pass theme="custom" to components.
               >
             </div>
           {:else}
-            {@render codeBlock('chip', `<Chip color="primary" variant="filled">Label</Chip>
+            {@render codeBlock(
+              "chip",
+              `<Chip color="primary" variant="filled">Label</Chip>
 
 <Chip color="success" variant="filled">Label</Chip>
 
@@ -2290,7 +2414,8 @@ Then pass theme="custom" to components.
   Starred
 </Chip>
 
-<Chip variant="ghost" color="neutral">Ghost</Chip>`)}
+<Chip variant="ghost" color="neutral">Ghost</Chip>`,
+            )}
           {/if}
         </Card>
 
@@ -2320,9 +2445,12 @@ Then pass theme="custom" to components.
                 >{/snippet}</Tooltip
             >
           {:else}
-            {@render codeBlock('tooltip', `<Tooltip text="This is a tooltip!">
+            {@render codeBlock(
+              "tooltip",
+              `<Tooltip text="This is a tooltip!">
   <span>Hover me</span>
-</Tooltip>`)}
+</Tooltip>`,
+            )}
           {/if}
         </Card>
 
@@ -2346,21 +2474,17 @@ Then pass theme="custom" to components.
             bind:active={progressBarTab}
           />
           {#if progressBarTab === "preview"}
-            <ProgressBar
-              value={progressVal}
-              animated={true}
-              label={true}
-            />
-            <ProgressBar
-              value={-1}
-              label={true}
-            />
+            <ProgressBar value={progressVal} animated={true} label={true} />
+            <ProgressBar value={-1} label={true} />
           {:else}
-            {@render codeBlock('progress', `<ProgressBar
+            {@render codeBlock(
+              "progress",
+              `<ProgressBar
   value={65}
   animated={true}
   label={true}
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -2390,11 +2514,14 @@ Then pass theme="custom" to components.
               <Spinner size="lg" />
             </div>
           {:else}
-            {@render codeBlock('spinner', `<Spinner size="sm" />
+            {@render codeBlock(
+              "spinner",
+              `<Spinner size="sm" />
 
 <Spinner size="md" />
 
-<Spinner size="lg" />`)}
+<Spinner size="lg" />`,
+            )}
           {/if}
         </Card>
 
@@ -2419,26 +2546,16 @@ Then pass theme="custom" to components.
           />
           {#if skeletonTab === "preview"}
             <div class="flex gap-3 items-center">
-              <Skeleton
-                variant="circle"
-                width="40px"
-                height="40px"
-              />
+              <Skeleton variant="circle" width="40px" height="40px" />
               <div class="flex-1 space-y-2">
-                <Skeleton
-                  variant="text"
-                  width="80%"
-                  height="14px"
-                />
-                <Skeleton
-                  variant="text"
-                  width="60%"
-                  height="14px"
-                />
+                <Skeleton variant="text" width="80%" height="14px" />
+                <Skeleton variant="text" width="60%" height="14px" />
               </div>
             </div>
           {:else}
-            {@render codeBlock('skeleton', `<Skeleton
+            {@render codeBlock(
+              "skeleton",
+              `<Skeleton
   variant="circle"
   width="40px"
   height="40px"
@@ -2454,7 +2571,8 @@ Then pass theme="custom" to components.
   variant="text"
   width="60%"
   height="14px"
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -2480,7 +2598,9 @@ Then pass theme="custom" to components.
           {#if tableTab === "preview"}
             <Table data={tableData} variant="striped" />
           {:else}
-            {@render codeBlock('table', `<script>
+            {@render codeBlock(
+              "table",
+              `<script>
   // Data keys become column headers automatically.
   // Multi-word keys work too:
   // { "First Name": "Alice", "Job Title": "Engineer", Status: "Active" }
@@ -2493,7 +2613,8 @@ Then pass theme="custom" to components.
 
 <Table data={data} variant="striped" />
 
-<!-- Variants: "plain", "striped", "hoverable", "bordered", "compact" -->`)}
+<!-- Variants: "plain", "striped", "hoverable", "bordered", "compact" -->`,
+            )}
           {/if}
         </Card>
       </div>
@@ -2533,18 +2654,23 @@ Then pass theme="custom" to components.
                   class:bg-indigo-500={alertVariant === v}
                   class:text-white={alertVariant === v}
                   class:border-indigo-500={alertVariant === v}
-                  onclick={() => (alertVariant = v)}
-                >{v}</button>
+                  onclick={() => (alertVariant = v)}>{v}</button
+                >
               {/each}
             </div>
             <Alert
               variant={alertVariant}
-              title={alertVariant.charAt(0).toUpperCase() + alertVariant.slice(1)}
-              icon={alertVariant === "default" ? null : (
-                alertVariant === "info" ? "info" :
-                alertVariant === "success" ? "check_circle" :
-                alertVariant === "warning" ? "warning" : "error"
-              )}
+              title={alertVariant.charAt(0).toUpperCase() +
+                alertVariant.slice(1)}
+              icon={alertVariant === "default"
+                ? null
+                : alertVariant === "info"
+                  ? "info"
+                  : alertVariant === "success"
+                    ? "check_circle"
+                    : alertVariant === "warning"
+                      ? "warning"
+                      : "error"}
               dismissible
             >
               {#snippet children()}
@@ -2560,7 +2686,9 @@ Then pass theme="custom" to components.
               {/snippet}
             </Alert>
           {:else}
-            {@render codeBlock('alert', `<script>
+            {@render codeBlock(
+              "alert",
+              `<script>
   let variant = $state("info");
 </script>
 
@@ -2571,7 +2699,8 @@ Then pass theme="custom" to components.
   Alert message here.
 </Alert>
 
-<!-- Variants: default, info, success, warning, error -->`)}
+<!-- Variants: default, info, success, warning, error -->`,
+            )}
           {/if}
         </Card>
 
@@ -2603,17 +2732,20 @@ Then pass theme="custom" to components.
               >
               <Button
                 variant="filled"
-                onclick={() => addToastMsg("Saved successfully", "success", "check_circle")}
+                onclick={() =>
+                  addToastMsg("Saved successfully", "success", "check_circle")}
                 >{#snippet children()}Success{/snippet}</Button
               >
               <Button
                 variant="filled"
-                onclick={() => addToastMsg("Review before continuing", "warning", "warning")}
+                onclick={() =>
+                  addToastMsg("Review before continuing", "warning", "warning")}
                 >{#snippet children()}Warning{/snippet}</Button
               >
               <Button
                 variant="filled"
-                onclick={() => addToastMsg("Something failed", "error", "error")}
+                onclick={() =>
+                  addToastMsg("Something failed", "error", "error")}
                 >{#snippet children()}Error{/snippet}</Button
               >
             </div>
@@ -2632,7 +2764,9 @@ Then pass theme="custom" to components.
               <option value="bottom-center">Bottom Center</option>
             </select>
           {:else}
-            {@render codeBlock('toast', `<script>
+            {@render codeBlock(
+              "toast",
+              `<script>
   let toasts = $state([]);
 
   function addToast(msg, variant, icon) {
@@ -2646,7 +2780,8 @@ Then pass theme="custom" to components.
 
 <!-- Icon is auto-wrapped with the configured icon class.
      Pass icon="info" for Material Icons,
-     or omit it for defaults: info→ℹ, success→✓, warning→⚠, error→✕. -->`)}
+     or omit it for defaults: info→ℹ, success→✓, warning→⚠, error→✕. -->`,
+            )}
           {/if}
         </Card>
 
@@ -2672,11 +2807,14 @@ Then pass theme="custom" to components.
           {#if ratingTab === "preview"}
             <Rating bind:value={ratingVal} max={5} showValue={true} />
           {:else}
-            {@render codeBlock('rating', `<Rating
+            {@render codeBlock(
+              "rating",
+              `<Rating
   bind:value={val}
   max={5}
   showValue={true}
-/>`)}
+/>`,
+            )}
           {/if}
         </Card>
 
@@ -2701,10 +2839,7 @@ Then pass theme="custom" to components.
           />
           {#if popoverTab === "preview"}
             <div class="flex flex-wrap gap-2">
-              <Popover
-                position="top"
-                bind:open={popoverOpen}
-              >
+              <Popover position="top" bind:open={popoverOpen}>
                 {#snippet children()}<Button variant="outlined"
                     >{#snippet children()}Top{/snippet}</Button
                   >{/snippet}
@@ -2714,8 +2849,7 @@ Then pass theme="custom" to components.
                   </div>{/snippet}
               </Popover>
               <Popover position="bottom">
-                {#snippet children()}<Button
-                    variant="outlined"
+                {#snippet children()}<Button variant="outlined"
                     >{#snippet children()}Bottom{/snippet}</Button
                   >{/snippet}
                 {#snippet content()}<p class="text-sm">
@@ -2724,12 +2858,618 @@ Then pass theme="custom" to components.
               </Popover>
             </div>
           {:else}
-            {@render codeBlock('popover', `<Popover position="top" bind:open={isOpen}>
+            {@render codeBlock(
+              "popover",
+              `<Popover position="top" bind:open={isOpen}>
   <Button variant="outlined">Trigger</Button>
 </Popover>
 <Popover position="bottom">
   <Button variant="outlined">Bottom</Button>
-</Popover>`)}
+</Popover>`,
+            )}
+          {/if}
+        </Card>
+      </div>
+    </section>
+
+    <!-- CHARTS -->
+    <section class:hidden={activeCat !== "charts"}>
+      <div class="flex items-center justify-between mb-6 border-b pb-2">
+        <h2 class="demo-section-title text-2xl font-semibold">
+          Chart Components
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Bar Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Bar Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={barChartTab}
+          />
+          {#if barChartTab === "preview"}
+            <BarChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              xAxisLabel="Quarter"
+              yAxisLabel="Revenue"
+              data={[
+                { label: "q1", value: 12 },
+                { label: "q2", value: 19 },
+                { label: "q3", value: 8 },
+                { label: "q4", value: 15 },
+              ]}
+              title="Quarterly Revenue"
+            />
+          {:else}
+            {@render codeBlock(
+              "barChart",
+              `<script>
+  // {label, value} format — order is preserved (unlike plain objects)
+  let data = [
+    { label: "q1", value: 12 },
+    { label: "q2", value: 19 },
+    { label: "q3", value: 8 },
+    { label: "q4", value: 15 },
+  ];
+</script>
+
+<BarChart {data} title="Quarterly Revenue" xAxisLabel="Quarter" yAxisLabel="Revenue" />
+
+<!-- Works for BarChart, LineChart, PieChart, DoughnutChart, RadarChart, PolarAreaChart.
+     For multi-series, pass more keys in each object:
+<BarChart data={[
+  { label: "Jan", revenue: 10, Cost: 5 },
+  { label: "Feb", revenue: 20, Cost: 8 },
+]} /> -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Line Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Line Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={lineChartTab}
+          />
+          {#if lineChartTab === "preview"}
+            <LineChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              xAxisLabel="Month"
+              yAxisLabel="Amount"
+              data={[
+                { label: "Jan", revenue: 10, Cost: 5 },
+                { label: "Feb", revenue: 20, Cost: 8 },
+                { label: "Mar", revenue: 30, Cost: 12 },
+                { label: "Apr", revenue: 25, Cost: 10 },
+                { label: "May", revenue: 35, Cost: 15 },
+                { label: "Jun", revenue: 40, Cost: 18 },
+              ]}
+              title="Revenue vs Cost"
+            />
+          {:else}
+            {@render codeBlock(
+              "lineChart",
+              `<script>
+  // Row-oriented format — label + any number of value keys
+  let data = [
+    { label: "Jan", revenue: 10, Cost: 5 },
+    { label: "Feb", revenue: 20, Cost: 8 },
+    { label: "Mar", revenue: 30, Cost: 12 },
+    { label: "Apr", revenue: 25, Cost: 10 },
+    { label: "May", revenue: 35, Cost: 15 },
+    { label: "Jun", revenue: 40, Cost: 18 },
+  ];
+</script>
+
+<LineChart {data} title="Revenue vs Cost" xAxisLabel="Month" yAxisLabel="Amount" />
+
+<!-- Works for BarChart, Area, StackedBarChart too!
+     The label field becomes the x-axis label, all other keys become series.
+     For single-series, use {label, value} objects in the data prop. -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Pie Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Pie Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={pieChartTab}
+          />
+          {#if pieChartTab === "preview"}
+            <PieChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              data={[
+                { label: "Direct", value: 35 },
+                { label: "Social", value: 25 },
+                { label: "Referral", value: 20 },
+                { label: "Organic", value: 20 },
+              ]}
+              title="Traffic Sources"
+            />
+          {:else}
+            {@render codeBlock(
+              "pieChart",
+              `<script>
+  let data = [
+    { label: "Direct", value: 35 },
+    { label: "Social", value: 25 },
+    { label: "Referral", value: 20 },
+    { label: "Organic", value: 20 },
+  ];
+</script>
+
+<PieChart {data} title="Traffic Sources" />
+
+<!-- Use the data prop with {label, value} format.
+     Auto-colors from theme palette. -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Doughnut Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Doughnut Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={doughnutChartTab}
+          />
+          {#if doughnutChartTab === "preview"}
+            <DoughnutChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              data={[
+                { label: "Chrome", value: 45 },
+                { label: "Firefox", value: 25 },
+                { label: "Safari", value: 15 },
+                { label: "Edge", value: 10 },
+                { label: "Other", value: 5 },
+              ]}
+              title="Browser Share"
+              options={{ cutout: "60%" }}
+            />
+          {:else}
+            {@render codeBlock(
+              "doughnutChart",
+              `<script>
+  let data = [
+    { label: "Chrome", value: 45 },
+    { label: "Firefox", value: 25 },
+    { label: "Safari", value: 15 },
+    { label: "Edge", value: 10 },
+    { label: "Other", value: 5 },
+  ];
+</script>
+
+<DoughnutChart {data} title="Browser Share" options={{cutout: "60%"}} />
+
+<!-- options={{cutout: "60%"}} creates the ring hole.
+     Use the data prop with {label, value} format. -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Radar Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Radar Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={radarChartTab}
+          />
+          {#if radarChartTab === "preview"}
+            <RadarChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              xAxisLabel="Attribute"
+              yAxisLabel="Score"
+              data={[
+                { label: "Speed", "Character A": 80, "Character B": 70 },
+                { label: "Power", "Character A": 65, "Character B": 85 },
+                { label: "Accuracy", "Character A": 90, "Character B": 75 },
+                { label: "Defense", "Character A": 70, "Character B": 85 },
+                { label: "Agility", "Character A": 85, "Character B": 80 },
+              ]}
+              title="Character Stats"
+            />
+          {:else}
+            {@render codeBlock(
+              radarChart,
+              `<script>
+  // Row-oriented format — label + any number of value keys
+  let data = [
+    { label: "Speed", "Character A": 80, "Character B": 70 },
+    { label: "Power", "Character A": 65, "Character B": 85 },
+    { label: "Accuracy", "Character A": 90, "Character B": 75 },
+    { label: "Defense", "Character A": 70, "Character B": 85 },
+    { label: "Agility", "Character A": 85, "Character B": 80 },
+  ];
+</script>
+
+<RadarChart {data} title="Character Stats" xAxisLabel="Attribute" yAxisLabel="Score" />
+
+<!-- Same row-oriented format works for BarChart, LineChart, StackedBarChart, RadarChart.
+     Single-series: <RadarChart data={[{label:"A", value:5}]} /> -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- PolarArea Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Polar Area Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={polarAreaChartTab}
+          />
+          {#if polarAreaChartTab === "preview"}
+            <PolarAreaChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              data={[
+                { label: "Red", value: 11 },
+                { label: "Blue", value: 16 },
+                { label: "Green", value: 7 },
+                { label: "Yellow", value: 3 },
+                { label: "Purple", value: 14 },
+              ]}
+              title="Color Distribution"
+            />
+          {:else}
+            {@render codeBlock(
+              "polarAreaChart",
+              `<script>
+  let data = [
+    { label: "Red", value: 11 },
+    { label: "Blue", value: 16 },
+    { label: "Green", value: 7 },
+    { label: "Yellow", value: 3 },
+    { label: "Purple", value: 14 },
+  ];
+</script>
+
+<PolarAreaChart {data} title="Color Distribution" />
+
+<!-- Use the data prop with {label, value} format.
+     Auto-colors from theme palette. -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Scatter Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Scatter Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={scatterChartTab}
+          />
+          {#if scatterChartTab === "preview"}
+            <ScatterChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              xAxisLabel="X Value"
+              yAxisLabel="Y Value"
+              data={[
+                { x: 1, y: 2 },
+                { x: 2, y: 5 },
+                { x: 3, y: 3 },
+                { x: 4, y: 8 },
+                { x: 5, y: 4 },
+                { x: 6, y: 7 },
+                { x: 7, y: 6 },
+                { x: 8, y: 9 },
+              ]}
+              title="Data Distribution"
+              height={280}
+            />
+          {:else}
+            {@render codeBlock(
+              "scatterChart",
+              `<script>
+  let data = [
+    {x: 1, y: 2},
+    {x: 2, y: 5},
+    {x: 3, y: 3},
+    {x: 4, y: 8},
+    {x: 5, y: 4},
+    {x: 6, y: 7},
+    {x: 7, y: 6},
+    {x: 8, y: 9},
+  ];
+</script>
+
+<ScatterChart {data} title="Data Distribution" xAxisLabel="X Value" yAxisLabel="Y Value" />
+
+<!-- Multi-series:
+<ScatterChart
+  series={[
+    { name: "A", points: [{x:1,y:2},{x:3,y:4}] },
+    { name: "B", points: [{x:2,y:1},{x:4,y:3}] },
+  ]}
+/> -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Bubble Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Bubble Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={bubbleChartTab}
+          />
+          {#if bubbleChartTab === "preview"}
+            <BubbleChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              xAxisLabel="Feature"
+              yAxisLabel="Performance"
+              series={[
+                { label: "Product A", x: 10, y: 20, r: 5 },
+                { label: "Product B", x: 15, y: 35, r: 8 },
+                { label: "Product C", x: 25, y: 15, r: 12 },
+                { label: "Product D", x: 30, y: 45, r: 6 },
+                { label: "Product E", x: 40, y: 25, r: 10 },
+              ]}
+              title="Product Performance"
+              height={280}
+            />
+          {:else}
+            {@render codeBlock(
+              "bubbleChart",
+              `<script>
+  let series = [
+    {
+      { label: "Product A", x: 10, y: 20, r: 5 },
+      { label: "Product B", x: 15, y: 35, r: 8 },
+      { label: "Product C", x: 25, y: 15, r: 12 },
+      { label: "Product D", x: 30, y: 45, r: 6 },
+      { label: "Product E", x: 40, y: 25, r: 10 },
+  ];
+</script>
+
+<BubbleChart {series} title="Product Performance" xAxisLabel="Feature" yAxisLabel="Performance" />
+
+<!-- r controls bubble size (radius).
+     Multi-series: add more objects to series[]. -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Stacked Bar Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Stacked Bar Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={stackedBarChartTab}
+          />
+          {#if stackedBarChartTab === "preview"}
+            <StackedBarChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              xAxisLabel="Quarter"
+              yAxisLabel="Revenue"
+              data={[
+                {
+                  label: "Q1",
+                  "Product A": 30,
+                  "Product B": 20,
+                  "Product C": 15,
+                },
+                {
+                  label: "Q2",
+                  "Product A": 45,
+                  "Product B": 30,
+                  "Product C": 10,
+                },
+                {
+                  label: "Q3",
+                  "Product A": 25,
+                  "Product B": 35,
+                  "Product C": 20,
+                },
+                {
+                  label: "Q4",
+                  "Product A": 50,
+                  "Product B": 25,
+                  "Product C": 15,
+                },
+              ]}
+              title="Revenue Breakdown"
+            />
+          {:else}
+            {@render codeBlock(
+              stackedBarChart,
+              `<script>
+  // Row-oriented format — label + any number of value keys
+  let data = [
+    { label: "Q1", "Product A": 30, "Product B": 20, "Product C": 15 },
+    { label: "Q2", "Product A": 45, "Product B": 30, "Product C": 10 },
+    { label: "Q3", "Product A": 25, "Product B": 35, "Product C": 20 },
+    { label: "Q4", "Product A": 50, "Product B": 25, "Product C": 15 },
+  ];
+</script>
+
+<StackedBarChart {data} title="Revenue Breakdown" xAxisLabel="Quarter" yAxisLabel="Revenue" />
+
+<!-- Same row-oriented format works for BarChart, LineChart, StackedBarChart, ComboChart.
+     Single-series: <BarChart data={[{label:"q1", value:12}]} /> -->`,
+            )}
+          {/if}
+        </Card>
+
+        <!-- Stacked Line Chart -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Stacked Line Chart
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={stackedLineChartTab}
+          />
+          {#if stackedLineChartTab === "preview"}
+            <StackedLineChart
+              style={selectedStyle}
+              theme={selectedTheme}
+              downloadable={true}
+              xAxisLabel="Week"
+              yAxisLabel="Page Views"
+              data={[
+                { label: "Week 1", EMEA: 120, APAC: 450, NA: 80 },
+                { label: "Week 2", EMEA: 180, APAC: 620, NA: 110 },
+                { label: "Week 3", EMEA: 140, APAC: 530, NA: 95 },
+                { label: "Week 4", EMEA: 220, APAC: 780, NA: 150 },
+              ]}
+              title="Website Traffic"
+            />
+          {:else}
+            {@render codeBlock(
+              "stackedLineChart",
+              `<script>
+  // Row-oriented format — label + any number of value keys
+  let data = [
+                { label: "Week 1", EMEA: 120, APAC: 450, NA: 80 },
+                { label: "Week 2", EMEA: 180, APAC: 620, NA: 110 },
+                { label: "Week 3", EMEA: 140, APAC: 530, NA: 95 },
+                { label: "Week 4", EMEA: 220, APAC: 780, NA: 150 },
+              ];
+</script>
+
+<StackedLineChart {data} title="Website Traffic" xAxisLabel="Week" yAxisLabel="Count" />
+
+<!-- Same row-oriented format works for BarChart, LineChart, StackedBarChart, ComboChart.
+     Single-series: <LineChart data={[{label:"q1", value:12}]} /> -->`,
+            )}
           {/if}
         </Card>
       </div>
