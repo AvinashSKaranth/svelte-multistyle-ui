@@ -148,12 +148,25 @@ The demo supports URL parameters for quick visual regression checks:
 - Dark/light mode is toggled with `dark` / `light` classes on `<html>`.
 - The library is built with `svelte-package` and emits to `dist/`.
 
-## Recent fixes
+## Charts
 
-- Demo gallery now wraps every component example in the library's own `Card` component instead of custom wrapper divs.
-- Tab buttons now use the correct style class so active/hover states render properly.
-- System dark mode now switches the page background and header consistently, not just components.
-- Checkbox, Radio, and Toggle now hide the native input and only show the themed custom control.
+Chart components are thin styled wrappers around [Chart.js](https://www.chartjs.org/) and accept the same `data` / `options` shape, plus the usual `style` and `theme` props. They require `chart.js` as a peer dependency.
+
+```svelte
+<script>
+  import { BarChart } from 'svelte-multistyle-ui';
+  import 'svelte-multistyle-ui/theme.css';
+
+  const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+    datasets: [{ label: 'Revenue', data: [12, 19, 7, 15] }]
+  };
+</script>
+
+<BarChart {data} style="material" theme="ocean" />
+```
+
+A shared `Chart` base component is also exported from `svelte-multistyle-ui/charts/Chart.svelte` for building custom chart types.
 
 ## License
 
