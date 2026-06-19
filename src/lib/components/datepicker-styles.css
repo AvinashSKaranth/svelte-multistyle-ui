@@ -43,7 +43,7 @@
   left: 14px;
   top: 16px;
   font-size: 15px;
-  color: var(--t-text-hint);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: left center;
   white-space: nowrap;
@@ -385,14 +385,14 @@
   left: 14px;
   top: 16px;
   font-size: 15px;
-  color: var(--t-border);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
 }
 .s-datepicker-material.floated .s-dp-floating-label {
   transform: translateY(-12px) scale(0.75);
   color: var(--t-primary);
 }
 .s-datepicker-material:not(.focused).has-value .s-dp-floating-label {
-  color: var(--t-border);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
 }
 
 /* ----- Material 3 ----- pill cells, outlined today, larger radii */
@@ -441,7 +441,7 @@
   left: 14px;
   top: 16px;
   font-size: 15px;
-  color: var(--t-border);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
   background: transparent;
   padding: 0 4px;
 }
@@ -451,7 +451,7 @@
   background: var(--t-surface);
 }
 .s-datepicker-material3:not(.focused).has-value .s-dp-floating-label {
-  color: var(--t-border);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
   background: var(--t-surface);
   transform: translateY(-24px) scale(0.75);
 }
@@ -491,7 +491,7 @@
   left: 12px;
   top: 15px;
   font-size: 14px;
-  color: var(--t-border);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
 }
 .s-datepicker-fluent.floated .s-dp-floating-label {
   transform: translateY(-9px) scale(0.78);
@@ -724,14 +724,14 @@
   left: 12px;
   top: 15px;
   font-size: 15px;
-  color: var(--t-text-hint);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
 }
 .s-datepicker-bootstrap.floated .s-dp-floating-label {
   transform: translateY(-10px) scale(0.75);
   color: var(--t-primary);
 }
 .s-datepicker-bootstrap:not(.focused).has-value .s-dp-floating-label {
-  color: var(--t-text-hint);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
 }
 
 /* ----- Cartoon ----- big rounded corners, offset shadow, bouncy */
@@ -878,7 +878,7 @@
   top: 8px;
   font-size: 12px;
   font-family: 'IBM Plex Sans', sans-serif;
-  color: var(--t-text-hint);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
   transform: none;
 }
 .s-datepicker-carbon.floated .s-dp-floating-label {

@@ -80,7 +80,8 @@
     <span class="s-input-icon s-input-icon-start {iconClass}">{iconStart}</span>
   {/if}
   {#if hasFloatingLabel}
-    <label class="s-input-floating-label" for={internalId}>{displayLabel}</label>
+    <label class="s-input-floating-label" for={internalId}>{displayLabel}</label
+    >
   {/if}
   <input
     {type}

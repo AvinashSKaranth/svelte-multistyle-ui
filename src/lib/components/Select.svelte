@@ -49,7 +49,9 @@
   class:floated
 >
   {#if hasFloatingLabel}
-    <label class="s-select-floating-label" for={internalId}>{displayLabel}</label>
+    <label class="s-select-floating-label" for={internalId}
+      >{displayLabel}</label
+    >
   {/if}
   <select
     bind:value

@@ -28,15 +28,12 @@
   const internalId = `dp-${uid}`;
   const dispFormat = $derived(displayFormat ?? format);
 
-
-
   // State
   let open = $state(false);
   let view = $state("date");
   let viewDate = $state(new Date());
   let selectedDate = $state(null);
   let isMobile = $state(false);
-
 
   // Format helpers — uses dayjs for full format support (MMM, MMMM, etc.)
   function toDayjsFmt(f) {
@@ -54,14 +51,21 @@
 
   // Derived
   const displayValue = $derived(
-    value ? fmt(parseDate(value, format) || new Date(), dispFormat) : ""
+    value ? fmt(parseDate(value, format) || new Date(), dispFormat) : "",
   );
   const inputPlaceholder = $derived(placeholder || dispFormat.toLowerCase());
 
   // Floating-label support — mirrors Input.svelte so the label sits inside the
   // border (floats up on focus/value) for outlined styles, and renders no
   // in-field label for the non-floating styles, exactly like Input.
-  const floatingStyles = ["material", "material3", "fluent", "carbon", "bootstrap", "legacy-ios"];
+  const floatingStyles = [
+    "material",
+    "material3",
+    "fluent",
+    "carbon",
+    "bootstrap",
+    "legacy-ios",
+  ];
   const hasFloatingLabel = $derived(floatingStyles.includes(style) && !!label);
   const hasValue = $derived(!!value);
   const floated = $derived(open || hasValue);
@@ -76,13 +80,13 @@
 
   const months = $derived(
     Array.from({ length: 12 }, (_, i) =>
-      new Date(2000, i, 1).toLocaleString(locale, { month: "short" })
-    )
+      new Date(2000, i, 1).toLocaleString(locale, { month: "short" }),
+    ),
   );
   const weekdays = $derived(
     Array.from({ length: 7 }, (_, i) =>
-      new Date(2000, 0, i + 2).toLocaleString(locale, { weekday: "short" })
-    )
+      new Date(2000, 0, i + 2).toLocaleString(locale, { weekday: "short" }),
+    ),
   );
 
   function calendarDays(year, month) {
@@ -93,27 +97,41 @@
     for (let i = fd - 1; i >= 0; i--) days.push({ d: pmd - i, o: true });
     for (let i = 1; i <= dim; i++) days.push({ d: i, o: false });
     let n = 1;
-    while (days.length < 42) { days.push({ d: n++, o: true }); }
+    while (days.length < 42) {
+      days.push({ d: n++, o: true });
+    }
     return days;
   }
 
   const calDays = $derived(calendarDays(viewYear, viewMonth));
   const yearList = $derived(
-    Array.from({ length: 12 }, (_, i) => decadeStart + i)
+    Array.from({ length: 12 }, (_, i) => decadeStart + i),
   );
 
   function isToday(d, o) {
     if (o) return false;
     const t = new Date();
-    return d === t.getDate() && viewMonth === t.getMonth() && viewYear === t.getFullYear();
+    return (
+      d === t.getDate() &&
+      viewMonth === t.getMonth() &&
+      viewYear === t.getFullYear()
+    );
   }
 
   function isDisabled(d, o) {
     if (o) return true;
     const dt = new Date(viewYear, viewMonth, d);
     const day = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
-    const minDay = minDate ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()) : null;
-    const maxDay = maxDate ? new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate() + 1) : null;
+    const minDay = minDate
+      ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate())
+      : null;
+    const maxDay = maxDate
+      ? new Date(
+          maxDate.getFullYear(),
+          maxDate.getMonth(),
+          maxDate.getDate() + 1,
+        )
+      : null;
     if (minDay && day < minDay) return true;
     if (maxDay && day >= maxDay) return true;
     return false;
@@ -121,7 +139,11 @@
 
   function isSelected(d, o) {
     if (!selectedDate || o) return false;
-    return d === selectedDate.getDate() && viewMonth === selectedDate.getMonth() && viewYear === selectedDate.getFullYear();
+    return (
+      d === selectedDate.getDate() &&
+      viewMonth === selectedDate.getMonth() &&
+      viewYear === selectedDate.getFullYear()
+    );
   }
 
   // Navigation
@@ -141,7 +163,11 @@
     if (o) return;
     const dt = new Date(viewYear, viewMonth, d);
     if (selectedDate) {
-      dt.setHours(selectedDate.getHours(), selectedDate.getMinutes(), selectedDate.getSeconds());
+      dt.setHours(
+        selectedDate.getHours(),
+        selectedDate.getMinutes(),
+        selectedDate.getSeconds(),
+      );
     }
     selectedDate = dt;
     value = fmt(dt, format);
@@ -230,7 +256,7 @@
   class="s-datepicker-wrapper {styleClass} {themeClass}"
   class:s-datepicker-open={open}
   class:focused={open}
-  class:floated={floated}
+  class:floated
   class:has-value={hasValue}
   class:disabled
   bind:this={wrapperEl}
@@ -246,13 +272,19 @@
     value={displayValue}
     placeholder={hasFloatingLabel ? "" : inputPlaceholder}
     {disabled}
-    onfocus={() => { if (!disabled) open = true; }}
-    onclick={() => { if (!disabled) open = true; }}
+    onfocus={() => {
+      if (!disabled) open = true;
+    }}
+    onclick={() => {
+      if (!disabled) open = true;
+    }}
     role="combobox"
     aria-expanded={open}
     aria-haspopup="dialog"
   />
-  <span class="s-datepicker-trigger-icon {iconClass}" aria-hidden="true">calendar_today</span>
+  <span class="s-datepicker-trigger-icon {iconClass}" aria-hidden="true"
+    >calendar_today</span
+  >
 
   {#if open}
     <div
@@ -264,24 +296,50 @@
     >
       <!-- Header -->
       <div class="s-dp-header">
-        <button type="button" class="s-dp-nav-btn" onclick={prev} aria-label="Previous">&lsaquo;</button>
+        <button
+          type="button"
+          class="s-dp-nav-btn"
+          onclick={prev}
+          aria-label="Previous">&lsaquo;</button
+        >
         <div class="s-dp-header-labels">
           {#if view === "date"}
-            <button type="button" class="s-dp-header-label" onclick={() => (view = "month")}>
-              {new Date(2000, viewMonth, 1).toLocaleString(locale, { month: "long" })}
+            <button
+              type="button"
+              class="s-dp-header-label"
+              onclick={() => (view = "month")}
+            >
+              {new Date(2000, viewMonth, 1).toLocaleString(locale, {
+                month: "long",
+              })}
             </button>
-            <button type="button" class="s-dp-header-label" onclick={() => (view = "year")}>
+            <button
+              type="button"
+              class="s-dp-header-label"
+              onclick={() => (view = "year")}
+            >
               {viewYear}
             </button>
           {:else if view === "month"}
-            <button type="button" class="s-dp-header-label s-dp-header-label-active" onclick={() => (view = "year")}>
+            <button
+              type="button"
+              class="s-dp-header-label s-dp-header-label-active"
+              onclick={() => (view = "year")}
+            >
               {viewYear}
             </button>
           {:else}
-            <span class="s-dp-header-label s-dp-header-label-active">{decadeStart} &ndash; {decadeEnd}</span>
+            <span class="s-dp-header-label s-dp-header-label-active"
+              >{decadeStart} &ndash; {decadeEnd}</span
+            >
           {/if}
         </div>
-        <button type="button" class="s-dp-nav-btn" onclick={next} aria-label="Next">&rsaquo;</button>
+        <button
+          type="button"
+          class="s-dp-nav-btn"
+          onclick={next}
+          aria-label="Next">&rsaquo;</button
+        >
       </div>
 
       <!-- Date view -->
@@ -301,34 +359,37 @@
               class:s-dp-selected={isSelected(cd.d, cd.o)}
               class:s-dp-day-disabled={isDisabled(cd.d, cd.o)}
               onclick={() => selectDay(cd.d, cd.o)}
-              disabled={cd.o || isDisabled(cd.d, cd.o)}
-            >{cd.d}</button>
+              disabled={cd.o || isDisabled(cd.d, cd.o)}>{cd.d}</button
+            >
           {/each}
         </div>
 
-      <!-- Month view -->
+        <!-- Month view -->
       {:else if view === "month"}
         <div class="s-dp-months-grid">
           {#each months as m, i}
             <button
               type="button"
               class="s-dp-month"
-              class:s-dp-selected={selectedDate && i === selectedDate.getMonth() && viewYear === selectedDate.getFullYear()}
-              onclick={() => selectMonth(i)}
-            >{m}</button>
+              class:s-dp-selected={selectedDate &&
+                i === selectedDate.getMonth() &&
+                viewYear === selectedDate.getFullYear()}
+              onclick={() => selectMonth(i)}>{m}</button
+            >
           {/each}
         </div>
 
-      <!-- Year view (decade) -->
+        <!-- Year view (decade) -->
       {:else}
         <div class="s-dp-years-grid">
           {#each yearList as y (y)}
             <button
               type="button"
               class="s-dp-year"
-              class:s-dp-selected={selectedDate && y === selectedDate.getFullYear()}
-              onclick={() => selectYear(y)}
-            >{y}</button>
+              class:s-dp-selected={selectedDate &&
+                y === selectedDate.getFullYear()}
+              onclick={() => selectYear(y)}>{y}</button
+            >
           {/each}
         </div>
       {/if}
@@ -339,18 +400,39 @@
           <span class="s-dp-time-label">Time</span>
           <div class="s-dp-time-inputs">
             {#if showHours}
-              <input type="number" class="s-dp-time-input" min={0} max={23} value={currentHour}
-                oninput={(e) => setHour(parseInt(e.target.value) || 0)} aria-label="Hour" />
+              <input
+                type="number"
+                class="s-dp-time-input"
+                min={0}
+                max={23}
+                value={currentHour}
+                oninput={(e) => setHour(parseInt(e.target.value) || 0)}
+                aria-label="Hour"
+              />
               <span class="s-dp-time-sep">:</span>
             {/if}
             {#if showMinutes}
-              <input type="number" class="s-dp-time-input" min={0} max={59} value={currentMinute}
-                oninput={(e) => setMinute(parseInt(e.target.value) || 0)} aria-label="Minute" />
+              <input
+                type="number"
+                class="s-dp-time-input"
+                min={0}
+                max={59}
+                value={currentMinute}
+                oninput={(e) => setMinute(parseInt(e.target.value) || 0)}
+                aria-label="Minute"
+              />
             {/if}
             {#if showSeconds}
               <span class="s-dp-time-sep">:</span>
-              <input type="number" class="s-dp-time-input" min={0} max={59} value={currentSecond}
-                oninput={(e) => setSecond(parseInt(e.target.value) || 0)} aria-label="Second" />
+              <input
+                type="number"
+                class="s-dp-time-input"
+                min={0}
+                max={59}
+                value={currentSecond}
+                oninput={(e) => setSecond(parseInt(e.target.value) || 0)}
+                aria-label="Second"
+              />
             {/if}
           </div>
         </div>
@@ -358,7 +440,11 @@
 
       <!-- Mobile done button -->
       {#if isMobile}
-        <button type="button" class="s-dp-done-btn" onclick={() => (open = false)}>Done</button>
+        <button
+          type="button"
+          class="s-dp-done-btn"
+          onclick={() => (open = false)}>Done</button
+        >
       {/if}
     </div>
   {/if}

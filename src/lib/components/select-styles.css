@@ -50,7 +50,7 @@
   left: 14px;
   top: 14px;
   font-size: 15px;
-  color: var(--t-border);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: left center;
 }
