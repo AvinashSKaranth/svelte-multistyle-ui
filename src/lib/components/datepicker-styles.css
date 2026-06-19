@@ -380,7 +380,23 @@
  * Material is the base look defined above; the other styles override from there.
  */
 
-/* ----- Material (label only; shape is the base look) ----- */
+/* ----- Material ----- underline input, rounded top */
+.s-datepicker-material input {
+  background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
+  border: none;
+  border-bottom: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+}
+.s-datepicker-material input:hover {
+  background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
+  border-bottom-color: var(--t-text);
+}
+.s-datepicker-material.s-datepicker-open input,
+.s-datepicker-material input:focus {
+  border-bottom-color: var(--t-primary);
+  background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface));
+  box-shadow: none;
+}
 .s-datepicker-material .s-dp-floating-label {
   left: 14px;
   top: 16px;

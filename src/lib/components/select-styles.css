@@ -66,8 +66,8 @@
 .s-select-carbon select,
 .s-select-bootstrap select,
 .s-select-legacy-ios select {
-  padding-top: 22px;
-  padding-bottom: 6px;
+  padding-top: 24px;
+  padding-bottom: 8px;
 }
 
 /* ===== MATERIAL ===== */
@@ -77,9 +77,30 @@
   border-bottom: var(--t-border-width) solid var(--t-border);
   border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
 }
+.s-select-material select:hover {
+  background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
+  border-bottom-color: var(--t-text);
+}
 .s-select-material.focused select {
   border-bottom-color: var(--t-primary);
+  background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface));
   box-shadow: none;
+}
+.s-select-material .s-select-floating-label {
+  left: 16px;
+  top: 16px;
+  font-size: 16px;
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+}
+.s-select-material.floated .s-select-floating-label {
+  transform: translateY(-12px) scale(0.75);
+  color: var(--t-primary);
+}
+.s-select-material:not(.focused).has-value .s-select-floating-label {
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+}
+.s-select-material.focused .s-select-arrow {
+  color: var(--t-primary);
 }
 
 /* ===== MATERIAL 3 ===== */
@@ -88,9 +109,30 @@
   border: var(--t-border-width) solid var(--t-border);
   border-radius: var(--t-card-radius);
 }
+.s-select-material3 select:hover {
+  border-color: var(--t-text);
+}
 .s-select-material3.focused select {
   border-color: var(--t-primary);
   border-width: calc(var(--t-border-width) + 0.5px);
+}
+.s-select-material3 .s-select-floating-label {
+  left: 14px;
+  top: 16px;
+  font-size: 16px;
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+  background: transparent;
+  padding: 0 4px;
+}
+.s-select-material3.floated .s-select-floating-label {
+  transform: translateY(-24px) scale(0.75);
+  color: var(--t-primary);
+  background: var(--t-surface);
+}
+.s-select-material3:not(.focused).has-value .s-select-floating-label {
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+  background: var(--t-surface);
+  transform: translateY(-24px) scale(0.75);
 }
 
 /* ===== STYLE OVERRIDES ===== */

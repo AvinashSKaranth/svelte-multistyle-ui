@@ -11,8 +11,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 4px;
-  min-height: 44px;
-  padding: 8px 36px 8px 12px;
+  min-height: 56px;
+  padding: 14px 36px 14px 12px;
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
@@ -106,7 +106,197 @@
   transform: translateY(-50%) rotate(180deg);
 }
 
+/* ===== FLOATING LABEL ===== */
+.s-mselect-floating-label {
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 12px;
+  font-size: 15px;
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left center;
+  z-index: 1;
+}
+.s-mselect-wrapper.floated .s-mselect-floating-label {
+  transform: translateY(-10px) scale(0.75);
+  color: var(--t-primary);
+}
+
+/* ===== FLOATING LABEL PADDING ===== */
+.s-mselect-material .mselect-control,
+.s-mselect-material3 .mselect-control,
+.s-mselect-fluent .mselect-control,
+.s-mselect-carbon .mselect-control,
+.s-mselect-bootstrap .mselect-control,
+.s-mselect-legacy-ios .mselect-control {
+  padding-top: 27px;
+  padding-bottom: 9px;
+}
+
 /* ===== STYLE OVERRIDES ===== */
+
+/* Material */
+.s-mselect-material .mselect-control {
+  background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
+  border: none;
+  border-bottom: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+}
+.s-mselect-material .mselect-control:hover {
+  background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
+  border-bottom-color: var(--t-text);
+}
+.s-mselect-material.focused .mselect-control {
+  border-bottom-color: var(--t-primary);
+  background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface));
+  box-shadow: none;
+}
+.s-mselect-material .s-mselect-floating-label {
+  left: 12px;
+  top: 14px;
+  font-size: 16px;
+}
+.s-mselect-material.floated .s-mselect-floating-label {
+  transform: translateY(-12px) scale(0.75);
+  color: var(--t-primary);
+}
+.s-mselect-material:not(.focused).has-value .s-mselect-floating-label {
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+}
+
+/* Material 3 */
+.s-mselect-material3 .mselect-control {
+  background: var(--t-surface);
+  border: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius);
+}
+.s-mselect-material3 .mselect-control:hover {
+  border-color: var(--t-text);
+}
+.s-mselect-material3.focused .mselect-control {
+  border-color: var(--t-primary);
+  border-width: calc(var(--t-border-width) + 0.5px);
+}
+.s-mselect-material3 .s-mselect-floating-label {
+  left: 12px;
+  top: 14px;
+  font-size: 16px;
+  background: transparent;
+  padding: 0 4px;
+}
+.s-mselect-material3.floated .s-mselect-floating-label {
+  transform: translateY(-22px) scale(0.75);
+  color: var(--t-primary);
+  background: var(--t-surface);
+}
+.s-mselect-material3:not(.focused).has-value .s-mselect-floating-label {
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+  background: var(--t-surface);
+  transform: translateY(-22px) scale(0.75);
+}
+
+/* Fluent */
+.s-mselect-fluent .mselect-control {
+  background: var(--t-surface);
+  border: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius);
+  border-bottom: 2px solid var(--t-border);
+}
+.s-mselect-fluent .mselect-control:hover {
+  border-color: color-mix(in srgb, var(--t-text) 50%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--t-text) 50%, transparent);
+}
+.s-mselect-fluent .s-mselect-floating-label {
+  left: 12px;
+  top: 13px;
+  font-size: 14px;
+}
+.s-mselect-fluent.floated .s-mselect-floating-label {
+  transform: translateY(-9px) scale(0.78);
+  color: var(--t-primary);
+  font-weight: 600;
+}
+.s-mselect-fluent:not(.focused).has-value .s-mselect-floating-label {
+  color: var(--t-text);
+  font-weight: 400;
+}
+
+/* Bootstrap */
+.s-mselect-bootstrap .mselect-control {
+  border-radius: 6px;
+  border: var(--t-border-width) solid var(--t-border);
+  box-shadow: var(--t-shadow-xs);
+}
+.s-mselect-bootstrap.focused .mselect-control {
+  box-shadow: 0 0 0 3px var(--t-shadow);
+  border-color: var(--t-primary);
+}
+.s-mselect-bootstrap .mselect-dropdown { border-radius: 6px; }
+.s-mselect-bootstrap .s-mselect-floating-label {
+  left: 12px;
+  top: 13px;
+  font-size: 15px;
+}
+.s-mselect-bootstrap.floated .s-mselect-floating-label {
+  transform: translateY(-10px) scale(0.75);
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+}
+.s-mselect-bootstrap:not(.focused).has-value .s-mselect-floating-label {
+  color: var(--t-text-hint);
+}
+
+/* Carbon */
+.s-mselect-carbon .mselect-control {
+  border-radius: 0;
+  border: var(--t-border-width) solid var(--t-border);
+  border-bottom-width: 2px;
+  box-shadow: none;
+}
+.s-mselect-carbon.focused .mselect-control {
+  border-bottom-color: var(--t-primary);
+  box-shadow: none;
+}
+.s-mselect-carbon .mselect-dropdown { border-radius: 0; }
+.s-mselect-carbon .s-mselect-floating-label {
+  left: 12px;
+  top: 6px;
+  font-size: 12px;
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+  transform: none;
+}
+.s-mselect-carbon.floated .s-mselect-floating-label {
+  transform: none;
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+}
+.s-mselect-carbon.focused .s-mselect-floating-label {
+  color: var(--t-primary);
+}
+
+/* Legacy iOS */
+.s-mselect-legacy-ios .mselect-control {
+  border-radius: 10px;
+  border: var(--t-border-width) solid var(--t-border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
+}
+.s-mselect-legacy-ios.focused .mselect-control {
+  border-color: var(--t-primary);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 0 0 3px var(--t-shadow);
+}
+.s-mselect-legacy-ios .mselect-dropdown { border-radius: 10px; }
+.s-mselect-legacy-ios .s-mselect-floating-label {
+  left: 12px;
+  top: 14px;
+  font-size: 16px;
+}
+.s-mselect-legacy-ios.floated .s-mselect-floating-label {
+  transform: translateY(-10px) scale(0.75);
+  color: var(--t-primary);
+}
+.s-mselect-legacy-ios:not(.focused).has-value .s-mselect-floating-label {
+  color: color-mix(in srgb, var(--t-text) 50%, transparent);
+}
 
 /* Brutalist */
 .s-mselect-brutalist .mselect-control {
@@ -143,15 +333,6 @@
 }
 .s-mselect-metro .mselect-dropdown { border-radius: 0; border: var(--t-border-width) solid var(--t-primary); }
 
-/* Bootstrap */
-.s-mselect-bootstrap .mselect-control {
-  border-radius: 6px;
-  border: var(--t-border-width) solid var(--t-border);
-  box-shadow: var(--t-shadow-xs);
-}
-.s-mselect-bootstrap.focused .mselect-control { box-shadow: 0 0 0 3px var(--t-shadow); border-color: var(--t-primary); }
-.s-mselect-bootstrap .mselect-dropdown { border-radius: 6px; }
-
 /* Cartoon */
 .s-mselect-cartoon .mselect-control {
   border-radius: 16px;
@@ -170,17 +351,6 @@
 }
 .s-mselect-illustration .mselect-dropdown { border-radius: 8px; border: var(--t-border-width) solid var(--t-text); box-shadow: 3px 3px 0 var(--t-border); }
 
-/* Carbon */
-.s-mselect-carbon .mselect-control {
-  border-radius: 0;
-  border: var(--t-border-width) solid var(--t-border);
-  border-bottom-width: 2px;
-  font-family: 'IBM Plex Sans', sans-serif;
-  box-shadow: none;
-}
-.s-mselect-carbon.focused .mselect-control { border-bottom-color: var(--t-primary); box-shadow: none; }
-.s-mselect-carbon .mselect-dropdown { border-radius: 0; }
-
 /* Liquid Glass */
 .s-mselect-liquid-glass .mselect-control {
   border-radius: 16px;
@@ -192,11 +362,4 @@
 }
 .s-mselect-liquid-glass .mselect-dropdown { border-radius: 16px; backdrop-filter: blur(24px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
 
-/* Legacy iOS */
-.s-mselect-legacy-ios .mselect-control {
-  border-radius: 10px;
-  border: var(--t-border-width) solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-}
-.s-mselect-legacy-ios .mselect-dropdown { border-radius: 10px; }
+

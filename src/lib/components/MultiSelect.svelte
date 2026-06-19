@@ -19,9 +19,23 @@
   let open = $state(false);
   let focused = $state(false);
   let hasValue = $derived(selected.length > 0);
+  let floated = $derived(focused || hasValue);
 
   const styleClass = $derived(`s-mselect-${style}`);
   const themeClass = $derived(`theme-${theme}`);
+
+  const floatingStyles = [
+    "material",
+    "material3",
+    "fluent",
+    "carbon",
+    "bootstrap",
+    "legacy-ios",
+  ];
+  const hasFloatingLabel = $derived(
+    floatingStyles.includes(style) && (label || placeholder),
+  );
+  const displayLabel = $derived(label || placeholder);
 
   function toggle(val) {
     if (selected.includes(val)) {
@@ -54,13 +68,17 @@
   class:focused
   class:open
   class:has-value={hasValue}
+  class:floated
   tabindex="-1"
   role="listbox"
-  aria-label={label || placeholder}
+  aria-label={displayLabel}
   onfocusin={() => (focused = true)}
   onfocusout={handleBlur}
   {...rest}
 >
+  {#if hasFloatingLabel}
+    <label class="s-mselect-floating-label">{displayLabel}</label>
+  {/if}
   <div
     class="mselect-control"
     role="button"
@@ -90,7 +108,7 @@
           </span>
         {/each}
       </div>
-    {:else}
+    {:else if !hasFloatingLabel}
       <span class="mselect-placeholder">{placeholder}</span>
     {/if}
     <span class="mselect-arrow">
