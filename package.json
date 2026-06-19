@@ -1,6 +1,6 @@
 {
   "name": "svelte-multistyle-ui",
-  "version": "0.0.3-alpha",
+  "version": "0.0.4-alpha",
   "description": "A multi-style, multi-theme Svelte 5 component library with multiple design styles and multiple color schemes",
   "type": "module",
   "license": "MIT",
