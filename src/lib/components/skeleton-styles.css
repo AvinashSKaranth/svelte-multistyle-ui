@@ -43,6 +43,3 @@
 
 /* Liquid Glass */
 .s-skeleton-liquid-glass { background: rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(8px); }
-
-/* Legacy iOS */
-.s-skeleton-legacy-ios { border-radius: 8px; }

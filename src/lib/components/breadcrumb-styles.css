@@ -65,9 +65,3 @@
 
 /* Liquid Glass */
 .s-breadcrumb-liquid-glass .s-breadcrumb-item a:hover { color: var(--t-primary); }
-
-/* Legacy iOS */
-.s-breadcrumb-legacy-ios .s-breadcrumb-item a,
-.s-breadcrumb-legacy-ios .s-breadcrumb-item span { color: var(--t-primary); }
-.s-breadcrumb-legacy-ios .s-breadcrumb-item.current a,
-.s-breadcrumb-legacy-ios .s-breadcrumb-item.current span { color: var(--t-text); }

@@ -13,7 +13,6 @@ const styles = [
   "illustration",
   "carbon",
   "liquid-glass",
-  "legacy-ios",
 ];
 
 for (const style of styles) {

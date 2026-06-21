@@ -40,6 +40,8 @@
   import Column from "./lib/components/Column.svelte";
   import Grid from "./lib/components/Grid.svelte";
 
+  import { themes as presetConfigs, generateThemeCss, applyThemeToElement, invertHex } from "./lib/themes/index.js";
+
   // Chart Components
   import BarChart from "./lib/components/charts/BarChart.svelte";
   import LineChart from "./lib/components/charts/LineChart.svelte";
@@ -62,6 +64,7 @@
 
   const styles = [
     { value: "material", label: "Material Design" },
+    { value: "liquid-glass", label: "Liquid Glass" },
     { value: "material3", label: "Material You (M3)" },
     { value: "fluent", label: "Fluent UI" },
     { value: "brutalist", label: "Brutalist UI" },
@@ -72,8 +75,6 @@
     { value: "cartoon", label: "Cartoon" },
     { value: "illustration", label: "Illustration" },
     { value: "carbon", label: "Carbon" },
-    { value: "liquid-glass", label: "Liquid Glass" },
-    { value: "legacy-ios", label: "Legacy iOS" },
   ];
 
   const themes = [
@@ -90,209 +91,26 @@
     { value: "custom", label: "Custom" },
   ];
 
-  const themeDefaults = {
-    default: {
-      primary: "#2563eb",
-      secondary: "#3b82f6",
-      surface: "#ffffff",
-      cardBg: "#ffffff",
-      cardBorderColor: "#e2e8f0",
-      text: "#0f172a",
-      textHint: "#94a3b8",
-      textPrimary: "#2563eb",
-      textSecondary: "#3b82f6",
-      surfaceBg: "#f1f5f9",
-      btnBg: "#2563eb",
-      btnBorderColor: "transparent",
-      btnRadius: "8px",
-      cardRadius: "12px",
-    },
-    ocean: {
-      primary: "#0ea5e9",
-      secondary: "#06b6d4",
-      surface: "#ffffff",
-      cardBg: "#f0f9ff",
-      cardBorderColor: "#bae6fd",
-      text: "#0c4a6e",
-      textHint: "#7dd3fc",
-      textPrimary: "#0284c7",
-      textSecondary: "#0891b2",
-      surfaceBg: "#f0f9ff",
-      btnBg: "#0ea5e9",
-      btnBorderColor: "transparent",
-      btnRadius: "10px",
-      cardRadius: "12px",
-    },
-    forest: {
-      primary: "#22c55e",
-      secondary: "#16a34a",
-      surface: "#ffffff",
-      cardBg: "#f0fdf4",
-      cardBorderColor: "#bbf7d0",
-      text: "#14532d",
-      textHint: "#86efac",
-      textPrimary: "#16a34a",
-      textSecondary: "#15803d",
-      surfaceBg: "#f0fdf4",
-      btnBg: "#22c55e",
-      btnBorderColor: "transparent",
-      btnRadius: "8px",
-      cardRadius: "12px",
-    },
-    rose: {
-      primary: "#f43f5e",
-      secondary: "#e11d48",
-      surface: "#ffffff",
-      cardBg: "#fff1f2",
-      cardBorderColor: "#fecdd3",
-      text: "#881337",
-      textHint: "#fda4af",
-      textPrimary: "#e11d48",
-      textSecondary: "#be123c",
-      surfaceBg: "#fff1f2",
-      btnBg: "#f43f5e",
-      btnBorderColor: "transparent",
-      btnRadius: "12px",
-      cardRadius: "14px",
-    },
-    midnight: {
-      primary: "#818cf8",
-      secondary: "#6366f1",
-      surface: "#1e1b4b",
-      cardBg: "#1e1b4b",
-      cardBorderColor: "#3730a3",
-      text: "#e0e7ff",
-      textHint: "#6366f1",
-      textPrimary: "#a5b4fc",
-      textSecondary: "#818cf8",
-      surfaceBg: "#0f0d2e",
-      btnBg: "#818cf8",
-      btnBorderColor: "transparent",
-      btnRadius: "8px",
-      cardRadius: "12px",
-    },
-    gold: {
-      primary: "#eab308",
-      secondary: "#ca8a04",
-      surface: "#ffffff",
-      cardBg: "#fefce8",
-      cardBorderColor: "#fde047",
-      text: "#713f12",
-      textHint: "#facc15",
-      textPrimary: "#ca8a04",
-      textSecondary: "#a16207",
-      surfaceBg: "#fefce8",
-      btnBg: "#eab308",
-      btnBorderColor: "transparent",
-      btnRadius: "8px",
-      cardRadius: "10px",
-    },
-    slate: {
-      primary: "#64748b",
-      secondary: "#475569",
-      surface: "#ffffff",
-      cardBg: "#f8fafc",
-      cardBorderColor: "#cbd5e1",
-      text: "#1e293b",
-      textHint: "#94a3b8",
-      textPrimary: "#475569",
-      textSecondary: "#334155",
-      surfaceBg: "#f1f5f9",
-      btnBg: "#64748b",
-      btnBorderColor: "transparent",
-      btnRadius: "6px",
-      cardRadius: "8px",
-    },
-    candy: {
-      primary: "#ec4899",
-      secondary: "#f472b6",
-      surface: "#ffffff",
-      cardBg: "#fdf2f8",
-      cardBorderColor: "#f9a8d4",
-      text: "#831843",
-      textHint: "#f9a8d4",
-      textPrimary: "#db2777",
-      textSecondary: "#be185d",
-      surfaceBg: "#fdf2f8",
-      btnBg: "#ec4899",
-      btnBorderColor: "transparent",
-      btnRadius: "20px",
-      cardRadius: "24px",
-    },
-    storm: {
-      primary: "#94a3b8",
-      secondary: "#64748b",
-      surface: "#0f172a",
-      cardBg: "#1e293b",
-      cardBorderColor: "#334155",
-      text: "#e2e8f0",
-      textHint: "#64748b",
-      textPrimary: "#cbd5e1",
-      textSecondary: "#94a3b8",
-      surfaceBg: "#0f172a",
-      btnBg: "#94a3b8",
-      btnBorderColor: "transparent",
-      btnRadius: "6px",
-      cardRadius: "10px",
-    },
-    royal: {
-      primary: "#7c3aed",
-      secondary: "#6d28d9",
-      surface: "#2e1065",
-      cardBg: "#3b0764",
-      cardBorderColor: "#7c3aed",
-      text: "#ddd6fe",
-      textHint: "#7c3aed",
-      textPrimary: "#a78bfa",
-      textSecondary: "#8b5cf6",
-      surfaceBg: "#1e0a4e",
-      btnBg: "#7c3aed",
-      btnBorderColor: "transparent",
-      btnRadius: "8px",
-      cardRadius: "12px",
-    },
-  };
-
   const urlParams = new URLSearchParams(window.location.search);
   let selectedStyle = $state(urlParams.get("style") || "material");
   let selectedTheme = $state(urlParams.get("theme") || "default");
   let mode = $state(urlParams.get("mode") || "system");
 
-  // Theme editor state
-  let customPrimary = $state("#6366f1");
-  let customSecondary = $state("#8b5cf6");
-  let customSurface = $state("#ffffff");
-  let customCardBg = $state("#ffffff");
-  let customCardBorderColor = $state("#e2e8f0");
-  let customText = $state("#1e293b");
-  let customTextHint = $state("#94a3b8");
-  let customTextPrimary = $state("#6366f1");
-  let customTextSecondary = $state("#8b5cf6");
-  let customSurfaceBg = $state("#f1f5f9");
-  let customBtnBg = $state("#6366f1");
-  let customBtnBorderColor = $state("transparent");
-  let customBtnRadius = $state("8px");
-  let customCardRadius = $state("12px");
+  // Theme editor state — single config object { common, light, dark }.
+  // Loaded from the selected preset; edits mutate it directly (live preview).
+  let editorConfig = $state(structuredClone(presetConfigs.default));
 
-  // Reset custom values when theme changes
+  // Load the chosen preset into the editor whenever the dropdown changes.
   $effect(() => {
-    const d = themeDefaults[selectedTheme];
-    if (d) {
-      customPrimary = d.primary;
-      customSecondary = d.secondary;
-      customSurface = d.surface;
-      customCardBg = d.cardBg;
-      customCardBorderColor = d.cardBorderColor;
-      customText = d.text;
-      customTextHint = d.textHint;
-      customTextPrimary = d.textPrimary;
-      customTextSecondary = d.textSecondary;
-      customSurfaceBg = d.surfaceBg;
-      customBtnBg = d.btnBg;
-      customBtnBorderColor = d.btnBorderColor;
-      customBtnRadius = d.btnRadius;
-      customCardRadius = d.cardRadius;
+    if (selectedTheme !== "custom" && presetConfigs[selectedTheme]) {
+      editorConfig = structuredClone(presetConfigs[selectedTheme]);
     }
+  });
+
+  // Live-apply the editor config to the demo root (overrides the theme-* class).
+  let demoEl;
+  $effect(() => {
+    if (demoEl) applyThemeToElement(demoEl, editorConfig, isDarkMode);
   });
 
   const isDarkMode = $derived(
@@ -443,10 +261,8 @@
   ];
 
   const radiusOptions = ["0px", "2px", "4px", "8px", "16px", "32px", "9999px"];
-
-  const customStyle = $derived(
-    `--t-primary:${customPrimary};--t-secondary:${customSecondary};--t-surface:${customSurface};--t-card-bg:${customCardBg};--t-card-border-color:${customCardBorderColor};--t-text:${customText};--t-text-hint:${customTextHint};--t-text-primary:${customTextPrimary};--t-text-secondary:${customTextSecondary};--t-surface-bg:${customSurfaceBg};--t-btn-bg:${customBtnBg};--t-btn-border-color:${customBtnBorderColor};--t-btn-radius:${customBtnRadius};--t-card-radius:${customCardRadius};`,
-  );
+  // Lightness lift per dark field — matches generator.js (text light, surfaces dark).
+  const darkLift = { text: 20, surface: 10, cardSurface: 14 };
 
   let dropdownItems = [
     { label: "Profile", icon: "👤", onclick: () => alert("Profile clicked") },
@@ -560,46 +376,23 @@
   let settingsOpen = $state(false);
   let copyStatus = $state("");
 
-  const customCss = $derived(`/* custom-theme.css */
-/* Link this file after svelte-multistyle-ui/theme.css. */
-.theme-custom {
-  --t-primary: ${customPrimary}; --t-secondary: ${customSecondary}; --t-surface: ${customSurface};
-  --t-card-bg: ${customCardBg}; --t-card-border-color: ${customCardBorderColor};
-  --t-text: ${customText}; --t-text-hint: ${customTextHint};
-  --t-text-primary: ${customTextPrimary}; --t-text-secondary: ${customTextSecondary};
-  --t-surface-bg: ${customSurfaceBg}; --t-btn-bg: ${customBtnBg};
-  --t-btn-border-color: ${customBtnBorderColor}; --t-btn-radius: ${customBtnRadius};
-  --t-card-radius: ${customCardRadius};
-  --t-info: ${customPrimary}; --t-success: ${customPrimary};
-  --t-warning: ${customPrimary}; --t-error: ${customPrimary};
-  --t-text-info: ${customPrimary}; --t-text-success: ${customPrimary};
-  --t-text-warning: ${customPrimary}; --t-text-error: ${customPrimary};
-}
+  // Build a copyable .theme-custom CSS block from the editor config (single
+  // source of truth — same generator the build uses).
+  function buildCustomCss(cfg) {
+    const { light, dark } = generateThemeCss("custom", cfg);
+    return `/* custom-theme.css — link after svelte-multistyle-ui/theme.css */
+${light}
 
-html.dark .theme-custom {
-  --t-primary: ${customPrimary}; --t-secondary: ${customSecondary}; --t-surface: ${customSurface};
-  --t-card-bg: ${customCardBg}; --t-card-border-color: ${customCardBorderColor};
-  --t-text: ${customText}; --t-text-hint: ${customTextHint};
-  --t-text-primary: ${customTextPrimary}; --t-text-secondary: ${customTextSecondary};
-  --t-surface-bg: ${customSurfaceBg}; --t-btn-bg: ${customBtnBg};
-  --t-btn-border-color: ${customBtnBorderColor}; --t-btn-radius: ${customBtnRadius};
-  --t-card-radius: ${customCardRadius};
-  --t-info: ${customPrimary}; --t-success: ${customPrimary};
-  --t-warning: ${customPrimary}; --t-error: ${customPrimary};
-  --t-text-info: ${customPrimary}; --t-text-success: ${customPrimary};
-  --t-text-warning: ${customPrimary}; --t-text-error: ${customPrimary};
-}
+${dark}
 
-/* Use it:
+/* Usage:
 import "svelte-multistyle-ui/theme.css";
 import "./custom-theme.css";
-
-Then pass theme="custom" to components.
-*/`);
-
-  function markCustomTheme() {
-    if (selectedTheme !== "custom") selectedTheme = "custom";
+// then pass theme="custom" to components
+*/`;
   }
+
+  const customCss = $derived(buildCustomCss(editorConfig));
 
   async function copyCustomCss() {
     await navigator.clipboard.writeText(customCss);
@@ -618,10 +411,10 @@ Then pass theme="custom" to components.
 </script>
 
 <div
+  bind:this={demoEl}
   class="demo-root min-h-screen page-bg transition-colors duration-300 theme-{selectedTheme}"
   class:glass-page-bg={selectedStyle === "liquid-glass"}
   class:dark-mode={isDarkMode}
-  style={customStyle}
 >
   <!-- Sticky Header -->
   <header
@@ -710,209 +503,86 @@ Then pass theme="custom" to components.
           >
             <h3 class="settings-panel-title">Theme Editor</h3>
             <p class="text-sm text-gray-500">
-              First edit switches the theme dropdown to Custom.
+              Edits live-preview on the gallery. Switch theme to load a preset;
+              dark fields default to HSL-inverted light (check "derive").
             </p>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-primary"
-                  class="text-xs font-medium text-gray-500">Primary</label
-                >
-                <input
-                  id="custom-primary"
-                  type="color"
-                  bind:value={customPrimary}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-secondary"
-                  class="text-xs font-medium text-gray-500">Secondary</label
-                >
-                <input
-                  id="custom-secondary"
-                  type="color"
-                  bind:value={customSecondary}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-surface"
-                  class="text-xs font-medium text-gray-500">Surface</label
-                >
-                <input
-                  id="custom-surface"
-                  type="color"
-                  bind:value={customSurface}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-card-bg"
-                  class="text-xs font-medium text-gray-500">Card BG</label
-                >
-                <input
-                  id="custom-card-bg"
-                  type="color"
-                  bind:value={customCardBg}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-card-border-color"
-                  class="text-xs font-medium text-gray-500">Card Border</label
-                >
-                <input
-                  id="custom-card-border-color"
-                  type="color"
-                  bind:value={customCardBorderColor}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-text"
-                  class="text-xs font-medium text-gray-500">Text</label
-                >
-                <input
-                  id="custom-text"
-                  type="color"
-                  bind:value={customText}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-text-hint"
-                  class="text-xs font-medium text-gray-500">Text Hint</label
-                >
-                <input
-                  id="custom-text-hint"
-                  type="color"
-                  bind:value={customTextHint}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-text-primary"
-                  class="text-xs font-medium text-gray-500">Text Primary</label
-                >
-                <input
-                  id="custom-text-primary"
-                  type="color"
-                  bind:value={customTextPrimary}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-text-secondary"
-                  class="text-xs font-medium text-gray-500"
-                  >Text Secondary</label
-                >
-                <input
-                  id="custom-text-secondary"
-                  type="color"
-                  bind:value={customTextSecondary}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-surface-bg"
-                  class="text-xs font-medium text-gray-500">Surface BG</label
-                >
-                <input
-                  id="custom-surface-bg"
-                  type="color"
-                  bind:value={customSurfaceBg}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-btn-bg"
-                  class="text-xs font-medium text-gray-500">Btn BG</label
-                >
-                <input
-                  id="custom-btn-bg"
-                  type="color"
-                  bind:value={customBtnBg}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
-              </div>
-              <div class="flex flex-col gap-1">
-                <label
-                  for="custom-btn-border-color"
-                  class="text-xs font-medium text-gray-500">Btn Border</label
-                >
-                <input
-                  id="custom-btn-border-color"
-                  type="color"
-                  bind:value={customBtnBorderColor}
-                  oninput={markCustomTheme}
-                  class="w-full h-9 rounded cursor-pointer border"
-                />
+
+            <div class="text-xs font-semibold uppercase tracking-wide text-gray-500 mt-3">Common (both modes)</div>
+            <div class="grid grid-cols-2 gap-3 mt-2">
+              {#each [["Primary", "primary"], ["Secondary", "secondary"], ["Info", "info"], ["Success", "success"], ["Warning", "warning"], ["Error", "error"], ["Text on Primary", "textOnPrimary"]] as [label, key]}
+                <div class="flex flex-col gap-1">
+                  <label class="text-xs font-medium text-gray-500">{label}</label>
+                  <input type="color" bind:value={editorConfig.common[key]} class="w-full h-9 rounded cursor-pointer border" />
+                </div>
+              {/each}
+            </div>
+
+            <div class="flex flex-wrap gap-4 mt-4">
+              {#each [["Button Radius", "buttonRadius"], ["Card Radius", "cardRadius"], ["Input Radius", "inputRadius"]] as [label, key]}
+                <div class="flex flex-col gap-2">
+                  <span class="text-xs font-medium text-gray-500">{label}</span>
+                  <div class="flex gap-1 flex-wrap">
+                    {#each radiusOptions as r}
+                      <button type="button" class="px-2 py-1 text-xs rounded border transition-colors"
+                        class:bg-indigo-500={editorConfig.common[key] === r}
+                        class:text-white={editorConfig.common[key] === r}
+                        onclick={() => (editorConfig.common[key] = r)}>{r}</button>
+                    {/each}
+                    <button type="button" class="px-2 py-1 text-xs rounded border transition-colors"
+                      class:bg-indigo-500={editorConfig.common[key] === null}
+                      class:text-white={editorConfig.common[key] === null}
+                      onclick={() => (editorConfig.common[key] = null)}>na</button>
+                  </div>
+                </div>
+              {/each}
+              <div class="flex flex-col gap-2">
+                <span class="text-xs font-medium text-gray-500">Border Width</span>
+                <div class="flex gap-1 flex-wrap">
+                  {#each ["1px", "1.5px", "2px"] as w}
+                    <button type="button" class="px-2 py-1 text-xs rounded border transition-colors"
+                      class:bg-indigo-500={editorConfig.common.borderWidth === w}
+                      class:text-white={editorConfig.common.borderWidth === w}
+                      onclick={() => (editorConfig.common.borderWidth = w)}>{w}</button>
+                  {/each}
+                  <button type="button" class="px-2 py-1 text-xs rounded border transition-colors"
+                    class:bg-indigo-500={editorConfig.common.borderWidth === null}
+                    class:text-white={editorConfig.common.borderWidth === null}
+                    onclick={() => (editorConfig.common.borderWidth = null)}>na</button>
+                </div>
               </div>
             </div>
-            <div class="flex flex-wrap gap-4 mt-4">
-              <div class="flex flex-col gap-2">
-                <span class="text-xs font-medium text-gray-500"
-                  >Button Radius</span
-                >
-                <div class="flex gap-1 flex-wrap">
-                  {#each radiusOptions as r}
-                    <button
-                      type="button"
-                      class="px-2 py-1 text-xs rounded border transition-colors"
-                      class:bg-indigo-500={customBtnRadius === r}
-                      class:text-white={customBtnRadius === r}
-                      onclick={() => {
-                        markCustomTheme();
-                        customBtnRadius = r;
-                      }}>{r}</button
-                    >
-                  {/each}
+
+            <div class="text-xs font-semibold uppercase tracking-wide text-gray-500 mt-4">Light</div>
+            <div class="grid grid-cols-3 gap-3 mt-2">
+              {#each [["Text", "text"], ["Surface", "surface"], ["Card Surface", "cardSurface"]] as [label, key]}
+                <div class="flex flex-col gap-1">
+                  <label class="text-xs font-medium text-gray-500">{label}</label>
+                  <input type="color" bind:value={editorConfig.light[key]} class="w-full h-9 rounded cursor-pointer border" />
                 </div>
-              </div>
-              <div class="flex flex-col gap-2">
-                <span class="text-xs font-medium text-gray-500"
-                  >Card Radius</span
-                >
-                <div class="flex gap-1 flex-wrap">
-                  {#each radiusOptions as r}
-                    <button
-                      type="button"
-                      class="px-2 py-1 text-xs rounded border transition-colors"
-                      class:bg-indigo-500={customCardRadius === r}
-                      class:text-white={customCardRadius === r}
-                      onclick={() => {
-                        markCustomTheme();
-                        customCardRadius = r;
-                      }}>{r}</button
-                    >
-                  {/each}
+              {/each}
+            </div>
+
+            <div class="text-xs font-semibold uppercase tracking-wide text-gray-500 mt-4">Dark</div>
+            <div class="grid grid-cols-3 gap-3 mt-2">
+              {#each [["Text", "text"], ["Surface", "surface"], ["Card Surface", "cardSurface"]] as [label, key]}
+                <div class="flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <label class="text-xs font-medium text-gray-500">Dark {label}</label>
+                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                      <input type="checkbox" checked={editorConfig.dark[key] === null}
+                        onchange={() => (editorConfig.dark[key] = editorConfig.dark[key] === null ? invertHex(editorConfig.light[key], darkLift[key]) : null)} />
+                      derive
+                    </label>
+                  </div>
+                  <input type="color"
+                    value={editorConfig.dark[key] ?? invertHex(editorConfig.light[key], darkLift[key])}
+                    disabled={editorConfig.dark[key] === null}
+                    oninput={(e) => (editorConfig.dark[key] = e.currentTarget.value)}
+                    class="w-full h-9 rounded cursor-pointer border" />
                 </div>
-              </div>
+              {/each}
             </div>
           </Card>
-
           <Card
             style={selectedStyle}
             theme={selectedTheme}
@@ -1778,98 +1448,396 @@ Then pass theme="custom" to components.
             bind:active={layoutTab}
           />
           {#if layoutTab === "preview"}
-            <Column gap="12px" fill>
-              <div>
-                <p
-                  style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;"
-                >
-                  Row — gap 8px, align center
-                </p>
-                <Row gap="8px" align="center">
-                  <Button variant="filled"
-                    >{#snippet children()}One{/snippet}</Button
-                  >
-                  <Button variant="outlined"
-                    >{#snippet children()}Two{/snippet}</Button
-                  >
-                  <Button variant="tonal"
-                    >{#snippet children()}Three{/snippet}</Button
-                  >
+            {#snippet lbl(text)}
+              <p
+                style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;"
+              >
+                {text}
+              </p>
+            {/snippet}
+            {#snippet cell(text, extra)}
+              <div
+                style={`padding:6px 10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;${extra}`}
+              >{text}</div>
+            {/snippet}
+            <Column gap="14px" fill>
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Row — align (cross-axis)
+              </p>
+              {@render lbl("align=start — items pin to top")}
+              <div class="layout-stage">
+                <Row gap="8px" align="start" class="h-20" fill>
+                  {@render cell("A", "height:24px;")}
+                  {@render cell("B", "height:40px;")}
+                  {@render cell("C", "height:32px;")}
                 </Row>
               </div>
-              <div>
-                <p
-                  style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;"
-                >
-                  Column — gap 8px, fill
-                </p>
-                <Column gap="8px" fill>
-                  <Button variant="filled"
-                    >{#snippet children()}Top{/snippet}</Button
-                  >
-                  <Button variant="outlined"
-                    >{#snippet children()}Bottom{/snippet}</Button
-                  >
+              {@render lbl("align=center — items centered vertically")}
+              <div class="layout-stage">
+                <Row gap="8px" align="center" class="h-20" fill>
+                  {@render cell("A", "height:24px;")}
+                  {@render cell("B", "height:40px;")}
+                  {@render cell("C", "height:32px;")}
+                </Row>
+              </div>
+              {@render lbl("align=end — items pin to bottom")}
+              <div class="layout-stage">
+                <Row gap="8px" align="end" class="h-20" fill>
+                  {@render cell("A", "height:24px;")}
+                  {@render cell("B", "height:40px;")}
+                  {@render cell("C", "height:32px;")}
+                </Row>
+              </div>
+              {@render lbl("align=baseline — text baselines line up")}
+              <div class="layout-stage">
+                <Row gap="8px" align="baseline" class="h-20" fill>
+                  {@render cell("A", "height:24px;font-size:10px;")}
+                  {@render cell("B", "height:40px;font-size:18px;")}
+                  {@render cell("C", "height:32px;font-size:14px;")}
+                </Row>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Row — justify (main-axis)
+              </p>
+              {@render lbl("justify=start")}
+              <div class="layout-stage">
+                <Row gap="8px" justify="start" fill>
+                  {@render cell("1", "width:48px;")}
+                  {@render cell("2", "width:48px;")}
+                  {@render cell("3", "width:48px;")}
+                </Row>
+              </div>
+              {@render lbl("justify=center")}
+              <div class="layout-stage">
+                <Row gap="8px" justify="center" fill>
+                  {@render cell("1", "width:48px;")}
+                  {@render cell("2", "width:48px;")}
+                  {@render cell("3", "width:48px;")}
+                </Row>
+              </div>
+              {@render lbl("justify=end")}
+              <div class="layout-stage">
+                <Row gap="8px" justify="end" fill>
+                  {@render cell("1", "width:48px;")}
+                  {@render cell("2", "width:48px;")}
+                  {@render cell("3", "width:48px;")}
+                </Row>
+              </div>
+              {@render lbl("justify=between — max space between")}
+              <div class="layout-stage">
+                <Row gap="8px" justify="between" fill>
+                  {@render cell("1", "width:48px;")}
+                  {@render cell("2", "width:48px;")}
+                  {@render cell("3", "width:48px;")}
+                </Row>
+              </div>
+              {@render lbl("justify=around")}
+              <div class="layout-stage">
+                <Row gap="8px" justify="around" fill>
+                  {@render cell("1", "width:48px;")}
+                  {@render cell("2", "width:48px;")}
+                  {@render cell("3", "width:48px;")}
+                </Row>
+              </div>
+              {@render lbl("justify=evenly")}
+              <div class="layout-stage">
+                <Row gap="8px" justify="evenly" fill>
+                  {@render cell("1", "width:48px;")}
+                  {@render cell("2", "width:48px;")}
+                  {@render cell("3", "width:48px;")}
+                </Row>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Row — fill &amp; wrap
+              </p>
+              {@render lbl("fill=false — Row shrinks to content width")}
+              <div class="layout-stage">
+                <Row gap="8px">
+                  {@render cell("A", "width:60px;")}
+                  {@render cell("B", "width:60px;")}
+                  {@render cell("C", "width:60px;")}
+                </Row>
+              </div>
+              {@render lbl("fill=true — Row stretches to 100% width")}
+              <div class="layout-stage">
+                <Row gap="8px" fill justify="between">
+                  {@render cell("A", "width:60px;")}
+                  {@render cell("B", "width:60px;")}
+                  {@render cell("C", "width:60px;")}
+                </Row>
+              </div>
+              {@render lbl("wrap=true — items wrap to next line when out of room")}
+              <div class="layout-stage">
+                <Row gap="8px" wrap fill>
+                  {@render cell("1", "width:120px;height:36px;")}
+                  {@render cell("2", "width:120px;height:36px;")}
+                  {@render cell("3", "width:120px;height:36px;")}
+                  {@render cell("4", "width:120px;height:36px;")}
+                  {@render cell("5", "width:120px;height:36px;")}
+                  {@render cell("6", "width:120px;height:36px;")}
+                </Row>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Column — align (cross-axis = horizontal)
+              </p>
+              {@render lbl("align=start — items pin left")}
+              <div class="layout-stage">
+                <Column gap="8px" align="start" fill>
+                  {@render cell("A", "width:80px;")}
+                  {@render cell("B", "width:120px;")}
+                  {@render cell("C", "width:60px;")}
                 </Column>
               </div>
-              <div>
-                <p
-                  style="color:var(--t-text-hint);font-size:11px;margin:0 0 4px;"
-                >
-                  Grid — columns 3, gap 8px
-                </p>
-                <Grid columns={3} gap="8px">
-                  <div
-                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
-                  >
-                    1
-                  </div>
-                  <div
-                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
-                  >
-                    2
-                  </div>
-                  <div
-                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
-                  >
-                    3
-                  </div>
-                  <div
-                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
-                  >
-                    4
-                  </div>
-                  <div
-                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
-                  >
-                    5
-                  </div>
-                  <div
-                    style="padding:10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);"
-                  >
-                    6
-                  </div>
+              {@render lbl("align=center — items centered horizontally")}
+              <div class="layout-stage">
+                <Column gap="8px" align="center" fill>
+                  {@render cell("A", "width:80px;")}
+                  {@render cell("B", "width:120px;")}
+                  {@render cell("C", "width:60px;")}
+                </Column>
+              </div>
+              {@render lbl("align=end — items pin right")}
+              <div class="layout-stage">
+                <Column gap="8px" align="end" fill>
+                  {@render cell("A", "width:80px;")}
+                  {@render cell("B", "width:120px;")}
+                  {@render cell("C", "width:60px;")}
+                </Column>
+              </div>
+              {@render lbl("align=stretch — items fill cross axis (no fixed width)")}
+              <div class="layout-stage">
+                <Column gap="8px" align="stretch" fill>
+                  {@render cell("A", "")}
+                  {@render cell("B", "")}
+                  {@render cell("C", "")}
+                </Column>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Column — justify (main-axis = vertical)
+              </p>
+              {@render lbl("justify=start (default)")}
+              <div class="layout-stage">
+                <Column gap="8px" justify="start" fill class="h-28">
+                  {@render cell("A", "width:80px;")}
+                  {@render cell("B", "width:80px;")}
+                </Column>
+              </div>
+              {@render lbl("justify=center")}
+              <div class="layout-stage">
+                <Column gap="8px" justify="center" fill class="h-28">
+                  {@render cell("A", "width:80px;")}
+                  {@render cell("B", "width:80px;")}
+                </Column>
+              </div>
+              {@render lbl("justify=between — push to top &amp; bottom")}
+              <div class="layout-stage">
+                <Column gap="8px" justify="between" fill class="h-28">
+                  {@render cell("A", "width:80px;")}
+                  {@render cell("B", "width:80px;")}
+                </Column>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Grid — align (align-items, cross-axis)
+              </p>
+              {@render lbl("align=start — cells pin to top of their track")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" align="start" class="h-24" fill>
+                  {@render cell("1", "height:28px;")}
+                  {@render cell("2", "height:28px;")}
+                  {@render cell("3", "height:28px;")}
+                  {@render cell("4", "height:28px;")}
+                  {@render cell("5", "height:28px;")}
+                  {@render cell("6", "height:28px;")}
+                </Grid>
+              </div>
+              {@render lbl("align=center")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" align="center" class="h-24" fill>
+                  {@render cell("1", "height:28px;")}
+                  {@render cell("2", "height:28px;")}
+                  {@render cell("3", "height:28px;")}
+                  {@render cell("4", "height:28px;")}
+                  {@render cell("5", "height:28px;")}
+                  {@render cell("6", "height:28px;")}
+                </Grid>
+              </div>
+              {@render lbl("align=end — cells pin to bottom of their track")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" align="end" class="h-24" fill>
+                  {@render cell("1", "height:28px;")}
+                  {@render cell("2", "height:28px;")}
+                  {@render cell("3", "height:28px;")}
+                  {@render cell("4", "height:28px;")}
+                  {@render cell("5", "height:28px;")}
+                  {@render cell("6", "height:28px;")}
+                </Grid>
+              </div>
+              {@render lbl("align=stretch — cells fill their track (no fixed height)")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" align="stretch" class="h-24" fill>
+                  {@render cell("1", "")}
+                  {@render cell("2", "")}
+                  {@render cell("3", "")}
+                </Grid>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Grid — justify (justify-items, within each cell's column track)
+              </p>
+              {@render lbl("justify=start — cells pin left")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" justify="start" fill>
+                  {@render cell("1", "width:50px;")}
+                  {@render cell("2", "width:50px;")}
+                  {@render cell("3", "width:50px;")}
+                </Grid>
+              </div>
+              {@render lbl("justify=center — cells centered in track")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" justify="center" fill>
+                  {@render cell("1", "width:50px;")}
+                  {@render cell("2", "width:50px;")}
+                  {@render cell("3", "width:50px;")}
+                </Grid>
+              </div>
+              {@render lbl("justify=end — cells pin right")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" justify="end" fill>
+                  {@render cell("1", "width:50px;")}
+                  {@render cell("2", "width:50px;")}
+                  {@render cell("3", "width:50px;")}
+                </Grid>
+              </div>
+              {@render lbl("justify=between — space between cells in each row track")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" justify="between" fill>
+                  {@render cell("1", "width:50px;")}
+                  {@render cell("2", "width:50px;")}
+                  {@render cell("3", "width:50px;")}
+                </Grid>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Grid — place-items (align + justify together)
+              </p>
+              {@render lbl("align=center + justify=center → cells centered both axes")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" align="center" justify="center" class="h-24" fill>
+                  {@render cell("1", "height:32px;width:50px;")}
+                  {@render cell("2", "height:32px;width:50px;")}
+                  {@render cell("3", "height:32px;width:50px;")}
+                  {@render cell("4", "height:32px;width:50px;")}
+                  {@render cell("5", "height:32px;width:50px;")}
+                  {@render cell("6", "height:32px;width:50px;")}
+                </Grid>
+              </div>
+              {@render lbl("align=end + justify=end → cells bottom-right of each track")}
+              <div class="layout-stage">
+                <Grid columns={3} gap="8px" align="end" justify="end" class="h-24" fill>
+                  {@render cell("1", "height:32px;width:50px;")}
+                  {@render cell("2", "height:32px;width:50px;")}
+                  {@render cell("3", "height:32px;width:50px;")}
+                </Grid>
+              </div>
+
+              <p
+                class="demo-label text-xs font-semibold uppercase tracking-wide"
+                style="margin:0;"
+              >
+                Grid — responsive &amp; explicit rows
+              </p>
+              {@render lbl('columns="auto" minColumnWidth="100px" — auto-fill, wraps on narrow widths')}
+              <div class="layout-stage">
+                <Grid columns="auto" minColumnWidth="100px" gap="8px" fill>
+                  {@render cell("1", "height:40px;")}
+                  {@render cell("2", "height:40px;")}
+                  {@render cell("3", "height:40px;")}
+                  {@render cell("4", "height:40px;")}
+                  {@render cell("5", "height:40px;")}
+                </Grid>
+              </div>
+              {@render lbl('columns={3} rows="60px 60px" — fixed row tracks')}
+              <div class="layout-stage">
+                <Grid columns={3} rows="60px 60px" gap="8px" fill>
+                  {@render cell("1", "")}
+                  {@render cell("2", "")}
+                  {@render cell("3", "")}
+                  {@render cell("4", "")}
+                  {@render cell("5", "")}
+                  {@render cell("6", "")}
                 </Grid>
               </div>
             </Column>
           {:else}
             {@render codeBlock(
               "layout",
-              `<Row gap="8px" align="center">
+              `<!-- Row: align = cross-axis, justify = main-axis, fill = width:100%, wrap -->
+<Row gap="8px" align="center" justify="between" fill wrap>
   <Button>One</Button>
   <Button>Two</Button>
   <Button>Three</Button>
 </Row>
 
-<Column gap="8px" fill>
+<!-- Column: align = cross-axis (horizontal), justify = main-axis (vertical) -->
+<Column gap="8px" align="stretch" justify="between" fill>
   <Button>Top</Button>
   <Button>Bottom</Button>
 </Column>
 
-<Grid columns={3} gap="8px">
+<!-- Grid: align = align-items, justify = justify-items (place-items = both) -->
+<Grid columns={3} gap="8px" align="center" justify="center" fill>
   <div>1</div>
   <div>2</div>
   <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
+</Grid>
+
+<!-- Responsive auto-fill grid: as many 100px+ columns as fit -->
+<Grid columns="auto" minColumnWidth="100px" gap="8px" fill>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</Grid>
+
+<!-- Explicit row tracks -->
+<Grid columns={3} rows="60px 60px" gap="8px" fill>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
 </Grid>`,
             )}
           {/if}

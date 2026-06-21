@@ -51,6 +51,3 @@
 
 /* Liquid Glass */
 .s-tooltip-liquid-glass .s-tooltip { border-radius: 12px; backdrop-filter: blur(16px); background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); }
-
-/* Legacy iOS */
-.s-tooltip-legacy-ios .s-tooltip { border-radius: 8px; background: rgba(0,0,0,0.75); box-shadow: var(--t-shadow-md); }

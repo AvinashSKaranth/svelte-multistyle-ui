@@ -139,7 +139,3 @@
 /* Liquid Glass */
 .s-carousel-liquid-glass { backdrop-filter: blur(24px) saturate(1.6); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); }
 .s-carousel-liquid-glass .s-carousel-arrow { background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); }
-
-/* Legacy iOS */
-.s-carousel-legacy-ios { border: 1px solid var(--t-border); }
-.s-carousel-legacy-ios .s-carousel-arrow { background: rgba(0,0,0,0.3); }

@@ -43,7 +43,7 @@
 /* Metro */
 .s-tabs-metro { border-bottom: var(--t-border-width) solid var(--t-primary); }
 .s-tabs-metro .s-tab { font-weight: 600; }
-.s-tabs-metro .s-tab.active { background: var(--t-primary); color: #fff; border-bottom-color: var(--t-primary); }
+.s-tabs-metro .s-tab.active { background: var(--t-primary); color: var(--t-text-on-primary); border-bottom-color: var(--t-primary); }
 
 /* Bootstrap */
 .s-tabs-bootstrap { border-bottom: var(--t-border-width) solid var(--t-border); }
@@ -53,7 +53,7 @@
 /* Cartoon */
 .s-tabs-cartoon { border-bottom: var(--t-border-width) solid var(--t-text); }
 .s-tabs-cartoon .s-tab { font-weight: 700; border-radius: 12px 12px 0 0; }
-.s-tabs-cartoon .s-tab.active { background: var(--t-primary); color: #fff; border-bottom: var(--t-border-width) solid var(--t-primary); box-shadow: 3px -3px 0 var(--t-text); }
+.s-tabs-cartoon .s-tab.active { background: var(--t-primary); color: var(--t-text-on-primary); border-bottom: var(--t-border-width) solid var(--t-primary); box-shadow: 3px -3px 0 var(--t-text); }
 
 /* Illustration */
 .s-tabs-illustration { border-bottom: var(--t-border-width) solid var(--t-text); }
@@ -68,7 +68,3 @@
 /* Liquid Glass */
 .s-tabs-liquid-glass { border-bottom: 1px solid rgba(255,255,255,0.2); }
 .s-tabs-liquid-glass .s-tab.active { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 8px 8px 0 0; }
-
-/* Legacy iOS */
-.s-tabs-legacy-ios { border-bottom: var(--t-border-width) solid var(--t-border); }
-.s-tabs-legacy-ios .s-tab.active { background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%); border: var(--t-border-width) solid var(--t-border); border-bottom-color: transparent; border-radius: 8px 8px 0 0; }

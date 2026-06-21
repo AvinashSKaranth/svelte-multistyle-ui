@@ -7,7 +7,7 @@ A multi-style, multi-theme **Svelte 5** component library. Every component can r
 ## Features
 
 - **Svelte 5 native** — uses runes (`$props`, `$state`, `$derived`, `$effect`) and snippets (`{@render children?.()}`).
-- **13 visual styles** — material, material3, fluent, brutalist, pixel, neon, metro, bootstrap, cartoon, illustration, carbon, liquid-glass, legacy-ios.
+- **12 visual styles** — material, material3, fluent, brutalist, pixel, neon, metro, bootstrap, cartoon, illustration, carbon, liquid-glass.
 - **10 color themes** — default, ocean, forest, rose, midnight, gold, slate, candy, storm, royal.
 - **CSS custom-property based theming** — easy to override or build custom themes without forking.
 - **Tailwind CSS v4** friendly — no `tailwind.config.js` required; just import the theme CSS.

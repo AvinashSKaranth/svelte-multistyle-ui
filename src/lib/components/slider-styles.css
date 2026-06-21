@@ -79,7 +79,3 @@
 /* Liquid Glass */
 .s-slider-liquid-glass .s-slider-track-wrapper input[type="range"] { background: rgba(255,255,255,0.15); border-radius: 3px; }
 .s-slider-liquid-glass .s-slider-track-wrapper input[type="range"]::-webkit-slider-thumb { background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); }
-
-/* Legacy iOS */
-.s-slider-legacy-ios .s-slider-track-wrapper input[type="range"] { border-radius: 3px; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, var(--t-border) 100%); }
-.s-slider-legacy-ios .s-slider-track-wrapper input[type="range"]::-webkit-slider-thumb { background: linear-gradient(180deg, #fff 0%, #e8e8e8 100%); box-shadow: var(--t-shadow-sm); }

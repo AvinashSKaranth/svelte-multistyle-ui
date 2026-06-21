@@ -17,7 +17,7 @@
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .s-textarea-wrapper textarea:hover {
@@ -60,8 +60,7 @@
 .s-textarea-material3 textarea,
 .s-textarea-fluent textarea,
 .s-textarea-carbon textarea,
-.s-textarea-bootstrap textarea,
-.s-textarea-legacy-ios textarea {
+.s-textarea-bootstrap textarea {
   padding-top: 24px;
 }
 
@@ -70,7 +69,7 @@
   background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
   border: none;
   border-bottom: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+  border-radius: var(--t-input-radius) var(--t-input-radius) 0 0;
 }
 .s-textarea-material.focused textarea {
   border-bottom-color: var(--t-primary);
@@ -82,7 +81,7 @@
 .s-textarea-material3 textarea {
   background: var(--t-surface);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
 }
 .s-textarea-material3.focused textarea {
   border-color: var(--t-primary);
@@ -209,16 +208,4 @@
 }
 .s-textarea-liquid-glass.focused textarea {
   box-shadow: none;
-}
-
-/* Legacy iOS */
-.s-textarea-legacy-ios textarea {
-  border-radius: 10px;
-  border: var(--t-border-width) solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-}
-.s-textarea-legacy-ios.focused textarea {
-  border-color: var(--t-primary);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 0 0 3px var(--t-shadow);
 }

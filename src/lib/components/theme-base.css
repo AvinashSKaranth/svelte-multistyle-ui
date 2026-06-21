@@ -17,7 +17,9 @@
 
   /* Text */
   --t-text: #0f172a;
-  --t-text-hint: #94a3b8;
+  --t-text-on-primary: #ffffff; /* text color when background is primary */
+  --t-text-hint: color-mix(in srgb, var(--t-text) 50%, transparent); /* derived, not configurable */
+  --t-text-disabled: color-mix(in srgb, var(--t-text) 50%, transparent); /* derived */
   --t-text-primary: #2563eb;
   --t-text-secondary: #3b82f6;
 
@@ -36,8 +38,9 @@
   --t-btn-border-color: transparent;
   --t-btn-radius: 8px;
 
-  /* Cards */
+  /* Cards / inputs */
   --t-card-radius: 12px;
+  --t-input-radius: 8px;
 
   /* Shared dimensional tokens */
   --t-border-width: 1.5px;
@@ -61,4 +64,18 @@
   --t-radius: var(--t-btn-radius);
   --t-text-muted: var(--t-text-hint);
   --t-surface-dim: var(--t-surface-bg);
+}
+
+/* liquid-glass style — keep text light in LIGHT mode.
+ * Glass surfaces are dark-ish translucent, so the theme's dark light-mode text
+ * is unreadable on them. Override --t-text to white AND re-bake the
+ * --t-text-hint / --t-text-muted / --t-text-disabled derivations with white:
+ * a color-mix() custom property bakes at its declaring element, so the :root
+ * derivation (baked with dark text) would otherwise be inherited as a fixed
+ * dark color and stay invisible on glass. Dark mode is unaffected. */
+html:not(.dark) [class*="-liquid-glass"] {
+  --t-text: #ffffff;
+  --t-text-hint: color-mix(in srgb, #ffffff 50%, transparent);
+  --t-text-muted: color-mix(in srgb, #ffffff 50%, transparent);
+  --t-text-disabled: color-mix(in srgb, #ffffff 50%, transparent);
 }

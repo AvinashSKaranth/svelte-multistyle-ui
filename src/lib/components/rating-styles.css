@@ -63,6 +63,3 @@
 /* Liquid Glass */
 .s-rating-liquid-glass .s-rating-star { opacity: 0.6; }
 .s-rating-liquid-glass .s-rating-star.star-filled { opacity: 1; filter: drop-shadow(0 0 6px rgba(234,179,8,0.5)); }
-
-/* Legacy iOS */
-.s-rating-legacy-ios .s-rating-star.star-filled { color: #ffcc00; }

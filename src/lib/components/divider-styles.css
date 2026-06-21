@@ -51,6 +51,3 @@
 
 /* Liquid Glass */
 .s-divider-liquid-glass .s-divider-line { height: 1px; background: rgba(255,255,255,0.2); }
-
-/* Legacy iOS */
-.s-divider-legacy-ios .s-divider-line { height: 1px; background: var(--t-border); }

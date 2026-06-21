@@ -14,6 +14,7 @@
     },
     "./theme.css": "./dist/components/theme.css",
     "./theme-base.css": "./dist/components/theme-base.css",
+    "./themes": "./dist/themes/index.js",
     "./components/*": "./dist/components/*",
     "./charts/*": "./dist/components/charts/*"
   },
@@ -24,7 +25,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:lib": "svelte-package -i src/lib",
+    "gen:theme": "node scripts/gen-theme.js",
+    "build:lib": "pnpm run gen:theme && svelte-package -i src/lib",
     "preview": "vite preview",
     "prepublishOnly": "pnpm run build:lib",
     "publish": "node -e \"const p=require('./package.json');const m=p.version.match(/^(\\d+\\.\\d+\\.)(\\d+)(.*)$/);p.version=m[1]+(parseInt(m[2])+1)+(m[3]||'');require('fs').writeFileSync('package.json',JSON.stringify(p,null,2)+'\\n')\" && pnpm run build && pnpm run build:lib && pnpm publish",

@@ -18,7 +18,7 @@ Source: `src/lib/components/Textarea.svelte` · styles: `textarea-styles.css`
 
 Plus `style`, `theme` (optional). `...rest` spreads onto the `<textarea>`.
 
-Floating-label style is enabled only for `style` in `material`, `material3`, `fluent`, `carbon`, `bootstrap`, `legacy-ios`.
+Floating-label style is enabled only for `style` in `material`, `material3`, `fluent`, `carbon`, `bootstrap`.
 
 ## Example
 

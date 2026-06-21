@@ -89,14 +89,6 @@
 .s-modal-liquid-glass .text-muted,
 .s-modal-liquid-glass .text-hint { color: rgba(255,255,255,0.55); }
 
-/* Legacy iOS */
-.s-modal-legacy-ios {
-  border-radius: 10px;
-  border: 1px solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, var(--t-surface) 100%);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
-}
-
 /* Borderless overlays — declared last to win source-order over base border. */
 .s-modal-material,
 .s-modal-material3,

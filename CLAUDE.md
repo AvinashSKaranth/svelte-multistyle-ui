@@ -21,12 +21,13 @@ All scripts are in `package.json`. Use pnpm:
 - `pnpm install` — install dependencies.
 - `pnpm dev` — start the Vite dev server for the component gallery.
 - `pnpm build` — build the demo app to `dist/`.
-- `pnpm build:lib` — build the library for publishing (uses `svelte-package -i src/lib` and emits to `dist/`).
+- `pnpm gen:theme` — regenerate `src/lib/components/theme.css` from `src/lib/themes/presets.js` + `generator.js` via `scripts/gen-theme.js`. Run whenever presets change; `build:lib` runs it automatically first.
+- `pnpm build:lib` — build the library for publishing. Runs `gen:theme` then `svelte-package -i src/lib`, emits to `dist/`.
 - `pnpm preview` — preview the production demo build.
 - `pnpm test` — run Playwright visual tests across Chromium and WebKit in light and dark mode.
 - `pnpm test:ui` — open the Playwright UI runner.
-- `pnpm test:install` — install Playwright browsers (chromium + webkit).
-- `pnpm prepublishOnly` — runs `build:lib` before publish.
+- `pnpm test:install` — install Playwright browsers (chromium + webkit, with deps).
+- `pnpm publish` — auto-bumps the patch version, builds demo + lib, then publishes. (`prepublishOnly` also runs `build:lib`.)
 
 There is currently no linter or formatter configured.
 
@@ -36,7 +37,7 @@ There is currently no linter or formatter configured.
 
 Every component in `src/lib/components/` accepts at least two props:
 
-- `style` — the visual design language (default `"material"`). Implemented styles include `material`, `material3`, `fluent`, `brutalist`, `pixel`, `neon`, `metro`, `bootstrap`, `cartoon`, `illustration`, `carbon`, `liquid-glass`, `legacy-ios`.
+- `style` — the visual design language (default `"material"`). Implemented styles include `material`, `material3`, `fluent`, `brutalist`, `pixel`, `neon`, `metro`, `bootstrap`, `cartoon`, `illustration`, `carbon`, `liquid-glass`.
 - `theme` — the color palette (default `"default"`). Implemented themes include `default`, `ocean`, `forest`, `rose`, `midnight`, `gold`, `slate`, `candy`, `storm`, `royal`.
 
 Components render a base class, a style-specific class, and a theme class, e.g.:
@@ -49,14 +50,23 @@ where `styleClass` is `s-button-${style}` and `themeClass` is `theme-${theme}`.
 
 ### Theme tokens
 
-The theme system is split into two files so users can create custom themes without forking presets:
+The theme system has three layers:
 
-- `src/lib/components/theme-base.css` defines default values for every `--t-*` token on `:root` (colors, border width, shadows, radii).
-- `src/lib/components/theme.css` imports the base, then defines each `.theme-*` preset and the corresponding `html.dark .theme-*` dark-mode overrides.
+- `src/lib/components/theme-base.css` — hand-written. Defines default values for every `--t-*` token on `:root` (colors, border width, shadows, radii) plus backward-compatibility aliases like `--t-border` and `--t-text-muted`.
+- `src/lib/themes/presets.js` — hand-written. Source of truth for each theme preset. Only a small set of fields is configurable per theme (see below); every other `--t-*` token is **derived** by the generator.
+- `src/lib/components/theme.css` — **AUTO-GENERATED** by `scripts/gen-theme.js` from `presets.js` + `src/lib/themes/generator.js`. Regenerate with `pnpm gen:theme`. **Do not edit by hand** — the header says so.
 
-Key tokens include `--t-primary`, `--t-secondary`, `--t-surface`, `--t-card-bg`, `--t-card-border-color`, `--t-text`, `--t-text-hint`, `--t-btn-bg`, `--t-btn-radius`, `--t-card-radius`, `--t-border-width`, `--t-shadow-*`, plus backward-compatibility aliases like `--t-border` and `--t-text-muted`.
+Each preset in `presets.js` has the shape `{ common, light, dark }`:
 
-Consuming apps can either import the full presets (`import 'svelte-multistyle-ui/theme.css'`) or import only the base (`import 'svelte-multistyle-ui/theme-base.css'`) and define their own `.theme-*` class with overrides.
+- `common` (both modes): `primary`, `secondary`, `info`, `success`, `warning`, `error`, `textOnPrimary`, `buttonRadius`, `cardRadius`, `inputRadius`, `borderWidth`.
+- `light`: `text`, `surface`, `cardSurface` (all required hex).
+- `dark`: `text`, `surface`, `cardSurface`. `null` = HSL-invert from the light counterpart (default); an explicit hex overrides (used by dark-native themes so an already-dark light palette isn't flipped).
+
+Derived (NOT configurable, set by `generator.js`): `--t-text-hint`/`--t-text-muted`/`--t-text-disabled` = 50% transparency of `--t-text`; `--t-card-bg` = surface; `--t-card-border-color` = `color-mix(text 14%, surface)`; `--t-surface-bg` = `color-mix(surface 85%, #000)`; `--t-btn-bg` = primary; `--t-text-*` brand/status colors mirror their status counterparts. The hint/muted/disabled derivations are re-emitted per mode (light and dark) on purpose — a `color-mix()` custom property bakes at the declaring element using that element's `--t-text`, so a single `:root` derivation would freeze the light value and never follow the theme/dark block. Output is byte-stable across runs (fixed `TOKEN_ORDER`).
+
+Runtime theme API (`src/lib/themes/`, exported from the package root and `./themes`): `themes`, `generateThemeCss`, `resolveLight`, `resolveDark`, `applyThemeToElement`, plus color utils `hexToHsl`/`hslToCss`/`invert`/`invertHex`. `applyThemeToElement(el, config, isDark)` sets every resolved `--t-*` var directly on a DOM element and clears stale ones — used for live theme preview (e.g. the editor in `src/App.svelte`).
+
+Consuming apps can: import the full presets (`import 'svelte-multistyle-ui/theme.css'`); import only the base (`import 'svelte-multistyle-ui/theme-base.css'`) and define their own `.theme-*` class; or use the JS API (`import { generateThemeCss, applyThemeToElement } from 'svelte-multistyle-ui/themes'`) to build/apply a custom theme at runtime.
 
 Dark/light mode is applied by toggling `dark` / `light` classes on `<html>`; the demo in `src/App.svelte` does this with `window.matchMedia('(prefers-color-scheme: dark)')`.
 
@@ -71,18 +81,29 @@ Style overrides control the shape/interaction language of a design system and ar
 
 ### Library exports
 
-`src/lib/index.js` re-exports every component. Package `exports` are:
+`src/lib/index.js` re-exports every component, the runtime theme API, the global config (`initMultistyleUI`), and actions (`portal`). Package `exports` are:
 
 - `.` → `dist/index.js` / `dist/index.d.ts`
-- `./theme.css` → `dist/components/theme.css`
+- `./theme.css` → `dist/components/theme.css` (generated)
 - `./theme-base.css` → `dist/components/theme-base.css`
+- `./themes` → `dist/themes/index.js` (runtime theme API)
 - `./components/*` → `dist/components/*`
+- `./charts/*` → `dist/components/charts/*`
+
+### Global config
+
+`src/lib/config.js` re-exports `initMultistyleUI` (from `config.svelte.js`). Call it once in the app (e.g. `App.svelte` or a `+layout.svelte`) to set default `style` and `theme` for every component; per-component `style`/`theme` props still override.
+
+### Charts
+
+`src/lib/components/charts/` wraps Chart.js (`chart.js` is a peer dependency). `Chart.svelte` is the base; variants (`BarChart`, `LineChart`, `PieChart`, `DoughnutChart`, `RadarChart`, `PolarAreaChart`, `BubbleChart`, `ScatterChart`, `ComboChart`, `StackedBarChart`, `StackedLineChart`) build on it. Shared config lives in `chart-config.js` and styles in `chart-styles.css`. Runtime deps: `dayjs`, `prismjs`, `@thisux/sveltednd`.
 
 ## Conventions when adding or changing components
 
 - Match the existing two-prop API (`style`, `theme`) and default values (`style="material"`, `theme="default"`).
 - Use the same class-naming scheme: `s-<component>` base, `s-<component>-${style}` override, `theme-${theme}` theme.
 - Keep component-specific styles in `<component>-styles.css` and rely on `theme.css` tokens; do not hardcode theme colors in component styles.
+- To add or change a theme preset, edit `src/lib/themes/presets.js` then run `pnpm gen:theme`. Never hand-edit `src/lib/components/theme.css` (it is generated).
 - Use Svelte 5 snippets for content slots (`{#snippet children()}...{/snippet}` and `{@render children?.()}`).
 - The demo app (`src/App.svelte`) imports components from `./lib/components/...` for live testing; update it if you add a new public component.
 - Re-export new components from `src/lib/index.js`.
@@ -93,6 +114,6 @@ Playwright tests live in `tests/visual-demo.spec.js`. They load the demo with `?
 
 ## Notes
 
-- `src/App.svelte` duplicates some theme default values for its theme editor, but `src/lib/components/theme.css` is the authoritative token definition for the library.
+- `src/App.svelte` duplicates some theme default values for its theme editor; the authoritative source for presets is `src/lib/themes/presets.js`, and `src/lib/components/theme-base.css` is the authoritative `:root` token default. `theme.css` is generated from both.
 - `README.md` is the generic Vite + Svelte template readme and does not describe this library.
 - No Cursor rules (`.cursor/rules/`, `.cursorrules`) or GitHub Copilot instructions (`.github/copilot-instructions.md`) were found in this repository.

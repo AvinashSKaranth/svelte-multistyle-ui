@@ -52,7 +52,11 @@ Chart.register(
 if (typeof CanvasRenderingContext2D !== "undefined") {
   const origSetLineDash = CanvasRenderingContext2D.prototype.setLineDash;
   CanvasRenderingContext2D.prototype.setLineDash = function (segments) {
-    if (!segments || typeof segments !== "object" || typeof segments[Symbol.iterator] !== "function") {
+    if (
+      !segments ||
+      typeof segments !== "object" ||
+      typeof segments[Symbol.iterator] !== "function"
+    ) {
       return origSetLineDash.call(this, []);
     }
     return origSetLineDash.call(this, segments);
@@ -73,8 +77,9 @@ export function readTokens(el) {
     textHint: cs.getPropertyValue("--t-text-hint").trim(),
     textSecondary: cs.getPropertyValue("--t-text-secondary").trim(),
     cardBg: cs.getPropertyValue("--t-card-bg").trim(),
-    border: cs.getPropertyValue("--t-border").trim() ||
-             cs.getPropertyValue("--t-card-border-color").trim(),
+    border:
+      cs.getPropertyValue("--t-border").trim() ||
+      cs.getPropertyValue("--t-card-border-color").trim(),
     info: cs.getPropertyValue("--t-info").trim(),
     success: cs.getPropertyValue("--t-success").trim(),
     warning: cs.getPropertyValue("--t-warning").trim(),
@@ -102,7 +107,13 @@ export function palette(n, tokens) {
     const base = colors[i % colors.length];
     const step = Math.floor(i / colors.length);
     const alpha = Math.max(0.35, 1 - step * 0.2);
-    result.push(alpha < 1 ? `${base}${Math.round(alpha * 255).toString(16).padStart(2, "0")}` : base);
+    result.push(
+      alpha < 1
+        ? `${base}${Math.round(alpha * 255)
+            .toString(16)
+            .padStart(2, "0")}`
+        : base,
+    );
   }
   return result;
 }
@@ -112,7 +123,12 @@ export function palette(n, tokens) {
  */
 export function buildData(type, { data, series, labels }, tokens) {
   // Normalize object-style data: {q1:12, q2:19} → labels=["q1","q2"], data=[12,19]
-  if (data && typeof data === "object" && !Array.isArray(data) && data.constructor === Object) {
+  if (
+    data &&
+    typeof data === "object" &&
+    !Array.isArray(data) &&
+    data.constructor === Object
+  ) {
     labels = Object.keys(data);
     data = Object.values(data);
   }
@@ -120,17 +136,26 @@ export function buildData(type, { data, series, labels }, tokens) {
   // Combo chart: row-oriented data + optional series for chartType overrides
   // [{label:"jan", Revenue:40, Target:50, Cost:20}, ...] → labels + series
   // If series is also provided, chartType is merged from matching series entries
-  if (type === "combo" && Array.isArray(data) && data.length > 0 && data[0] &&
-      typeof data[0] === "object" && !Array.isArray(data[0]) && "label" in data[0]) {
-    const keys = Object.keys(data[0]).filter(k => k !== "label");
-    labels = data.map(d => d.label);
+  if (
+    type === "combo" &&
+    Array.isArray(data) &&
+    data.length > 0 &&
+    data[0] &&
+    typeof data[0] === "object" &&
+    !Array.isArray(data[0]) &&
+    "label" in data[0]
+  ) {
+    const keys = Object.keys(data[0]).filter((k) => k !== "label");
+    labels = data.map((d) => d.label);
     const chartTypeMap = {};
     if (series) {
-      series.forEach(s => { chartTypeMap[s.name] = s.chartType; });
+      series.forEach((s) => {
+        chartTypeMap[s.name] = s.chartType;
+      });
     }
-    series = keys.map(key => ({
+    series = keys.map((key) => ({
       name: key,
-      values: data.map(d => d[key]),
+      values: data.map((d) => d[key]),
       chartType: chartTypeMap[key] || "line",
     }));
     data = null;
@@ -138,30 +163,53 @@ export function buildData(type, { data, series, labels }, tokens) {
 
   // Normalize single-series {label, value} format: [{label:"q1", value:5}, ...]
   // → labels=["q1","q2"], data=[5,19] — order preserved (unlike plain objects)
-  if (Array.isArray(data) && data.length > 0 && data[0] &&
-      typeof data[0] === "object" && !Array.isArray(data[0]) &&
-      "label" in data[0] && "value" in data[0] && !series) {
-    labels = data.map(d => d.label);
-    data = data.map(d => d.value);
+  if (
+    Array.isArray(data) &&
+    data.length > 0 &&
+    data[0] &&
+    typeof data[0] === "object" &&
+    !Array.isArray(data[0]) &&
+    "label" in data[0] &&
+    "value" in data[0] &&
+    !series
+  ) {
+    labels = data.map((d) => d.label);
+    data = data.map((d) => d.value);
   }
 
   // Normalize multi-series row-oriented data: [{label:"jan", revenue:10, Cost:5}, ...]
   // → labels=["jan","feb"], series=[{name:"revenue",values:[10,20]}, {name:"Cost",values:[5,8]}]
-  else if (Array.isArray(data) && data.length > 0 && data[0] &&
-      typeof data[0] === "object" && !Array.isArray(data[0]) &&
-      "label" in data[0] && !series) {
-    const keys = Object.keys(data[0]).filter(k => k !== "label");
-    labels = data.map(d => d.label);
-    series = keys.map(key => ({ name: key, values: data.map(d => d[key]) }));
+  else if (
+    Array.isArray(data) &&
+    data.length > 0 &&
+    data[0] &&
+    typeof data[0] === "object" &&
+    !Array.isArray(data[0]) &&
+    "label" in data[0] &&
+    !series
+  ) {
+    const keys = Object.keys(data[0]).filter((k) => k !== "label");
+    labels = data.map((d) => d.label);
+    series = keys.map((key) => ({
+      name: key,
+      values: data.map((d) => d[key]),
+    }));
     data = null;
   }
 
   // Bubble chart: row-oriented {label, x, y, r} format
   // [{label:"Product A", x:10, y:20, r:15}, ...] → single dataset with points
-  if (type === "bubble" && Array.isArray(series) && series.length > 0 && series[0] &&
-      typeof series[0] === "object" && !Array.isArray(series[0]) &&
-      "x" in series[0] && "y" in series[0]) {
-    const points = series.map(s => ({
+  if (
+    type === "bubble" &&
+    Array.isArray(series) &&
+    series.length > 0 &&
+    series[0] &&
+    typeof series[0] === "object" &&
+    !Array.isArray(series[0]) &&
+    "x" in series[0] &&
+    "y" in series[0]
+  ) {
+    const points = series.map((s) => ({
       x: s.x,
       y: s.y,
       r: s.r ?? 10,
@@ -174,19 +222,28 @@ export function buildData(type, { data, series, labels }, tokens) {
   // Allows: <Bar series={[{label:"q1", value:5}, ...]} />
   //   and: <Line series={[{label:"jan", Revenue:10, Cost:5}, ...]} />
   // Detection: traditional series has {name, values}, row-oriented has {label, ...}
-  else if (!data && Array.isArray(series) && series.length > 0 && series[0] &&
-      typeof series[0] === "object" && !Array.isArray(series[0]) &&
-      "label" in series[0]) {
+  else if (
+    !data &&
+    Array.isArray(series) &&
+    series.length > 0 &&
+    series[0] &&
+    typeof series[0] === "object" &&
+    !Array.isArray(series[0]) &&
+    "label" in series[0]
+  ) {
     if ("value" in series[0]) {
       // Single-series {label, value}
-      labels = series.map(s => s.label);
-      data = series.map(s => s.value);
+      labels = series.map((s) => s.label);
+      data = series.map((s) => s.value);
       series = null;
     } else {
       // Multi-series row-oriented
-      const keys = Object.keys(series[0]).filter(k => k !== "label");
-      labels = series.map(s => s.label);
-      series = keys.map(key => ({ name: key, values: series.map(s => s[key]) }));
+      const keys = Object.keys(series[0]).filter((k) => k !== "label");
+      labels = series.map((s) => s.label);
+      series = keys.map((key) => ({
+        name: key,
+        values: series.map((s) => s[key]),
+      }));
     }
   }
 
@@ -194,20 +251,24 @@ export function buildData(type, { data, series, labels }, tokens) {
   if (data && !series) {
     if (type === "scatter") {
       return {
-        datasets: [{
-          label: undefined,
-          data: data,
-          backgroundColor: tokens.primary,
-        }],
+        datasets: [
+          {
+            label: undefined,
+            data: data,
+            backgroundColor: tokens.primary,
+          },
+        ],
       };
     }
     if (type === "bubble") {
       return {
-        datasets: [{
-          label: undefined,
-          data: data,
-          backgroundColor: tokens.primary,
-        }],
+        datasets: [
+          {
+            label: undefined,
+            data: data,
+            backgroundColor: tokens.primary,
+          },
+        ],
       };
     }
     // Category charts (bar, line, pie, doughnut, radar, polarArea)
@@ -215,13 +276,15 @@ export function buildData(type, { data, series, labels }, tokens) {
     const cols = isSlice ? palette(data.length, tokens) : [tokens.primary];
     return {
       labels: labels || [],
-      datasets: [{
-        label: undefined,
-        data: data,
-        backgroundColor: isSlice ? cols : cols[0],
-        borderColor: isSlice ? cols.map(() => tokens.surface) : cols[0],
-        borderWidth: isSlice ? 2 : undefined,
-      }],
+      datasets: [
+        {
+          label: undefined,
+          data: data,
+          backgroundColor: isSlice ? cols : cols[0],
+          borderColor: isSlice ? cols.map(() => tokens.surface) : cols[0],
+          borderWidth: isSlice ? 2 : undefined,
+        },
+      ],
     };
   }
 
@@ -399,15 +462,6 @@ const STYLE_OVERRIDES = {
     gridColor: undefined,
     extra: {},
   },
-  "legacy-ios": {
-    barRadius: 4,
-    lineTension: 0.3,
-    fill: true,
-    fillAlpha: 0.25,
-    gridDash: [],
-    gridColor: undefined,
-    extra: {},
-  },
 };
 
 /**
@@ -426,13 +480,63 @@ function deepMerge(a, b) {
 }
 
 /**
+ * Per-type Chart.js animation config.
+ * - Cartesian (line/bar/scatter/bubble/combo): grow from the baseline ("from
+ *   bottom") — y animates from 0; bubble radius also grows from 0.
+ * - Circular (pie/doughnut/polarArea): expand from the center (animateScale +
+ *   animateRotate).
+ * - radar: simple ease (no per-property override).
+ */
+function buildAnimation(type, animated) {
+  if (!animated) return false;
+  const isCircular = ["pie", "doughnut", "polarArea"].includes(type);
+  if (isCircular) {
+    return {
+      duration: 900,
+      easing: "easeOutQuart",
+      animateRotate: true,
+      animateScale: false,
+    };
+  }
+  if (type === "radar") {
+    return { duration: 900, easing: "easeOutQuart" };
+  }
+  // cartesian: line/bar/scatter/bubble/combo — grow from baseline
+  const animations = {
+    x: { type: "number", easing: "easeOutQuart", duration: 1000, from: 0 },
+  };
+  if (type === "bubble") {
+    animations.r = {
+      type: "number",
+      easing: "easeOutQuart",
+      duration: 1000,
+      from: 0,
+    };
+  }
+  return { duration: 1000, easing: "easeOutQuart", animations };
+}
+
+/**
  * Build a full Chart.js options object inferred from type, style, and tokens.
  * @param {string} type - chart type
  * @param {string} style - visual design language
  * @param {object} tokens - resolved CSS theme tokens
  * @param {{ title, legend, animated, userOptions, seriesCount, xAxisLabel, yAxisLabel }} params
  */
-export function buildOptions(type, style, tokens, { title, legend, animated, userOptions, seriesCount = 0, xAxisLabel, yAxisLabel }) {
+export function buildOptions(
+  type,
+  style,
+  tokens,
+  {
+    title,
+    legend,
+    animated,
+    userOptions,
+    seriesCount = 0,
+    xAxisLabel,
+    yAxisLabel,
+  },
+) {
   const so = STYLE_OVERRIDES[style] || STYLE_OVERRIDES.material;
   const isCategory = ["bar", "line", "radar"].includes(type);
   const isSlice = ["pie", "doughnut", "polarArea"].includes(type);
@@ -447,7 +551,7 @@ export function buildOptions(type, style, tokens, { title, legend, animated, use
   const opts = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: animated ? undefined : false,
+    animation: buildAnimation(type, animated),
     color: tokens.text,
     font: {
       family: getComputedFontFamily(),
@@ -490,7 +594,13 @@ export function buildOptions(type, style, tokens, { title, legend, animated, use
   const effectiveType = type === "combo" ? "bar" : type;
 
   if (isCartesian || type === "combo") {
-    opts.scales = buildCartesianScales(effectiveType, tokens, so, xAxisLabel, yAxisLabel);
+    opts.scales = buildCartesianScales(
+      effectiveType,
+      tokens,
+      so,
+      xAxisLabel,
+      yAxisLabel,
+    );
   }
 
   if (isSlice) {
@@ -509,12 +619,14 @@ export function buildOptions(type, style, tokens, { title, legend, animated, use
       r: {
         grid: {
           color: tokens.border,
-          borderDash: so.gridDash && so.gridDash.length > 0 ? so.gridDash : undefined,
+          borderDash:
+            so.gridDash && so.gridDash.length > 0 ? so.gridDash : undefined,
           circular: true,
         },
         angleLines: {
           color: tokens.border,
-          borderDash: so.gridDash && so.gridDash.length > 0 ? so.gridDash : undefined,
+          borderDash:
+            so.gridDash && so.gridDash.length > 0 ? so.gridDash : undefined,
         },
         pointLabels: {
           color: tokens.text,
@@ -551,7 +663,8 @@ function buildCartesianScales(type, tokens, so, xAxisLabel, yAxisLabel) {
 
   const gridColor = so.gridColor || tokens.border;
   // Always provide a valid borderDash array to avoid Canvas setLineDash(non-iterable) errors
-  const borderDash = so.gridDash && so.gridDash.length > 0 ? so.gridDash : undefined;
+  const borderDash =
+    so.gridDash && so.gridDash.length > 0 ? so.gridDash : undefined;
   const gridOpts = { color: gridColor, drawBorder: false };
   if (borderDash) {
     gridOpts.borderDash = borderDash;

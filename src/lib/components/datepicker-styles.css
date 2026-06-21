@@ -16,7 +16,7 @@
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   outline: none;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -55,8 +55,7 @@
 .s-datepicker-material3 input,
 .s-datepicker-fluent input,
 .s-datepicker-bootstrap input,
-.s-datepicker-carbon input,
-.s-datepicker-legacy-ios input {
+.s-datepicker-carbon input {
   padding-top: 24px;
   padding-bottom: 8px;
 }
@@ -184,12 +183,12 @@
 }
 .s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   font-weight: 600;
 }
 .s-dp-selected:hover {
   background: color-mix(in srgb, var(--t-primary) 85%, #000000);
-  color: #fff;
+  color: var(--t-text-on-primary);
 }
 .s-dp-day-disabled {
   opacity: 0.3;
@@ -222,7 +221,7 @@
 }
 .s-dp-month.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   font-weight: 600;
 }
 
@@ -251,7 +250,7 @@
 }
 .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   font-weight: 600;
 }
 
@@ -314,7 +313,7 @@
   border: none;
   border-radius: var(--t-btn-radius);
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -385,7 +384,7 @@
   background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
   border: none;
   border-bottom: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+  border-radius: var(--t-input-radius) var(--t-input-radius) 0 0;
 }
 .s-datepicker-material input:hover {
   background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
@@ -414,7 +413,7 @@
 /* ----- Material 3 ----- pill cells, outlined today, larger radii */
 .s-datepicker-material3 input {
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   box-shadow: none;
 }
 .s-datepicker-material3 input:focus,
@@ -446,12 +445,12 @@
 .s-datepicker-material3 .s-dp-month.s-dp-selected,
 .s-datepicker-material3 .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-radius: 999px;
 }
 .s-datepicker-material3 .s-dp-selected:hover {
   background: color-mix(in srgb, var(--t-primary) 85%, #000);
-  color: #fff;
+  color: var(--t-text-on-primary);
 }
 .s-datepicker-material3 .s-dp-floating-label {
   left: 14px;
@@ -475,7 +474,7 @@
 /* ----- Fluent ----- clean lines, subtle elevation, square-ish cells */
 .s-datepicker-fluent input {
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   box-shadow: 0 1px 2px rgba(0,0,0,0.06);
 }
 .s-datepicker-fluent input:focus,
@@ -498,7 +497,7 @@
 .s-datepicker-fluent .s-dp-month.s-dp-selected,
 .s-datepicker-fluent .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-radius: 4px;
 }
 .s-datepicker-fluent .s-dp-month,
@@ -606,7 +605,7 @@
 .s-datepicker-pixel .s-dp-month.s-dp-selected,
 .s-datepicker-pixel .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-radius: 0;
   box-shadow: inset -2px -2px 0 rgba(0,0,0,0.3), inset 2px 2px 0 rgba(255,255,255,0.15);
 }
@@ -676,7 +675,7 @@
   border-color: var(--t-primary);
 }
 .s-datepicker-metro .s-dp-nav-btn { border-radius: 0; }
-.s-datepicker-metro .s-dp-nav-btn:hover { background: var(--t-primary); color: #fff; }
+.s-datepicker-metro .s-dp-nav-btn:hover { background: var(--t-primary); color: var(--t-text-on-primary); }
 .s-datepicker-metro .s-dp-header-label { text-transform: uppercase; font-weight: 700; border-radius: 0; }
 .s-datepicker-metro .s-dp-weekday { text-transform: uppercase; font-weight: 700; }
 .s-datepicker-metro .s-dp-day,
@@ -697,10 +696,10 @@
 .s-datepicker-metro .s-dp-month.s-dp-selected,
 .s-datepicker-metro .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-radius: 0;
 }
-.s-datepicker-metro .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: #fff; }
+.s-datepicker-metro .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: var(--t-text-on-primary); }
 .s-datepicker-metro .s-dp-time-input { border-radius: 0; border-color: var(--t-primary); }
 .s-datepicker-metro .s-dp-done-btn { border-radius: 0; }
 
@@ -726,10 +725,10 @@
 .s-datepicker-bootstrap .s-dp-month.s-dp-selected,
 .s-datepicker-bootstrap .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-radius: 4px;
 }
-.s-datepicker-bootstrap .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: #fff; }
+.s-datepicker-bootstrap .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: var(--t-text-on-primary); }
 .s-datepicker-bootstrap .s-dp-month,
 .s-datepicker-bootstrap .s-dp-year { border-radius: 4px; }
 .s-datepicker-bootstrap .s-dp-month:hover,
@@ -783,13 +782,13 @@
 .s-datepicker-cartoon .s-dp-month.s-dp-selected,
 .s-datepicker-cartoon .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-radius: 12px;
   box-shadow: 3px 3px 0 var(--t-text);
 }
 .s-datepicker-cartoon .s-dp-selected:hover {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   transform: translate(-1px,-1px);
   box-shadow: 4px 4px 0 var(--t-text);
 }
@@ -827,11 +826,11 @@
 .s-datepicker-illustration .s-dp-month.s-dp-selected,
 .s-datepicker-illustration .s-dp-year.s-dp-selected {
   background: var(--t-primary);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-radius: 6px;
   font-style: italic;
 }
-.s-datepicker-illustration .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: #fff; }
+.s-datepicker-illustration .s-dp-selected:hover { background: color-mix(in srgb, var(--t-primary) 85%, #000); color: var(--t-text-on-primary); }
 .s-datepicker-illustration .s-dp-time-input { border-radius: 6px; font-style: italic; }
 
 /* ----- Carbon ----- square, IBM Plex, bottom-bar accent (no fill) */
@@ -960,68 +959,3 @@
   border-radius: 999px;
 }
 .s-datepicker-liquid-glass .s-dp-time-input:focus { box-shadow: 0 0 0 2px var(--t-primary); }
-
-/* ----- Legacy iOS ----- skeuomorphic, gradient fills, inset highlights */
-.s-datepicker-legacy-ios input {
-  border-radius: 10px;
-  border: var(--t-border-width) solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-}
-.s-datepicker-legacy-ios .s-datepicker-overlay {
-  border-radius: 12px;
-  border-color: var(--t-card-border-color);
-  box-shadow: var(--t-shadow-lg);
-}
-.s-datepicker-legacy-ios .s-dp-nav-btn { border-radius: 8px; }
-.s-datepicker-legacy-ios .s-dp-header-label { font-weight: 700; border-radius: 8px; }
-.s-datepicker-legacy-ios .s-dp-day,
-.s-datepicker-legacy-ios .s-dp-month,
-.s-datepicker-legacy-ios .s-dp-year {
-  border-radius: 10px;
-  font-weight: 600;
-}
-.s-datepicker-legacy-ios .s-dp-day:hover,
-.s-datepicker-legacy-ios .s-dp-month:hover,
-.s-datepicker-legacy-ios .s-dp-year:hover {
-  background: color-mix(in srgb, var(--t-primary) 12%, var(--t-surface));
-}
-.s-datepicker-legacy-ios .s-dp-today {
-  color: var(--t-primary);
-  box-shadow: inset 0 0 0 1.5px var(--t-primary), inset 0 1px 0 rgba(255,255,255,0.6);
-}
-.s-datepicker-legacy-ios .s-dp-selected,
-.s-datepicker-legacy-ios .s-dp-month.s-dp-selected,
-.s-datepicker-legacy-ios .s-dp-year.s-dp-selected {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--t-primary) 80%, #fff) 0%, var(--t-primary) 100%);
-  color: #fff;
-  border-radius: 10px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 1px 2px var(--t-shadow);
-}
-.s-datepicker-legacy-ios .s-dp-selected:hover {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--t-primary) 80%, #fff) 0%, color-mix(in srgb, var(--t-primary) 85%, #000) 100%);
-  color: #fff;
-}
-.s-datepicker-legacy-ios .s-dp-time-input {
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
-}
-.s-datepicker-legacy-ios .s-dp-done-btn {
-  border-radius: 10px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--t-primary) 80%, #fff) 0%, var(--t-primary) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), var(--t-shadow-xs);
-}
-.s-datepicker-legacy-ios .s-dp-floating-label {
-  left: 14px;
-  top: 16px;
-  font-size: 15px;
-  color: var(--t-text-hint);
-}
-.s-datepicker-legacy-ios.floated .s-dp-floating-label {
-  transform: translateY(-10px) scale(0.75);
-  color: var(--t-primary);
-}
-.s-datepicker-legacy-ios:not(.focused).has-value .s-dp-floating-label {
-  color: var(--t-text-hint);
-}

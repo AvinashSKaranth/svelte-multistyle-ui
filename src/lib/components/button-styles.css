@@ -14,7 +14,7 @@
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --btn-color: var(--btn-color);
   background: var(--btn-color);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border: var(--t-border-width) solid transparent;
   border-radius: var(--t-btn-radius);
   box-shadow: var(--t-shadow-sm);
@@ -41,7 +41,7 @@
 /* ===== VARIANTS ===== */
 .s-button.btn-filled {
   background: var(--btn-color);
-  color: #fff;
+  color: var(--t-text-on-primary);
   border-color: transparent;
 }
 .s-button.btn-filled:hover {
@@ -170,7 +170,7 @@
 }
 .s-button-metro.btn-filled {
   background: var(--btn-color);
-  color: #fff;
+  color: var(--t-text-on-primary);
 }
 .s-button-metro.btn-outlined {
   background: var(--t-surface);
@@ -261,21 +261,4 @@
 .s-button-liquid-glass:hover {
   background: rgba(255,255,255,0.18);
   box-shadow: var(--t-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.4);
-}
-
-/* Legacy iOS */
-.s-button-legacy-ios {
-  border-radius: 10px;
-  border: var(--t-border-width) solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-  font-weight: 600;
-}
-.s-button-legacy-ios.btn-filled {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--btn-color) 80%, #fff) 0%, var(--btn-color) 100%);
-  color: #fff;
-  border-color: color-mix(in srgb, var(--btn-color) 80%, #000);
-}
-.s-button-legacy-ios:active {
-  transform: scale(0.95);
 }

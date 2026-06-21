@@ -16,7 +16,7 @@
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -128,8 +128,7 @@
 .s-mselect-material3 .mselect-control,
 .s-mselect-fluent .mselect-control,
 .s-mselect-carbon .mselect-control,
-.s-mselect-bootstrap .mselect-control,
-.s-mselect-legacy-ios .mselect-control {
+.s-mselect-bootstrap .mselect-control {
   padding-top: 27px;
   padding-bottom: 9px;
 }
@@ -141,7 +140,7 @@
   background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
   border: none;
   border-bottom: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+  border-radius: var(--t-input-radius) var(--t-input-radius) 0 0;
 }
 .s-mselect-material .mselect-control:hover {
   background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
@@ -169,7 +168,7 @@
 .s-mselect-material3 .mselect-control {
   background: var(--t-surface);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
 }
 .s-mselect-material3 .mselect-control:hover {
   border-color: var(--t-text);
@@ -200,7 +199,7 @@
 .s-mselect-fluent .mselect-control {
   background: var(--t-surface);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   border-bottom: 2px solid var(--t-border);
 }
 .s-mselect-fluent .mselect-control:hover {
@@ -272,32 +271,6 @@
 .s-mselect-carbon.focused .s-mselect-floating-label {
   color: var(--t-primary);
 }
-
-/* Legacy iOS */
-.s-mselect-legacy-ios .mselect-control {
-  border-radius: 10px;
-  border: var(--t-border-width) solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-}
-.s-mselect-legacy-ios.focused .mselect-control {
-  border-color: var(--t-primary);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 0 0 3px var(--t-shadow);
-}
-.s-mselect-legacy-ios .mselect-dropdown { border-radius: 10px; }
-.s-mselect-legacy-ios .s-mselect-floating-label {
-  left: 12px;
-  top: 14px;
-  font-size: 16px;
-}
-.s-mselect-legacy-ios.floated .s-mselect-floating-label {
-  transform: translateY(-10px) scale(0.75);
-  color: var(--t-primary);
-}
-.s-mselect-legacy-ios:not(.focused).has-value .s-mselect-floating-label {
-  color: color-mix(in srgb, var(--t-text) 50%, transparent);
-}
-
 /* Brutalist */
 .s-mselect-brutalist .mselect-control {
   font-family: 'Courier New', monospace;

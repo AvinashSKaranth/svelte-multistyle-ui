@@ -18,7 +18,7 @@
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .s-select-wrapper select:hover {
@@ -64,8 +64,7 @@
 .s-select-material3 select,
 .s-select-fluent select,
 .s-select-carbon select,
-.s-select-bootstrap select,
-.s-select-legacy-ios select {
+.s-select-bootstrap select {
   padding-top: 24px;
   padding-bottom: 8px;
 }
@@ -75,7 +74,7 @@
   background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
   border: none;
   border-bottom: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+  border-radius: var(--t-input-radius) var(--t-input-radius) 0 0;
 }
 .s-select-material select:hover {
   background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
@@ -107,7 +106,7 @@
 .s-select-material3 select {
   background: var(--t-surface);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
 }
 .s-select-material3 select:hover {
   border-color: var(--t-text);
@@ -246,15 +245,3 @@
   border-color: var(--t-primary);
 }
 .s-select-liquid-glass.focused select { box-shadow: none; }
-
-/* Legacy iOS */
-.s-select-legacy-ios select {
-  border-radius: 10px;
-  border: var(--t-border-width) solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-}
-.s-select-legacy-ios.focused select {
-  border-color: var(--t-primary);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 0 0 3px var(--t-shadow);
-}

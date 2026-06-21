@@ -111,10 +111,3 @@
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow: var(--t-shadow-sm), inset 0 1px 0 rgba(255,255,255,0.3);
 }
-
-/* Legacy iOS */
-.s-radio-legacy-ios .s-radio-circle {
-  border: var(--t-border-width) solid var(--t-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-}

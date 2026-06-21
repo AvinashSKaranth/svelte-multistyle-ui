@@ -108,7 +108,3 @@
 /* Liquid Glass */
 .s-table-liquid-glass { border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; overflow: hidden; backdrop-filter: blur(16px); }
 .s-table-liquid-glass th { background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.15); }
-
-/* Legacy iOS */
-.s-table-legacy-ios { border: var(--t-border-width) solid var(--t-border); border-radius: 10px; overflow: hidden; box-shadow: var(--t-shadow-xs); }
-.s-table-legacy-ios th { background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%); }

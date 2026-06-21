@@ -1,6 +1,6 @@
 ---
 name: svelte-multistyle-ui
-description: How to use, configure, and theme the svelte-multistyle-ui Svelte 5 component library. Use this skill whenever the user is working with svelte-multistyle-ui — importing components, choosing a visual style (material, material3, fluent, brutalist, pixel, neon, metro, bootstrap, cartoon, illustration, carbon, liquid-glass, legacy-ios), choosing or creating a color theme (default, ocean, forest, rose, midnight, gold, slate, candy, storm, royal, or a custom `.theme-*` preset), wiring dark/light mode, calling `initMultistyleUI`, using the `portal` action, or asking what components/props are available. Trigger it even when the user doesn't name the library explicitly but is building a Svelte 5 UI with multi-style/multi-theme components, asks for Material/Fluent/Brutalist/Liquid-Glass style components, or wants to create a custom color theme with `--t-*` tokens. Do NOT use for general Svelte, Tailwind, or chart.js questions unrelated to this library.
+description: How to use, configure, and theme the svelte-multistyle-ui Svelte 5 component library. Use this skill whenever the user is working with svelte-multistyle-ui — importing components, choosing a visual style (material, material3, fluent, brutalist, pixel, neon, metro, bootstrap, cartoon, illustration, carbon, liquid-glass), choosing or creating a color theme (default, ocean, forest, rose, midnight, gold, slate, candy, storm, royal, or a custom `.theme-*` preset), wiring dark/light mode, calling `initMultistyleUI`, using the `portal` action, or asking what components/props are available. Trigger it even when the user doesn't name the library explicitly but is building a Svelte 5 UI with multi-style/multi-theme components, asks for Material/Fluent/Brutalist/Liquid-Glass style components, or wants to create a custom color theme with `--t-*` tokens. Do NOT use for general Svelte, Tailwind, or chart.js questions unrelated to this library.
 ---
 
 # svelte-multistyle-ui
@@ -60,9 +60,8 @@ Dark/light mode is toggled by adding `dark` / `light` classes to `<html>`. `mode
 | `illustration` | illustrated look |
 | `carbon` | IBM Carbon |
 | `liquid-glass` | glassmorphism blur |
-| `legacy-ios` | old iOS skeuomorphic |
 
-Not every component has an explicit override for every style — when a component has no `<component>-<style>` override it falls back to the style's base look. Floating-label form fields (Input/Textarea/Select) are enabled for `material`, `material3`, `fluent`, `carbon`, `bootstrap`, `legacy-ios` only.
+Not every component has an explicit override for every style — when a component has no `<component>-<style>` override it falls back to the style's base look. Floating-label form fields (Input/Textarea/Select) are enabled for `material`, `material3`, `fluent`, `carbon`, `bootstrap` only.
 
 ## Available themes (10 presets)
 

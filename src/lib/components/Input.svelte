@@ -59,7 +59,6 @@
     "fluent",
     "carbon",
     "bootstrap",
-    "legacy-ios",
   ];
   const hasFloatingLabel = $derived(
     floatingStyles.includes(style) && (label || placeholder),

@@ -107,11 +107,6 @@
 .s-dropdown-liquid-glass .s-dropdown-menu { border-radius: 16px; backdrop-filter: blur(24px) saturate(1.6); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); box-shadow: var(--t-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.2); }
 .s-dropdown-liquid-glass .s-dropdown-item { border-radius: 12px; }
 .s-dropdown-liquid-glass .s-dropdown-item:hover { background: rgba(255,255,255,0.12); }
-
-/* Legacy iOS */
-.s-dropdown-legacy-ios .s-dropdown-menu { border-radius: 10px; border: 1px solid var(--t-border); background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, var(--t-surface) 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-md); }
-.s-dropdown-legacy-ios .s-dropdown-item { border-radius: 8px; }
-
 /* Material3 */
 .s-dropdown-material3 .s-dropdown-menu { border-radius: 16px; }
 .s-dropdown-material3 .s-dropdown-item { border-radius: 12px; }

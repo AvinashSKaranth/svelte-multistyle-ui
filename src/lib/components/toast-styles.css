@@ -101,6 +101,3 @@
 
 /* Liquid Glass */
 .s-toast-liquid-glass { border-radius: 16px; backdrop-filter: blur(24px) saturate(1.6); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); box-shadow: var(--t-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.3); }
-
-/* Legacy iOS */
-.s-toast-legacy-ios { border-radius: 10px; border: 1px solid var(--t-border); background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, var(--t-surface) 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-md); }

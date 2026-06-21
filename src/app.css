@@ -150,6 +150,14 @@ body {
   max-height: calc(100svh - 5rem);
 }
 
+/* Layout demo stage: dashed frame so align/justify/fill effects are visible */
+.layout-stage {
+  border: 1px dashed var(--t-card-border-color);
+  border-radius: 8px;
+  padding: 6px;
+  background: color-mix(in srgb, var(--t-surface-bg) 60%, transparent);
+}
+
 .settings-panel {
   /* Padding handled by Card; only keep override for gap behavior */
   display: flex;
@@ -333,6 +341,9 @@ html.dark .copy-btn:hover {
  * Replace hardcoded Tailwind grays with theme variables
  * so the sidebar panels respect the selected theme/color combo.
  */
+.settings-sidebar .text-gray-400 {
+  color: var(--t-text-hint);
+}
 .settings-sidebar .text-gray-500 {
   color: var(--t-text-hint);
 }

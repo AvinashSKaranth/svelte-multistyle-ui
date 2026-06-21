@@ -64,10 +64,6 @@
 .s-drawer-liquid-glass .demo-label,
 .s-drawer-liquid-glass .text-muted,
 .s-drawer-liquid-glass .text-hint { color: rgba(255,255,255,0.55); }
-
-/* Legacy iOS */
-.s-drawer-legacy-ios { border: 1px solid var(--t-border); background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, var(--t-surface) 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-md); }
-
 /* Material3 */
 .s-drawer-material3.drawer-left   { border-radius: 0 16px 16px 0; }
 .s-drawer-material3.drawer-right  { border-radius: 16px 0 0 16px; }

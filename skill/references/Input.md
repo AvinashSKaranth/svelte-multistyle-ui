@@ -26,7 +26,7 @@ Text input with optional label, icons, and floating-label form styles (for suppo
 
 Plus `style`, `theme` (optional, fall back to globals). `...rest` spreads onto the input.
 
-Floating-label style is enabled only for `style` in `material`, `material3`, `fluent`, `carbon`, `bootstrap`, `legacy-ios`.
+Floating-label style is enabled only for `style` in `material`, `material3`, `fluent`, `carbon`, `bootstrap`.
 
 ## Example
 

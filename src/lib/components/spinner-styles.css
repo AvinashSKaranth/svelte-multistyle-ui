@@ -47,6 +47,3 @@
 
 /* Liquid Glass */
 .s-spinner-liquid-glass .s-spinner-circle { border-color: rgba(255,255,255,0.15); border-top-color: var(--t-primary); }
-
-/* Legacy iOS */
-.s-spinner-legacy-ios .s-spinner-circle { border-color: var(--t-border); border-top-color: var(--t-primary); }

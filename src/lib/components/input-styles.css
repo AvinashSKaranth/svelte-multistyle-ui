@@ -73,7 +73,7 @@
   color: var(--t-text);
   border: none;
   border-bottom: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius) var(--t-card-radius) 0 0;
+  border-radius: var(--t-input-radius) var(--t-input-radius) 0 0;
 }
 .s-input-material input:hover {
   background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
@@ -104,7 +104,7 @@
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
 .s-input-material3 input:hover {
@@ -141,7 +141,7 @@
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   border-bottom: 2px solid var(--t-border);
 }
 .s-input-fluent input:hover {
@@ -232,7 +232,7 @@
   background: var(--t-surface);
   color: var(--t-text);
   border: var(--t-border-width) solid var(--t-primary);
-  border-radius: var(--t-card-radius);
+  border-radius: var(--t-input-radius);
   box-shadow: 0 0 5px var(--t-primary), inset 0 0 5px rgba(0, 0, 0, 0.5);
   animation: neonPulse 3s ease-in-out infinite alternate;
   transition: all 0.3s ease;
@@ -400,36 +400,4 @@
   color: var(--t-text);
   border: none;
   border-radius: 16px;
-}
-
-/* ===== LEGACY iOS ===== */
-.s-input-legacy-ios input {
-  padding: 24px 16px 8px;
-  font-size: 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, var(--t-surface) 100%);
-  color: var(--t-text);
-  border: var(--t-border-width) solid var(--t-border);
-  border-radius: 10px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--t-shadow-xs);
-  transition: all 0.2s ease;
-}
-.s-input-legacy-ios input:hover {
-  border-color: color-mix(in srgb, var(--t-primary) 50%, var(--t-border));
-}
-.s-input-legacy-ios.focused input {
-  border-color: var(--t-primary);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 0 0 3px var(--t-shadow);
-}
-.s-input-legacy-ios .s-input-floating-label {
-  left: 16px;
-  top: 16px;
-  font-size: 16px;
-  color: color-mix(in srgb, var(--t-text) 50%, transparent);
-}
-.s-input-legacy-ios.floated .s-input-floating-label {
-  transform: translateY(-10px) scale(0.75);
-  color: var(--t-primary);
-}
-.s-input-legacy-ios:not(.focused).has-value .s-input-floating-label {
-  color: color-mix(in srgb, var(--t-text) 50%, transparent);
 }

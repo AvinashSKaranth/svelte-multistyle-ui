@@ -25,4 +25,4 @@ Plus `style`, `theme` (optional). `...rest` spreads onto the card root.
 </Card>
 ```
 
-Note: Card has explicit style overrides for `brutalist`, `pixel`, `neon`, `metro`, `bootstrap`, `cartoon`, `illustration`, `carbon`, `liquid-glass`, `legacy-ios`. `material`, `material3`, `fluent` fall back to the base look.
+Note: Card has explicit style overrides for `brutalist`, `pixel`, `neon`, `metro`, `bootstrap`, `cartoon`, `illustration`, `carbon`, `liquid-glass`. `material`, `material3`, `fluent` fall back to the base look.
