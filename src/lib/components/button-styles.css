@@ -12,12 +12,21 @@
   overflow: hidden;
   white-space: nowrap;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  background: var(--t-primary);
+  --btn-color: var(--btn-color);
+  background: var(--btn-color);
   color: #fff;
   border: var(--t-border-width) solid transparent;
   border-radius: var(--t-btn-radius);
   box-shadow: var(--t-shadow-sm);
 }
+
+/* ===== PRESETS (semantic color, theme-aware via --t-* tokens) ===== */
+.s-button.btn-primary { --btn-color: var(--t-primary); }
+.s-button.btn-secondary { --btn-color: var(--t-secondary); }
+.s-button.btn-info { --btn-color: var(--t-info); }
+.s-button.btn-success { --btn-color: var(--t-success); }
+.s-button.btn-warning { --btn-color: var(--t-warning); }
+.s-button.btn-error { --btn-color: var(--t-error); }
 .s-button:disabled {
   opacity: 0.45;
   pointer-events: none;
@@ -31,12 +40,12 @@
 
 /* ===== VARIANTS ===== */
 .s-button.btn-filled {
-  background: var(--t-primary);
+  background: var(--btn-color);
   color: #fff;
   border-color: transparent;
 }
 .s-button.btn-filled:hover {
-  background: color-mix(in srgb, var(--t-primary) 85%, #000);
+  background: color-mix(in srgb, var(--btn-color) 85%, #000);
   box-shadow: var(--t-shadow-colored-md);
 }
 .s-button.btn-filled:active {
@@ -46,42 +55,42 @@
 
 .s-button.btn-outlined {
   background: transparent;
-  color: var(--t-primary);
-  border-color: var(--t-primary);
+  color: var(--btn-color);
+  border-color: var(--btn-color);
   box-shadow: none;
 }
 .s-button.btn-outlined:hover {
-  background: color-mix(in srgb, var(--t-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--btn-color) 8%, transparent);
 }
 .s-button.btn-outlined:active {
-  background: color-mix(in srgb, var(--t-primary) 14%, transparent);
+  background: color-mix(in srgb, var(--btn-color) 14%, transparent);
   transform: scale(0.97);
 }
 
 .s-button.btn-text {
   background: transparent;
-  color: var(--t-primary);
+  color: var(--btn-color);
   border-color: transparent;
   box-shadow: none;
 }
 .s-button.btn-text:hover {
-  background: color-mix(in srgb, var(--t-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--btn-color) 8%, transparent);
 }
 .s-button.btn-text:active {
-  background: color-mix(in srgb, var(--t-primary) 14%, transparent);
+  background: color-mix(in srgb, var(--btn-color) 14%, transparent);
 }
 
 .s-button.btn-tonal {
-  background: color-mix(in srgb, var(--t-primary) 15%, var(--t-surface));
-  color: var(--t-primary);
+  background: color-mix(in srgb, var(--btn-color) 15%, var(--t-surface));
+  color: var(--btn-color);
   border-color: transparent;
   box-shadow: none;
 }
 .s-button.btn-tonal:hover {
-  background: color-mix(in srgb, var(--t-primary) 22%, var(--t-surface));
+  background: color-mix(in srgb, var(--btn-color) 22%, var(--t-surface));
 }
 .s-button.btn-tonal:active {
-  background: color-mix(in srgb, var(--t-primary) 28%, var(--t-surface));
+  background: color-mix(in srgb, var(--btn-color) 28%, var(--t-surface));
   transform: scale(0.97);
 }
 
@@ -141,31 +150,31 @@
 
 /* Neon */
 .s-button-neon {
-  box-shadow: 0 0 5px var(--t-primary), 0 0 15px var(--t-shadow);
+  box-shadow: 0 0 5px var(--btn-color), 0 0 15px var(--t-shadow);
 }
 .s-button-neon:hover {
-  box-shadow: 0 0 10px var(--t-primary), 0 0 30px var(--t-shadow);
+  box-shadow: 0 0 10px var(--btn-color), 0 0 30px var(--t-shadow);
 }
 .s-button-neon.btn-filled {
   background: var(--t-surface);
-  color: var(--t-primary);
-  border-color: var(--t-primary);
+  color: var(--btn-color);
+  border-color: var(--btn-color);
 }
 
 /* Metro */
 .s-button-metro {
   border-radius: 0;
-  border: var(--t-border-width) solid var(--t-primary);
+  border: var(--t-border-width) solid var(--btn-color);
   font-weight: 600;
   box-shadow: none;
 }
 .s-button-metro.btn-filled {
-  background: var(--t-primary);
+  background: var(--btn-color);
   color: #fff;
 }
 .s-button-metro.btn-outlined {
   background: var(--t-surface);
-  color: var(--t-primary);
+  color: var(--btn-color);
 }
 .s-button-metro:hover {
   opacity: 0.85;
@@ -178,30 +187,30 @@
   box-shadow: var(--t-shadow-xs);
 }
 .s-button-bootstrap.btn-filled {
-  border-color: var(--t-primary);
+  border-color: var(--btn-color);
 }
 .s-button-bootstrap:hover {
   box-shadow: 0 0 0 3px var(--t-shadow);
 }
 .s-button-bootstrap:focus-visible {
   box-shadow: 0 0 0 3px var(--t-shadow);
-  border-color: var(--t-primary);
+  border-color: var(--btn-color);
 }
 
 /* Cartoon */
 .s-button-cartoon {
   border-radius: 16px;
   border: var(--t-border-width) solid var(--t-text);
-  box-shadow: 4px 4px 0 var(--t-primary);
+  box-shadow: 4px 4px 0 var(--btn-color);
   font-weight: 700;
 }
 .s-button-cartoon:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 var(--t-primary);
+  box-shadow: 5px 5px 0 var(--btn-color);
 }
 .s-button-cartoon:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--t-primary);
+  box-shadow: 1px 1px 0 var(--btn-color);
 }
 
 /* Illustration */
@@ -225,10 +234,10 @@
   box-shadow: none;
 }
 .s-button-carbon:hover {
-  border-bottom-color: var(--t-primary);
+  border-bottom-color: var(--btn-color);
 }
 .s-button-carbon:focus-visible {
-  border-bottom-color: var(--t-primary);
+  border-bottom-color: var(--btn-color);
 }
 
 /* Liquid Glass */
@@ -241,13 +250,13 @@
   box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .s-button-liquid-glass.btn-filled {
-  background: color-mix(in srgb, var(--t-primary) 60%, transparent);
+  background: color-mix(in srgb, var(--btn-color) 60%, transparent);
   border-color: rgba(255,255,255,0.2);
 }
 .s-button-liquid-glass.btn-outlined {
   background: rgba(255,255,255,0.06);
-  border-color: color-mix(in srgb, var(--t-primary) 50%, transparent);
-  color: var(--t-primary);
+  border-color: color-mix(in srgb, var(--btn-color) 50%, transparent);
+  color: var(--btn-color);
 }
 .s-button-liquid-glass:hover {
   background: rgba(255,255,255,0.18);
@@ -263,9 +272,9 @@
   font-weight: 600;
 }
 .s-button-legacy-ios.btn-filled {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--t-primary) 80%, #fff) 0%, var(--t-primary) 100%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--btn-color) 80%, #fff) 0%, var(--btn-color) 100%);
   color: #fff;
-  border-color: color-mix(in srgb, var(--t-primary) 80%, #000);
+  border-color: color-mix(in srgb, var(--btn-color) 80%, #000);
 }
 .s-button-legacy-ios:active {
   transform: scale(0.95);

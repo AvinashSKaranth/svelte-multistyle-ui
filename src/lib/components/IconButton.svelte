@@ -6,6 +6,7 @@
     style: styleProp,
     theme: themeProp,
     variant = "filled",
+    preset = "primary",
     size = "md",
     disabled = false,
     icon,
@@ -21,11 +22,12 @@
   const styleClass = $derived(`s-iconbtn-${style}`);
   const themeClass = $derived(`theme-${theme}`);
   const variantClass = $derived(`ibtn-${variant}`);
+  const presetClass = $derived(`ibtn-${preset}`);
   const sizeClass = $derived(`ibtn-${size}`);
 </script>
 
 <button
-  class="s-iconbtn {styleClass} {themeClass} {variantClass} {sizeClass}"
+  class="s-iconbtn {styleClass} {themeClass} {variantClass} {presetClass} {sizeClass}"
   {disabled}
   {onclick}
   aria-label={ariaLabel}

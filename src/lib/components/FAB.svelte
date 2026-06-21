@@ -5,6 +5,7 @@
   let {
     style: styleProp,
     theme: themeProp,
+    preset = "primary",
     children,
     position = "bottom-right",
     onclick,
@@ -16,10 +17,11 @@
 
   const styleClass = $derived(`s-fab-${style}`);
   const themeClass = $derived(`theme-${theme}`);
+  const presetClass = $derived(`fab-${preset}`);
 </script>
 
 <button
-  class="s-fab {styleClass} {themeClass} fab-{position}"
+  class="s-fab {styleClass} {themeClass} {presetClass} fab-{position}"
   {onclick}
   {...rest}
 >

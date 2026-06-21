@@ -338,7 +338,8 @@
   // Code preview tab states
   let buttonTab = $state("preview");
   let inputTab = $state("preview");
-  let iconBtnTab = $state("preview");
+  let btnPreset = $state("primary");
+  let btnVariant = $state("filled");
   let textareaTab = $state("preview");
   let selectTab = $state("preview");
   let multiSelectTab = $state("preview");
@@ -990,7 +991,7 @@ Then pass theme="custom" to components.
         Form Components
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Button -->
+        <!-- Button / IconButton / FAB (preset + variant drive all samples) -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
@@ -998,7 +999,7 @@ Then pass theme="custom" to components.
           class="space-y-3"
         >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Button
+            Buttons
           </p>
           <Tabs
             style={selectedStyle}
@@ -1010,105 +1011,72 @@ Then pass theme="custom" to components.
             bind:active={buttonTab}
           />
           {#if buttonTab === "preview"}
-            <div class="flex flex-wrap gap-2">
-              <Button variant="filled"
-                >{#snippet children()}Filled{/snippet}</Button
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="demo-label text-xs font-semibold uppercase tracking-wide"
+                >preset</span
               >
-              <Button variant="outlined"
-                >{#snippet children()}Outlined{/snippet}</Button
+              <select
+                bind:value={btnPreset}
+                class="border rounded px-2 py-1 text-sm bg-transparent"
               >
-              <Button variant="text">{#snippet children()}Text{/snippet}</Button
+                <option value="primary">primary</option>
+                <option value="secondary">secondary</option>
+                <option value="info">info</option>
+                <option value="success">success</option>
+                <option value="warning">warning</option>
+                <option value="error">error</option>
+              </select>
+              <span class="demo-label text-xs font-semibold uppercase tracking-wide ml-2"
+                >variant</span
               >
-              <Button variant="tonal"
-                >{#snippet children()}Tonal{/snippet}</Button
+              <select
+                bind:value={btnVariant}
+                class="border rounded px-2 py-1 text-sm bg-transparent"
               >
+                <option value="filled">filled</option>
+                <option value="outlined">outlined</option>
+                <option value="text">text</option>
+                <option value="tonal">tonal</option>
+              </select>
             </div>
-            <div class="flex flex-wrap gap-2 mt-2">
-              <Button variant="filled" icon="add"
+
+            <p class="demo-label text-xs mt-3">Button</p>
+            <div class="flex flex-wrap gap-2 items-center">
+              <Button variant={btnVariant} preset={btnPreset}
+                >{#snippet children()}Click me{/snippet}</Button
+              >
+              <Button variant={btnVariant} preset={btnPreset} icon="add"
                 >{#snippet children()}Add{/snippet}</Button
               >
-              <Button variant="outlined" icon="edit"
+              <Button variant={btnVariant} preset={btnPreset} icon="edit"
                 >{#snippet children()}Edit{/snippet}</Button
               >
-              <Button variant="tonal" icon="delete"
-                >{#snippet children()}Delete{/snippet}</Button
-              >
             </div>
+
+            <p class="demo-label text-xs mt-2">IconButton</p>
+            <div class="flex flex-wrap gap-2 items-center">
+              <IconButton variant={btnVariant} preset={btnPreset} ariaLabel="Favorite" icon="favorite" />
+              <IconButton variant={btnVariant} preset={btnPreset} ariaLabel="Star" icon="star" />
+              <IconButton variant={btnVariant} preset={btnPreset} ariaLabel="Delete" icon="delete" />
+            </div>
+
+            <p class="demo-label text-xs mt-2">
+              FAB — floating bottom-right uses the selected preset (no variant)
+            </p>
           {:else}
             {@render codeBlock(
               "btn",
-              `<Button
-  variant="filled"
->
-  Click
-</Button>
+              `<Button variant="filled" preset="success">Save</Button>
 
-<Button variant="outlined">Click</Button>
+<Button variant="outlined" preset="error" icon="delete">Delete</Button>
 
-<Button variant="text">Click</Button>
+<IconButton variant="tonal" preset="info" icon="info" ariaLabel="Info" />
 
-<Button variant="tonal">Click</Button>
+<!-- FAB has no variant; preset drives its color -->
+<FAB preset="warning">+</FAB>
 
-<!-- With icons — just the icon name; the class is auto-applied: -->
-<Button
-  variant="filled"
-  icon="add"
->
-  Add
-</Button>`,
-            )}
-          {/if}
-        </Card>
-
-        <!-- IconButton -->
-        <Card
-          style={selectedStyle}
-          theme={selectedTheme}
-          elevated={true}
-          class="space-y-3"
-        >
-          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Icon Button
-          </p>
-          <Tabs
-            style={selectedStyle}
-            theme={selectedTheme}
-            tabs={[
-              { id: "preview", label: "👁 Preview" },
-              { id: "code", label: "</> Code" },
-            ]}
-            bind:active={iconBtnTab}
-          />
-          {#if iconBtnTab === "preview"}
-            <div class="flex gap-3 items-center">
-              <IconButton
-                variant="filled"
-                ariaLabel="Favorite"
-                icon="favorite"
-              />
-              <IconButton variant="outlined" ariaLabel="Star" icon="star" />
-              <IconButton variant="tonal" ariaLabel="Add" icon="add" />
-            </div>
-          {:else}
-            {@render codeBlock(
-              "iconBtn",
-              `<IconButton
-  variant="filled"
-  ariaLabel="Favorite"
-  icon="favorite"
-/>
-
-<IconButton
-  variant="outlined"
-  ariaLabel="Star"
-  icon="star"
-/>
-
-<IconButton
-  variant="tonal"
-  ariaLabel="Add"
-  icon="add"
-/>`,
+<!-- variant: filled | outlined | text | tonal -->
+<!-- preset: primary | secondary | info | success | warning | error -->`,
             )}
           {/if}
         </Card>
@@ -3584,7 +3552,7 @@ Then pass theme="custom" to components.
     />
 
     <!-- FAB -->
-    <FAB style={selectedStyle} theme={selectedTheme} position="bottom-right"
+    <FAB style={selectedStyle} theme={selectedTheme} preset={btnPreset} position="bottom-right"
       >{#snippet children()}+{/snippet}</FAB
     >
   </main>

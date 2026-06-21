@@ -6,6 +6,7 @@
     style: styleProp,
     theme: themeProp,
     variant = "filled",
+    preset = "primary",
     size = "md",
     disabled = false,
     icon,
@@ -20,11 +21,12 @@
   const styleClass = $derived(`s-button-${style}`);
   const themeClass = $derived(`theme-${theme}`);
   const variantClass = $derived(`btn-${variant}`);
+  const presetClass = $derived(`btn-${preset}`);
   const sizeClass = $derived(`btn-${size}`);
 </script>
 
 <button
-  class="s-button {styleClass} {themeClass} {variantClass} {sizeClass}"
+  class="s-button {styleClass} {themeClass} {variantClass} {presetClass} {sizeClass}"
   {disabled}
   {onclick}
   {...rest}
