@@ -113,7 +113,12 @@
     chartInstance = null;
   });
 
-  // Single effect: recreate on shape change, update in-place otherwise
+  // Single effect: recreate on shape change, update in-place otherwise.
+  // Creation is deferred until the canvas has a non-zero layout size — Chart.js
+  // initialized at 0×0 (e.g. chart mounted inside a hidden tab/accordion) reads
+  // a bogus size, then a ResizeObserver fires mid-entry-animation and breaks it
+  // (labels vanish, animation stalls). Waiting one frame + guarding on size
+  // lets layout settle before the first render.
   $effect(() => {
     if (!canvasEl) return;
 
@@ -138,13 +143,68 @@
     // Shape changed (or first mount) — destroy old if any, then create new
     if (existing) existing.destroy();
 
-    const ctx = canvas.getContext("2d");
     const cfg = {
       type,
       data: buildData(type, { data: normalized.data, series: normalized.series, labels: normalized.labels }, tokens),
       options: buildOptions(type, style, tokens, { title, legend, animated, userOptions: options, seriesCount, xAxisLabel, yAxisLabel }),
     };
-    chartInstance = new ChartJS(ctx, cfg);
+
+    let rafId = 0;
+    let resizeId = 0;
+    let cancelled = false;
+    const container = canvas.parentElement;
+    const init = () => {
+      if (cancelled) return;
+      // Wait until the chart's container has a real layout size. Charts mount
+      // while their gallery section is display:none (parent 0×0); creating now
+      // yields a degenerate chartArea that hides axes/labels. The container
+      // (not the canvas — it has a 300×150 intrinsic default) is Chart.js's
+      // size source.
+      if (!container || container.clientWidth === 0 || container.clientHeight === 0) {
+        rafId = requestAnimationFrame(init);
+        return;
+      }
+      chartInstance = new ChartJS(canvas.getContext("2d"), cfg);
+      // Layout can still settle one frame after the container becomes visible;
+      // force a re-measure so the first render's chartArea is final and axes
+      // + labels draw.
+      resizeId = requestAnimationFrame(() => {
+        if (cancelled || !chartInstance) return;
+        chartInstance.resize();
+      });
+    };
+    rafId = requestAnimationFrame(init);
+
+    // Cancel any pending deferred init when deps change again or on unmount.
+    return () => {
+      cancelled = true;
+      if (rafId) cancelAnimationFrame(rafId);
+      if (resizeId) cancelAnimationFrame(resizeId);
+    };
+  });
+
+  // Color mode (dark/light) is toggled by adding/removing a class on <html>,
+  // which flips every --t-* token. That isn't a Svelte-reactive dep, so the
+  // main effect never re-runs and the chart keeps stale token colors — labels
+  // and axes render in the old mode's color and vanish against the new
+  // background. Watch <html>'s class and refresh colors in place.
+  $effect(() => {
+    if (!canvasEl) return;
+    const root = document.documentElement;
+    let isDark = root.classList.contains("dark");
+    const observer = new MutationObserver(() => {
+      const nowDark = root.classList.contains("dark");
+      if (nowDark === isDark) return;
+      isDark = nowDark;
+      const existing = ChartJS.getChart(canvasEl);
+      if (!existing) return;
+      const tokens = readTokens(canvasEl);
+      existing.data = buildData(type, { data: normalized.data, series: normalized.series, labels: normalized.labels }, tokens);
+      existing.options = buildOptions(type, style, tokens, { title, legend, animated, userOptions: options, seriesCount, xAxisLabel, yAxisLabel });
+      existing.update("none");
+    });
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
   });
 
   function downloadChart() {

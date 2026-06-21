@@ -76,6 +76,7 @@
   top: calc(100% + 4px);
   left: 0;
   z-index: 100;
+  box-sizing: border-box;
   width: 320px;
   background: var(--t-surface);
   border: var(--t-border-width) solid var(--t-card-border-color);
@@ -331,9 +332,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100%;
+    width: 480px;
+    max-width:100%;
     height: 100%;
     max-height: 100dvh;
+    box-sizing: border-box;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -422,7 +425,7 @@
   border-width: calc(var(--t-border-width) + 0.5px);
   box-shadow: none;
 }
-.s-datepicker-material3 .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-material3 {
   border-radius: 16px;
   box-shadow: var(--t-shadow-lg);
 }
@@ -482,7 +485,7 @@
   border-color: var(--t-primary);
   box-shadow: 0 0 0 1px var(--t-primary);
 }
-.s-datepicker-fluent .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-fluent {
   border-radius: var(--t-card-radius);
   box-shadow: 0 2px 6px rgba(0,0,0,0.12), var(--t-shadow-lg);
 }
@@ -526,7 +529,7 @@
   border-radius: 0;
   box-shadow: 4px 4px 0 var(--t-text);
 }
-.s-datepicker-brutalist .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-brutalist {
   border-radius: 0;
   box-shadow: 6px 6px 0 var(--t-text);
 }
@@ -580,7 +583,7 @@
   border: var(--t-border-width) solid var(--t-primary);
   border-radius: 0;
 }
-.s-datepicker-pixel .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-pixel {
   border-radius: 0;
   image-rendering: pixelated;
 }
@@ -620,7 +623,7 @@
   border-color: var(--t-primary);
   box-shadow: 0 0 5px var(--t-primary);
 }
-.s-datepicker-neon .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-neon {
   border-color: var(--t-primary);
   box-shadow: 0 0 12px var(--t-shadow), 0 0 25px var(--t-shadow);
 }
@@ -669,7 +672,7 @@
   font-weight: 600;
   box-shadow: none;
 }
-.s-datepicker-metro .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-metro {
   border-radius: 0;
   box-shadow: none;
   border-color: var(--t-primary);
@@ -709,7 +712,7 @@
   border: var(--t-border-width) solid var(--t-border);
   box-shadow: var(--t-shadow-xs);
 }
-.s-datepicker-bootstrap .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-bootstrap {
   border-radius: 8px;
   border-color: var(--t-card-border-color);
   box-shadow: var(--t-shadow-lg);
@@ -756,7 +759,7 @@
   box-shadow: 4px 4px 0 var(--t-primary);
   font-weight: 700;
 }
-.s-datepicker-cartoon .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-cartoon {
   border-radius: 16px;
   box-shadow: 5px 5px 0 var(--t-primary);
 }
@@ -802,7 +805,7 @@
   box-shadow: 3px 3px 0 var(--t-border);
   font-style: italic;
 }
-.s-datepicker-illustration .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-illustration {
   border-radius: 8px;
   box-shadow: 4px 4px 0 var(--t-card-border-color);
 }
@@ -846,7 +849,7 @@
   border-bottom-color: var(--t-primary);
   box-shadow: none;
 }
-.s-datepicker-carbon .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-carbon {
   border-radius: 0;
   border-color: var(--t-card-border-color);
   box-shadow: var(--t-shadow-lg);
@@ -905,6 +908,9 @@
 }
 
 /* ----- Liquid Glass ----- translucent, frosted, glass cells */
+/* Glass on the wrapper is safe because the overlay is portaled to <body> (see
+   DatePicker.svelte), so the wrapper's backdrop-filter stacking context no
+   longer traps the popout. */
 .s-datepicker-liquid-glass {
   background: rgba(255,255,255,0.1);
   border-radius: 16px;
@@ -918,7 +924,7 @@
   border: none;
   border-radius: 16px;
 }
-.s-datepicker-liquid-glass .s-datepicker-overlay {
+.s-datepicker-overlay.s-datepicker-liquid-glass {
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(30px) saturate(1.8);
   -webkit-backdrop-filter: blur(30px) saturate(1.8);

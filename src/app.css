@@ -55,6 +55,29 @@ body {
   border-color: var(--t-border);
 }
 
+/* Top-level category tabs: horizontally scrollable on narrow screens so the
+   tab row never forces page-level horizontal overflow. Tabs keep their
+   natural width (no shrink/wrap) and the row scrolls when they overflow. */
+.category-tabs .s-tabs {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.category-tabs .s-tab {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.category-tabs .s-tabs::-webkit-scrollbar {
+  height: 6px;
+}
+.category-tabs .s-tabs::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--t-text) 20%, transparent);
+  border-radius: 999px;
+}
+.category-tabs .s-tabs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .demo-label {
   color: var(--t-text-muted);
 }

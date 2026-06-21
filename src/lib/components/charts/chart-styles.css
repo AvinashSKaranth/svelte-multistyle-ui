@@ -7,16 +7,24 @@
   border-radius: var(--t-card-radius);
   border: var(--t-border-width) solid var(--t-card-border-color);
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* block (not flex) so Chart.js can measure the container cleanly. A flex
+     container with the canvas as a flex item creates a sizing circular
+     dependency — the canvas's size affects the container's size, so the
+     ResizeObserver misreads on the first layout pass and computes a too-small
+     chartArea; Chart.js then draws bars but hides the axis labels/ticks for
+     lack of room. On remount the cached layout reads correctly. */
+  display: block;
   padding: 12px;
-  transition: all 0.3s ease;
+  /* Only transition cosmetic props — transitioning width/height/padding makes
+     the container resize during Chart.js's entry animation, which trips the
+     ResizeObserver mid-animation and stalls it / hides scale labels. */
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
+/* Let Chart.js own the canvas display size (responsive + maintainAspectRatio:
+   false). Forcing width/height with !important fights Chart.js's own sizing and
+   breaks retina/DPR handling. */
 .s-chart canvas {
-  width: 100% !important;
-  height: 100% !important;
-  max-height: 100%;
+  display: block;
 }
 
 /* ===== DOWNLOAD BUTTON ===== */
@@ -147,4 +155,20 @@
   backdrop-filter: blur(24px) saturate(1.6);
   -webkit-backdrop-filter: blur(24px) saturate(1.6);
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+/* Liquid-glass surfaces force light text (see app.css), so the default
+   download button (color: var(--t-text-hint) on a --t-surface-tinted bg) goes
+   white-on-white in light mode. Give it a dark translucent glass + white icon
+   that reads in both light and dark. */
+.s-chart-liquid-glass .s-chart-download-btn {
+  background: rgba(0, 0, 0, 0.28);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px) saturate(1.4);
+  -webkit-backdrop-filter: blur(8px) saturate(1.4);
+}
+.s-chart-liquid-glass .s-chart-download-btn:hover,
+.s-chart-liquid-glass .s-chart-download-btn:focus-visible {
+  background: rgba(0, 0, 0, 0.42);
+  color: #ffffff;
 }

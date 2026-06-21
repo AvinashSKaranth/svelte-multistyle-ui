@@ -1,6 +1,7 @@
 <script>
   import "./datepicker-styles.css";
   import { defaults, iconClass } from "../config.js";
+  import { portal } from "../actions/portal.js";
   import dayjs from "dayjs";
   import customParseFormat from "dayjs/plugin/customParseFormat";
   dayjs.extend(customParseFormat);
@@ -189,23 +190,56 @@
 
   // Click outside
   let wrapperEl;
+  let overlayEl;
 
   function docClick(e) {
-    if (open && wrapperEl && !wrapperEl.contains(e.target)) {
+    // overlay is portaled to <body>, so it is no longer inside wrapperEl —
+    // treat it as part of the picker for outside-click purposes.
+    if (open && wrapperEl && !wrapperEl.contains(e.target) &&
+        !(overlayEl && overlayEl.contains(e.target))) {
       open = false;
     }
   }
 
-  $effect(() => {
-    if (open) {
-      document.addEventListener("mousedown", docClick);
-      document.addEventListener("touchstart", docClick);
-      checkMobile();
-      return () => {
-        document.removeEventListener("mousedown", docClick);
-        document.removeEventListener("touchstart", docClick);
-      };
+  // Position the portaled overlay (fixed) anchored to the input. On mobile it
+  // is a fullscreen sheet driven by CSS, so anchoring is skipped.
+  function positionOverlay() {
+    if (!overlayEl || !wrapperEl || isMobile) return;
+    const rect = wrapperEl.getBoundingClientRect();
+    const ovW = overlayEl.offsetWidth || 320;
+    const ovH = overlayEl.offsetHeight || 360;
+    let left = rect.left;
+    const maxLeft = window.innerWidth - ovW - 8;
+    if (left > maxLeft) left = maxLeft;
+    if (left < 8) left = 8;
+    let top = rect.bottom + 4;
+    // Flip above the field if it would overflow the bottom of the viewport.
+    if (top + ovH > window.innerHeight - 8 && rect.top - ovH - 4 > 8) {
+      top = rect.top - ovH - 4;
     }
+    overlayEl.style.position = "fixed";
+    overlayEl.style.left = `${left}px`;
+    overlayEl.style.top = `${top}px`;
+    overlayEl.style.zIndex = "10000";
+  }
+
+  $effect(() => {
+    if (!open) return;
+    document.addEventListener("mousedown", docClick);
+    document.addEventListener("touchstart", docClick);
+    checkMobile();
+    // Re-anchor on any scroll (capture: catches scroll inside ancestor cards)
+    // and on resize; reposition once the portaled overlay is mounted.
+    const reposition = () => positionOverlay();
+    window.addEventListener("scroll", reposition, true);
+    window.addEventListener("resize", reposition);
+    queueMicrotask(reposition);
+    return () => {
+      document.removeEventListener("mousedown", docClick);
+      document.removeEventListener("touchstart", docClick);
+      window.removeEventListener("scroll", reposition, true);
+      window.removeEventListener("resize", reposition);
+    };
   });
 
   // Init from value
@@ -287,8 +321,10 @@
 
   {#if open}
     <div
-      class="s-datepicker-overlay"
+      class="s-datepicker-overlay {styleClass} {themeClass}"
       class:s-datepicker-mobile={isMobile}
+      bind:this={overlayEl}
+      use:portal
       role="dialog"
       aria-modal="true"
       aria-label="Date picker"
