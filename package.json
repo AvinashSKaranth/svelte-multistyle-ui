@@ -6,6 +6,9 @@
   "license": "MIT",
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "svelte-multistyle-ui": "cli/bin.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -20,12 +23,18 @@
   },
   "files": [
     "dist",
-    "!dist/**/*.test.*"
+    "!dist/**/*.test.*",
+    "cli",
+    "!cli/**/*.test.*",
+    "!cli/test.js"
   ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "gen:theme": "node scripts/gen-theme.js",
+    "gen": "node cli/bin.js generate",
+    "gen:sample": "node cli/bin.js generate --input cli/fixtures/sample.yaml --output ./src/routes/demo.svelte --dry-run",
+    "test:gen": "node cli/test.js",
     "build:lib": "pnpm run gen:theme && svelte-package -i src/lib",
     "preview": "vite preview",
     "prepublishOnly": "pnpm run build:lib",
@@ -64,6 +73,7 @@
   "dependencies": {
     "@thisux/sveltednd": "^0.4.1",
     "dayjs": "^1.11.21",
+    "js-yaml": "^4.1.0",
     "prismjs": "^1.30.0"
   }
 }

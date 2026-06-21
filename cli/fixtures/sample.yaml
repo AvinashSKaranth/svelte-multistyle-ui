@@ -1,0 +1,128 @@
+style: material
+theme: default
+mode: system
+
+state:
+  - { name: username,     type: string, default: "" }
+  - { name: bio,          type: string, default: "Hello" }
+  - { name: count,         type: number, default: 0 }
+  - { name: rating,        type: number, default: 3 }
+  - { name: agreed,        type: bool,   default: false }
+  - { name: tags,          type: array,  default: [] }
+  - { name: selectedFruit, type: string, default: "" }
+  - { name: selectedTags,  type: array,  default: [] }
+  - { name: activeTab,      type: number, default: 0 }
+  - { name: modalOpen,      type: bool,   default: false }
+  - { name: popoverOpen,    type: bool,   default: false }
+
+# The page body — a tree of component nodes.
+# - `bind: varName`        shorthand: binds the component's primary bindable to a state var
+# - `bind: { prop: var }`  explicit named bindable
+# - `props: { k: v }`      scalars become attributes; "{var}" is a reactive ref;
+#                          a YAML sequence becomes an inline JS array literal
+# - `children: [...]`      nested nodes (kind: children | container)
+# - `snippets:`           named snippets (kind: multi-snippet, e.g. Popover)
+body:
+  - component: Card
+    props: { padding: md, elevated: true, class: space-y-3 }
+    children:
+      - component: Row
+        props: { gap: 16px }
+        children:
+          - component: Input
+            bind: username
+            props: { label: Username, placeholder: Enter name }
+          - component: Button
+            props: { preset: primary, icon: save }
+            children: Save
+
+      - component: Select
+        bind: selectedFruit
+        props:
+          label: Pick a fruit
+          options:
+            - { value: apple, label: Apple }
+            - { value: banana, label: Banana }
+            - { value: cherry, label: Cherry }
+
+      - component: MultiSelect
+        bind: { selected: selectedTags }
+        props:
+          label: Tags
+          options:
+            - { value: svelte, label: Svelte }
+            - { value: ts, label: TypeScript }
+            - { value: css, label: CSS }
+
+      - component: Rating
+        bind: rating
+
+      - component: Checkbox
+        bind: agreed
+        props: { label: I agree to the terms }
+
+      - component: Textarea
+        bind: bio
+        props: { label: Bio, placeholder: Tell us about yourself }
+
+      - component: Tabs
+        bind: activeTab
+        props:
+          tabs:
+            - { id: 0, label: Profile }
+            - { id: 1, label: Settings }
+
+      - component: BarChart
+        props:
+          title: Quarterly Revenue
+          xAxisLabel: Quarter
+          yAxisLabel: Revenue
+          downloadable: true
+          data:
+            - { label: q1, value: 12 }
+            - { label: q2, value: 19 }
+            - { label: q3, value: 8 }
+            - { label: q4, value: 15 }
+
+      - component: Table
+        props:
+          data:
+            - { id: 1, name: Alice, role: Admin }
+            - { id: 2, name: Bob, role: User }
+            - { id: 3, name: Cara, role: Editor }
+
+      - component: Stepper
+        props:
+          steps:
+            - { label: Account }
+            - { label: Profile }
+            - { label: Confirm }
+
+      - component: Breadcrumb
+        props:
+          items:
+            - { label: Home, href: "/" }
+            - { label: Demo, href: "/demo" }
+
+      - component: Button
+        props: { preset: primary }
+        # v1 limitation: event handlers like onclick are not expressible in YAML.
+        # Add onclick={() => modalOpen = true} by hand after generation.
+        children: Open modal
+
+      - component: Modal
+        bind: { open: modalOpen }
+        props: { title: Hello there }
+        children:
+          - text: "Modal body content goes here."
+
+      - component: Popover
+        bind: { open: popoverOpen }
+        props: { position: top }
+        snippets:
+          children:
+            - component: Button
+              props: { variant: outlined }
+              children: Hover me
+          content:
+            - text: "Popover body text"
