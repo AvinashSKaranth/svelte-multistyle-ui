@@ -1,58 +1,58 @@
 <script>
-  import Input from "./lib/components/Input.svelte";
-  import Button from "./lib/components/Button.svelte";
-  import IconButton from "./lib/components/IconButton.svelte";
-  import Textarea from "./lib/components/Textarea.svelte";
-  import Select from "./lib/components/Select.svelte";
-  import MultiSelect from "./lib/components/MultiSelect.svelte";
-  import Checkbox from "./lib/components/Checkbox.svelte";
-  import Radio from "./lib/components/Radio.svelte";
-  import Toggle from "./lib/components/Toggle.svelte";
-  import Slider from "./lib/components/Slider.svelte";
-  import FileUpload from "./lib/components/FileUpload.svelte";
-  import DatePicker from "./lib/components/DatePicker.svelte";
-  import Card from "./lib/components/Card.svelte";
-  import Divider from "./lib/components/Divider.svelte";
-  import Tabs from "./lib/components/Tabs.svelte";
-  import Carousel from "./lib/components/Carousel.svelte";
-  import Accordion from "./lib/components/Accordion.svelte";
-  import Modal from "./lib/components/Modal.svelte";
-  import Breadcrumb from "./lib/components/Breadcrumb.svelte";
-  import Pagination from "./lib/components/Pagination.svelte";
-  import Stepper from "./lib/components/Stepper.svelte";
-  import Avatar from "./lib/components/Avatar.svelte";
-  import Tooltip from "./lib/components/Tooltip.svelte";
-  import ProgressBar from "./lib/components/ProgressBar.svelte";
-  import Table from "./lib/components/Table.svelte";
-  import Alert from "./lib/components/Alert.svelte";
-  import Spinner from "./lib/components/Spinner.svelte";
-  import Skeleton from "./lib/components/Skeleton.svelte";
-  import FAB from "./lib/components/FAB.svelte";
-  import Toast from "./lib/components/Toast.svelte";
-  import SortableList from "./lib/components/SortableList.svelte";
-  import DropdownMenu from "./lib/components/DropdownMenu.svelte";  import Popover from "./lib/components/Popover.svelte";
-  import Drawer from "./lib/components/Drawer.svelte";
-  import Chip from "./lib/components/Chip.svelte";
-  import ButtonGroup from "./lib/components/ButtonGroup.svelte";
-  import Rating from "./lib/components/Rating.svelte";
-  import CommandPalette from "./lib/components/CommandPalette.svelte";
-  import Row from "./lib/components/Row.svelte";
-  import Column from "./lib/components/Column.svelte";
-  import Grid from "./lib/components/Grid.svelte";
+  import Input from "../lib/components/Input.svelte";
+  import Button from "../lib/components/Button.svelte";
+  import IconButton from "../lib/components/IconButton.svelte";
+  import Textarea from "../lib/components/Textarea.svelte";
+  import Select from "../lib/components/Select.svelte";
+  import MultiSelect from "../lib/components/MultiSelect.svelte";
+  import Checkbox from "../lib/components/Checkbox.svelte";
+  import Radio from "../lib/components/Radio.svelte";
+  import Toggle from "../lib/components/Toggle.svelte";
+  import Slider from "../lib/components/Slider.svelte";
+  import FileUpload from "../lib/components/FileUpload.svelte";
+  import DatePicker from "../lib/components/DatePicker.svelte";
+  import Card from "../lib/components/Card.svelte";
+  import Divider from "../lib/components/Divider.svelte";
+  import Tabs from "../lib/components/Tabs.svelte";
+  import Carousel from "../lib/components/Carousel.svelte";
+  import Accordion from "../lib/components/Accordion.svelte";
+  import Modal from "../lib/components/Modal.svelte";
+  import Breadcrumb from "../lib/components/Breadcrumb.svelte";
+  import Pagination from "../lib/components/Pagination.svelte";
+  import Stepper from "../lib/components/Stepper.svelte";
+  import Avatar from "../lib/components/Avatar.svelte";
+  import Tooltip from "../lib/components/Tooltip.svelte";
+  import ProgressBar from "../lib/components/ProgressBar.svelte";
+  import Table from "../lib/components/Table.svelte";
+  import Alert from "../lib/components/Alert.svelte";
+  import Spinner from "../lib/components/Spinner.svelte";
+  import Skeleton from "../lib/components/Skeleton.svelte";
+  import FAB from "../lib/components/FAB.svelte";
+  import Toast from "../lib/components/Toast.svelte";
+  import SortableList from "../lib/components/SortableList.svelte";
+  import DropdownMenu from "../lib/components/DropdownMenu.svelte";  import Popover from "../lib/components/Popover.svelte";
+  import Drawer from "../lib/components/Drawer.svelte";
+  import Chip from "../lib/components/Chip.svelte";
+  import ButtonGroup from "../lib/components/ButtonGroup.svelte";
+  import Rating from "../lib/components/Rating.svelte";
+  import CommandPalette from "../lib/components/CommandPalette.svelte";
+  import Row from "../lib/components/Row.svelte";
+  import Column from "../lib/components/Column.svelte";
+  import Grid from "../lib/components/Grid.svelte";
 
-  import { themes as presetConfigs, generateThemeCss, applyThemeToElement, invertHex } from "./lib/themes/index.js";
+  import { themes as presetConfigs, generateThemeCss, applyThemeToElement, invertHex } from "../lib/themes/index.js";
 
   // Chart Components
-  import BarChart from "./lib/components/charts/BarChart.svelte";
-  import LineChart from "./lib/components/charts/LineChart.svelte";
-  import PieChart from "./lib/components/charts/PieChart.svelte";
-  import DoughnutChart from "./lib/components/charts/DoughnutChart.svelte";
-  import RadarChart from "./lib/components/charts/RadarChart.svelte";
-  import PolarAreaChart from "./lib/components/charts/PolarAreaChart.svelte";
-  import ScatterChart from "./lib/components/charts/ScatterChart.svelte";
-  import BubbleChart from "./lib/components/charts/BubbleChart.svelte";
-  import StackedBarChart from "./lib/components/charts/StackedBarChart.svelte";
-  import StackedLineChart from "./lib/components/charts/StackedLineChart.svelte";
+  import BarChart from "../lib/components/charts/BarChart.svelte";
+  import LineChart from "../lib/components/charts/LineChart.svelte";
+  import PieChart from "../lib/components/charts/PieChart.svelte";
+  import DoughnutChart from "../lib/components/charts/DoughnutChart.svelte";
+  import RadarChart from "../lib/components/charts/RadarChart.svelte";
+  import PolarAreaChart from "../lib/components/charts/PolarAreaChart.svelte";
+  import ScatterChart from "../lib/components/charts/ScatterChart.svelte";
+  import BubbleChart from "../lib/components/charts/BubbleChart.svelte";
+  import StackedBarChart from "../lib/components/charts/StackedBarChart.svelte";
+  import StackedLineChart from "../lib/components/charts/StackedLineChart.svelte";
 
   import Prism from "prismjs";
 
@@ -60,7 +60,8 @@
     return Prism.highlight(code, Prism.languages.markup, "markup");
   }
 
-  import { defaults, initMultistyleUI } from "./lib/config.js";
+  import { defaults, initMultistyleUI } from "../lib/config.js";
+  import { browser } from "$app/environment";
 
   const styles = [
     { value: "material", label: "Material Design" },
@@ -91,7 +92,7 @@
     { value: "custom", label: "Custom" },
   ];
 
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(browser ? window.location.search : "");
   let selectedStyle = $state(urlParams.get("style") || "material");
   let selectedTheme = $state(urlParams.get("theme") || "default");
   let mode = $state(urlParams.get("mode") || "system");

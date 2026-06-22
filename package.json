@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/rename-bundle.js",
     "gen:theme": "node scripts/gen-theme.js",
     "gen": "node cli/bin.js generate",
     "gen:sample": "node cli/bin.js generate --input cli/fixtures/sample.yaml --output ./src/routes/demo.svelte --dry-run",
@@ -49,6 +49,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",
+    "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/kit": "^2.66.0",
     "@sveltejs/package": "^2.5.7",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.2",

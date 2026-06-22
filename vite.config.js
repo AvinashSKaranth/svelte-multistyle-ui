@@ -1,26 +1,10 @@
 import { defineConfig } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
+import { sveltekit } from "@sveltejs/kit/vite";
 
 // https://vite.dev/config/
+// All kit config (adapter, output.bundleStrategy, compilerOptions) lives in
+// svelte.config.js — passing kit options here would make SvelteKit ignore that file.
 export default defineConfig({
-  plugins: [svelte(), tailwindcss()],
-  // Relative asset paths so the static export works from any subfolder/host.
-  base: "./",
-  build: {
-    outDir: "docs",
-    emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        // Plain, stable filenames (no content hash) so the static export
-        // is easy to host and reference directly.
-        entryFileNames: "script.js",
-        chunkFileNames: "chunks/[name].js",
-        assetFileNames: (assetInfo) =>
-          assetInfo.name && assetInfo.name.endsWith(".css")
-            ? "style.css"
-            : "assets/[name][extname]",
-      },
-    },
-  },
+  plugins: [tailwindcss(), sveltekit()],
 });
