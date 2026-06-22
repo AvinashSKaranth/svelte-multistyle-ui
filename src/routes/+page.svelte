@@ -1462,7 +1462,7 @@ import "./custom-theme.css";
               >{text}</div>
             {/snippet}
             <Column gap="18px" fill>
-              <p class="demo-label text-lg font-bold font-semibold uppercase tracking-wide" style="margin:0;">Row</p>
+              <p class="demo-label text-lg font-bold uppercase tracking-wide" style="margin:0;">Row</p>
               <Grid columns={3} gap="16px" fill>
                 <Column gap="12px" fill>
                   <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Row — align (cross-axis)</p>
@@ -1584,7 +1584,7 @@ import "./custom-theme.css";
                 </Column>
               </Grid>
 
-              <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Column</p>
+              <p class="demo-label text-lg font-bold uppercase tracking-wide" style="margin:0;">Column</p>
               <Grid columns={3} gap="16px" fill>
                 <Column gap="12px" fill>
                   <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Column — align (cross-axis = horizontal)</p>
@@ -1669,7 +1669,7 @@ import "./custom-theme.css";
               <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid</p>
               <Grid columns={3} gap="16px" fill>
                 <Column gap="12px" fill>
-                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid — align (align-items, cross-axis)</p>
+                  <p class="demo-label text-lg font-bold uppercase tracking-wide" style="margin:0;">Grid — align (align-items, cross-axis)</p>
                   {@render lbl("align=start — cells pin to top of their track")}
                   <div class="layout-stage">
                     <Grid columns={3} gap="8px" align="start" class="h-24" fill>
