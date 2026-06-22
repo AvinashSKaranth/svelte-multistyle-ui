@@ -22,7 +22,6 @@ export function emitPage(doc, cfg) {
   const sections = [
     emitImports(used),
     emitState(state),
-    emitDarkEffect(cfg.mode),
     emitOnMount(),
   ].filter((s) => s.length);
 
@@ -37,12 +36,11 @@ export function emitPage(doc, cfg) {
 
 function emitImports(used) {
   const components = [...used].sort();
-  const lines = ['import { onMount } from "svelte";'];
+  const lines = [];
   if (components.length) {
+    lines.push(`import { onMount } from "svelte";`);
     lines.push(`import { ${components.join(", ")} } from "svelte-multistyle-ui";`);
   }
-  // initMultistyleUI is intentionally NOT imported here — the consuming app
-  // sets global style/theme/mode once in its layout, not per-page.
   return lines;
 }
 
@@ -142,7 +140,7 @@ function emitNode(node, depth, used) {
         let inner = "";
         if (typeof content === "string") inner = `${IND.repeat(depth + 2)}${content}`;
         else if (Array.isArray(content)) inner = emitBody(content, depth + 2, used);
-        return `${indent}${IND}{#snippet ${sn}()}\n${inner}\n${indent}${IND}{/snippet}`;
+        return `${indent}${IND}{#snippet ${sn}()}\n${inner ? inner + "\n" : ""}${indent}${IND}{/snippet}`;
       });
       return `${open}>\n${blocks.join("\n")}\n${indent}</${name}>`;
     }

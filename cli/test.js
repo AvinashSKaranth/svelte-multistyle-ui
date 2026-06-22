@@ -65,14 +65,11 @@ const outFile = path.join(TMP, "src", "routes", "demo", "+page.svelte");
   ok("has <script> block", code.includes("<script>") && code.includes("</script>"));
   ok("imports components from published package", code.includes('from "svelte-multistyle-ui"'));
   ok("imports onMount", code.includes('import { onMount } from "svelte"'));
-  ok("has onMount stub with TODO", code.includes("onMount(() => {") && code.includes("// TODO: add setup logic here"));
   ok("does NOT import/call initMultistyleUI (layout's job)", !code.includes("initMultistyleUI"));
   ok("declares $state vars", code.includes("let username = $state(\"\")"));
   ok("emits bind:value", code.includes("bind:value={username}"));
-  ok("emits bind:open for Modal", code.includes("bind:open={modalOpen}"));
-  ok("emits Popover snippets", code.includes("{#snippet children()}") && code.includes("{#snippet content()}"));
+  ok("does NOT emit mode/effect logic", !code.includes('classList.toggle("dark"'));
   ok("inline array literal for options", code.includes('options={[{value:"apple"'));
-  ok("emits dark/light $effect", code.includes('classList.toggle("dark"') && code.includes('classList.toggle("light"'));
 }
 
 // 4. generated Svelte compiles ---------------------------------------------
@@ -93,7 +90,29 @@ const outFile = path.join(TMP, "src", "routes", "demo", "+page.svelte");
   ok("dry-run matches golden file", r.code === 0 && r.stdout === golden, "round-trip drift");
 }
 
-// 6. bad inputs -------------------------------------------------------------
+// 6. compact DSL features ---------------------------------------------------
+{
+  const r = runCli(`generate --input "${SAMPLE}" --output dummy --dry-run`);
+  ok("auto-binds Input", r.stdout.includes("bind:value={username}"));
+  ok("auto-binds Select", r.stdout.includes("bind:value={selectedFruit}"));
+  ok("auto-binds MultiSelect", r.stdout.includes("bind:selected={selectedHobbies}"));
+  ok("converts string options", r.stdout.includes('value:"apple",label:"Apple"'));
+  ok("fakes missing Table data", r.stdout.includes('name:"Alice"'));
+}
+
+// 6b. fake data injection when options / chart data are omitted ----------------
+{
+  const fakeOptionsYaml = path.join(TMP, "fake-options.yaml");
+  fs.writeFileSync(
+    fakeOptionsYaml,
+    "Card:\n  - Row:\n      - Select:\n      - BarChart:\n"
+  );
+  const r = runCli(`generate --input "${fakeOptionsYaml}" --output dummy --dry-run`);
+  ok("fakes missing options", r.stdout.includes('value:"opt1",label:"Option 1"'));
+  ok("fakes missing chart data", r.stdout.includes('label:"q1"'));
+}
+
+// 7. bad inputs -------------------------------------------------------------
 {
   const unknown = path.join(TMP, "unknown.yaml");
   fs.writeFileSync(unknown, "body:\n  - component: NotAComponent\n");
@@ -111,11 +130,11 @@ const outFile = path.join(TMP, "src", "routes", "demo", "+page.svelte");
   ok("missing --input exits non-zero", missingInput.code !== 0);
 }
 
-// 7. CLI overrides ----------------------------------------------------------
+// 8. CLI overrides are no longer emitted in generated script -----------------
 {
   const r = runCli(`generate --input "${SAMPLE}" --output dummy --dry-run --mode dark`);
   ok("CLI override exits 0", r.code === 0, r.stderr);
-  ok("mode override applied", r.stdout.includes('MODE = "dark"'));
+  ok("mode override not emitted", !r.stdout.includes('MODE = "dark"'));
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });

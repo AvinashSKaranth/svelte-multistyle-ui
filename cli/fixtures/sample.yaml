@@ -1,128 +1,254 @@
-style: material
-theme: default
-mode: system
+- Card:
+    - Row:
+        - Input:
+            label: Username
+            placeholder: Enter name
 
-state:
-  - { name: username,     type: string, default: "" }
-  - { name: bio,          type: string, default: "Hello" }
-  - { name: count,         type: number, default: 0 }
-  - { name: rating,        type: number, default: 3 }
-  - { name: agreed,        type: bool,   default: false }
-  - { name: tags,          type: array,  default: [] }
-  - { name: selectedFruit, type: string, default: "" }
-  - { name: selectedTags,  type: array,  default: [] }
-  - { name: activeTab,      type: number, default: 0 }
-  - { name: modalOpen,      type: bool,   default: false }
-  - { name: popoverOpen,    type: bool,   default: false }
+- Card:
+    - Row:
+        - Input:
+            label: Email
+            placeholder: Enter email
 
-# The page body — a tree of component nodes.
-# - `bind: varName`        shorthand: binds the component's primary bindable to a state var
-# - `bind: { prop: var }`  explicit named bindable
-# - `props: { k: v }`      scalars become attributes; "{var}" is a reactive ref;
-#                          a YAML sequence becomes an inline JS array literal
-# - `children: [...]`      nested nodes (kind: children | container)
-# - `snippets:`           named snippets (kind: multi-snippet, e.g. Popover)
-body:
-  - component: Card
-    props: { padding: md, elevated: true, class: space-y-3 }
-    children:
-      - component: Row
-        props: { gap: 16px }
-        children:
-          - component: Input
-            bind: username
-            props: { label: Username, placeholder: Enter name }
-          - component: Button
-            props: { preset: primary, icon: save }
-            children: Save
+- Card:
+    - Row:
+        - Button:
+            label: Submit
 
-      - component: Select
-        bind: selectedFruit
-        props:
-          label: Pick a fruit
-          options:
-            - { value: apple, label: Apple }
-            - { value: banana, label: Banana }
-            - { value: cherry, label: Cherry }
+- Card:
+    - Row:
+        - Select:
+            placeholder: Fruit
+            options:
+              - value: apple
+                label: Apple
+              - value: banana
+                label: Banana
+              - value: cherry
+                label: Cherry
 
-      - component: MultiSelect
-        bind: { selected: selectedTags }
-        props:
-          label: Tags
-          options:
-            - { value: svelte, label: Svelte }
-            - { value: ts, label: TypeScript }
-            - { value: css, label: CSS }
+- Card:
+    - Row:
+        - MultiSelect:
+            placeholder: Hobbies
+            options:
+              - value: reading
+                label: Reading
+              - value: traveling
+                label: Traveling
+              - value: cooking
+                label: Cooking
 
-      - component: Rating
-        bind: rating
+- Card:
+    - Row:
+        - Textarea:
+            label: Bio
+            placeholder: Tell us about yourself
+            rows: 4
 
-      - component: Checkbox
-        bind: agreed
-        props: { label: I agree to the terms }
+- Card:
+    - Row:
+        - Checkbox:
+            label: Subscribe to newsletter
 
-      - component: Textarea
-        bind: bio
-        props: { label: Bio, placeholder: Tell us about yourself }
+- Card:
+    - Row:
+        - Toggle:
+            label: Enable notifications
 
-      - component: Tabs
-        bind: activeTab
-        props:
-          tabs:
-            - { id: 0, label: Profile }
-            - { id: 1, label: Settings }
+- Card:
+    - Row:
+        - Radio:
+            label: Plan A
+            value: plan-a
 
-      - component: BarChart
-        props:
-          title: Quarterly Revenue
-          xAxisLabel: Quarter
-          yAxisLabel: Revenue
-          downloadable: true
-          data:
-            - { label: q1, value: 12 }
-            - { label: q2, value: 19 }
-            - { label: q3, value: 8 }
-            - { label: q4, value: 15 }
+- Card:
+    - Row:
+        - Radio:
+            label: Plan B
+            value: plan-b
 
-      - component: Table
-        props:
-          data:
-            - { id: 1, name: Alice, role: Admin }
-            - { id: 2, name: Bob, role: User }
-            - { id: 3, name: Cara, role: Editor }
+- Card:
+    - Row:
+        - Slider:
+            label: Volume
+            min: 0
+            max: 100
 
-      - component: Stepper
-        props:
-          steps:
-            - { label: Account }
-            - { label: Profile }
-            - { label: Confirm }
+- Card:
+    - Row:
+        - DatePicker:
+            label: Start date
 
-      - component: Breadcrumb
-        props:
-          items:
-            - { label: Home, href: "/" }
-            - { label: Demo, href: "/demo" }
+- Card:
+    - Row:
+        - FileUpload:
+            label: Upload resume
 
-      - component: Button
-        props: { preset: primary }
-        # v1 limitation: event handlers like onclick are not expressible in YAML.
-        # Add onclick={() => modalOpen = true} by hand after generation.
-        children: Open modal
+- Card:
+    - Row:
+        - ButtonGroup:
+            items:
+              - value: grid
+                label: Grid
+              - value: list
+                label: List
 
-      - component: Modal
-        bind: { open: modalOpen }
-        props: { title: Hello there }
-        children:
-          - text: "Modal body content goes here."
+- Card:
+    - Row:
+        - Rating:
+            max: 5
 
-      - component: Popover
-        bind: { open: popoverOpen }
-        props: { position: top }
-        snippets:
-          children:
-            - component: Button
-              props: { variant: outlined }
-              children: Hover me
-          content:
-            - text: "Popover body text"
+- Card:
+    - Row:
+        - Chip:
+            children: Tag
+
+- Card:
+    - Row:
+        - IconButton:
+            icon: search
+            ariaLabel: Search
+
+- Card:
+    - Row:
+        - Tabs:
+            tabs:
+              - id: home
+                label: Home
+              - id: profile
+                label: Profile
+
+- Card:
+    - Row:
+        - Breadcrumb:
+            items:
+              - label: Home
+                href: /
+              - label: Products
+              - label: Details
+
+- Card:
+    - Row:
+        - Stepper:
+            steps:
+              - label: Cart
+              - label: Shipping
+              - label: Payment
+            current: 1
+
+- Card:
+    - Row:
+        - Pagination:
+            total: 100
+            perPage: 10
+
+- Card:
+    - Row:
+        - Accordion:
+            items:
+              - id: faq-1
+                title: What is this?
+                content: A multi-style UI library.
+              - id: faq-2
+                title: How do I use it?
+                content: Import components and pick a style.
+
+- Card:
+    - Row:
+        - DropdownMenu:
+            items:
+              - label: Edit
+              - label: Delete
+              - divider: true
+              - label: Share
+
+- Card:
+    - Row:
+        - Tooltip:
+            text: Hover tip
+            children: Info
+
+- Card:
+    - Row:
+        - Popover:
+            children: Trigger
+            content: Popover body
+
+- Card:
+    - Row:
+        - Alert:
+            preset: success
+            title: Done
+            children: Your changes were saved.
+
+- Card:
+    - Row:
+        - ProgressBar:
+            value: 60
+
+- Card:
+    - Row:
+        - Spinner:
+
+- Card:
+    - Row:
+        - Skeleton:
+
+- Card:
+    - Row:
+        - Divider:
+
+- Card:
+    - Row:
+        - Avatar:
+            src: ""
+            fallback: JD
+
+- Card:
+    - Row:
+        - Grid:
+            columns: 2
+            children: Grid cell
+
+- Card:
+    - Row:
+        - Column:
+            children: Column cell
+
+- Card:
+    - Row:
+        - Table:
+
+- Card:
+    - Row:
+        - BarChart:
+            title: Quarterly Revenue
+            xAxisLabel: Quarter
+            yAxisLabel: Revenue
+            downloadable: true
+
+- Card:
+    - Row:
+        - LineChart:
+            title: Trend
+
+- Card:
+    - Row:
+        - PieChart:
+            title: Share
+
+- Card:
+    - Row:
+        - DoughnutChart:
+            title: Distribution
+
+- Card:
+    - Row:
+        - RadarChart:
+            title: Radar
+
+- Card:
+    - Row:
+        - PolarAreaChart:
+            title: Polar

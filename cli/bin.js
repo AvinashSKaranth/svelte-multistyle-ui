@@ -38,6 +38,9 @@ Usage:
 
 Subcommands:
   generate            Convert a YAML file into a Svelte 5 route page.
+                      Supports the standard verbose schema, a proper nested
+                      YAML tree, and a compact indentation-based shorthand
+                      (all auto-detected).
 
 Options:
   --input <path>      YAML source file (required)
