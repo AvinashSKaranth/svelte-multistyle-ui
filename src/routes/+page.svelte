@@ -1461,342 +1461,338 @@ import "./custom-theme.css";
                 style={`padding:6px 10px;text-align:center;border-radius:6px;background:var(--t-card-surface);border:1px solid var(--t-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;${extra}`}
               >{text}</div>
             {/snippet}
-            <Column gap="14px" fill>
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Row — align (cross-axis)
-              </p>
-              {@render lbl("align=start — items pin to top")}
-              <div class="layout-stage">
-                <Row gap="8px" align="start" class="h-20" fill>
-                  {@render cell("A", "height:24px;")}
-                  {@render cell("B", "height:40px;")}
-                  {@render cell("C", "height:32px;")}
-                </Row>
-              </div>
-              {@render lbl("align=center — items centered vertically")}
-              <div class="layout-stage">
-                <Row gap="8px" align="center" class="h-20" fill>
-                  {@render cell("A", "height:24px;")}
-                  {@render cell("B", "height:40px;")}
-                  {@render cell("C", "height:32px;")}
-                </Row>
-              </div>
-              {@render lbl("align=end — items pin to bottom")}
-              <div class="layout-stage">
-                <Row gap="8px" align="end" class="h-20" fill>
-                  {@render cell("A", "height:24px;")}
-                  {@render cell("B", "height:40px;")}
-                  {@render cell("C", "height:32px;")}
-                </Row>
-              </div>
-              {@render lbl("align=baseline — text baselines line up")}
-              <div class="layout-stage">
-                <Row gap="8px" align="baseline" class="h-20" fill>
-                  {@render cell("A", "height:24px;font-size:10px;")}
-                  {@render cell("B", "height:40px;font-size:18px;")}
-                  {@render cell("C", "height:32px;font-size:14px;")}
-                </Row>
-              </div>
-
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Row — justify (main-axis)
-              </p>
-              {@render lbl("justify=start")}
-              <div class="layout-stage">
-                <Row gap="8px" justify="start" fill>
-                  {@render cell("1", "width:48px;")}
-                  {@render cell("2", "width:48px;")}
-                  {@render cell("3", "width:48px;")}
-                </Row>
-              </div>
-              {@render lbl("justify=center")}
-              <div class="layout-stage">
-                <Row gap="8px" justify="center" fill>
-                  {@render cell("1", "width:48px;")}
-                  {@render cell("2", "width:48px;")}
-                  {@render cell("3", "width:48px;")}
-                </Row>
-              </div>
-              {@render lbl("justify=end")}
-              <div class="layout-stage">
-                <Row gap="8px" justify="end" fill>
-                  {@render cell("1", "width:48px;")}
-                  {@render cell("2", "width:48px;")}
-                  {@render cell("3", "width:48px;")}
-                </Row>
-              </div>
-              {@render lbl("justify=between — max space between")}
-              <div class="layout-stage">
-                <Row gap="8px" justify="between" fill>
-                  {@render cell("1", "width:48px;")}
-                  {@render cell("2", "width:48px;")}
-                  {@render cell("3", "width:48px;")}
-                </Row>
-              </div>
-              {@render lbl("justify=around")}
-              <div class="layout-stage">
-                <Row gap="8px" justify="around" fill>
-                  {@render cell("1", "width:48px;")}
-                  {@render cell("2", "width:48px;")}
-                  {@render cell("3", "width:48px;")}
-                </Row>
-              </div>
-              {@render lbl("justify=evenly")}
-              <div class="layout-stage">
-                <Row gap="8px" justify="evenly" fill>
-                  {@render cell("1", "width:48px;")}
-                  {@render cell("2", "width:48px;")}
-                  {@render cell("3", "width:48px;")}
-                </Row>
-              </div>
-
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Row — fill &amp; wrap
-              </p>
-              {@render lbl("fill=false — Row shrinks to content width")}
-              <div class="layout-stage">
-                <Row gap="8px">
-                  {@render cell("A", "width:60px;")}
-                  {@render cell("B", "width:60px;")}
-                  {@render cell("C", "width:60px;")}
-                </Row>
-              </div>
-              {@render lbl("fill=true — Row stretches to 100% width")}
-              <div class="layout-stage">
-                <Row gap="8px" fill justify="between">
-                  {@render cell("A", "width:60px;")}
-                  {@render cell("B", "width:60px;")}
-                  {@render cell("C", "width:60px;")}
-                </Row>
-              </div>
-              {@render lbl("wrap=true — items wrap to next line when out of room")}
-              <div class="layout-stage">
-                <Row gap="8px" wrap fill>
-                  {@render cell("1", "width:120px;height:36px;")}
-                  {@render cell("2", "width:120px;height:36px;")}
-                  {@render cell("3", "width:120px;height:36px;")}
-                  {@render cell("4", "width:120px;height:36px;")}
-                  {@render cell("5", "width:120px;height:36px;")}
-                  {@render cell("6", "width:120px;height:36px;")}
-                </Row>
-              </div>
-
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Column — align (cross-axis = horizontal)
-              </p>
-              {@render lbl("align=start — items pin left")}
-              <div class="layout-stage">
-                <Column gap="8px" align="start" fill>
-                  {@render cell("A", "width:80px;")}
-                  {@render cell("B", "width:120px;")}
-                  {@render cell("C", "width:60px;")}
+            <Column gap="18px" fill>
+              <p class="demo-label text-lg font-bold font-semibold uppercase tracking-wide" style="margin:0;">Row</p>
+              <Grid columns={3} gap="16px" fill>
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Row — align (cross-axis)</p>
+                  {@render lbl("align=start — items pin to top")}
+                  <div class="layout-stage">
+                    <Row gap="8px" align="start" class="h-20" fill>
+                      {@render cell("A", "height:24px;")}
+                      {@render cell("B", "height:40px;")}
+                      {@render cell("C", "height:32px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("align=center — items centered vertically")}
+                  <div class="layout-stage">
+                    <Row gap="8px" align="center" class="h-20" fill>
+                      {@render cell("A", "height:24px;")}
+                      {@render cell("B", "height:40px;")}
+                      {@render cell("C", "height:32px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("align=end — items pin to bottom")}
+                  <div class="layout-stage">
+                    <Row gap="8px" align="end" class="h-20" fill>
+                      {@render cell("A", "height:24px;")}
+                      {@render cell("B", "height:40px;")}
+                      {@render cell("C", "height:32px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("align=baseline — text baselines line up")}
+                  <div class="layout-stage">
+                    <Row gap="8px" align="baseline" class="h-20" fill>
+                      {@render cell("A", "height:24px;font-size:10px;")}
+                      {@render cell("B", "height:40px;font-size:18px;")}
+                      {@render cell("C", "height:32px;font-size:14px;")}
+                    </Row>
+                  </div>
                 </Column>
-              </div>
-              {@render lbl("align=center — items centered horizontally")}
-              <div class="layout-stage">
-                <Column gap="8px" align="center" fill>
-                  {@render cell("A", "width:80px;")}
-                  {@render cell("B", "width:120px;")}
-                  {@render cell("C", "width:60px;")}
-                </Column>
-              </div>
-              {@render lbl("align=end — items pin right")}
-              <div class="layout-stage">
-                <Column gap="8px" align="end" fill>
-                  {@render cell("A", "width:80px;")}
-                  {@render cell("B", "width:120px;")}
-                  {@render cell("C", "width:60px;")}
-                </Column>
-              </div>
-              {@render lbl("align=stretch — items fill cross axis (no fixed width)")}
-              <div class="layout-stage">
-                <Column gap="8px" align="stretch" fill>
-                  {@render cell("A", "")}
-                  {@render cell("B", "")}
-                  {@render cell("C", "")}
-                </Column>
-              </div>
 
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Column — justify (main-axis = vertical)
-              </p>
-              {@render lbl("justify=start (default)")}
-              <div class="layout-stage">
-                <Column gap="8px" justify="start" fill class="h-28">
-                  {@render cell("A", "width:80px;")}
-                  {@render cell("B", "width:80px;")}
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Row — justify (main-axis)</p>
+                  {@render lbl("justify=start")}
+                  <div class="layout-stage">
+                    <Row gap="8px" justify="start" fill>
+                      {@render cell("1", "width:48px;")}
+                      {@render cell("2", "width:48px;")}
+                      {@render cell("3", "width:48px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("justify=center")}
+                  <div class="layout-stage">
+                    <Row gap="8px" justify="center" fill>
+                      {@render cell("1", "width:48px;")}
+                      {@render cell("2", "width:48px;")}
+                      {@render cell("3", "width:48px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("justify=end")}
+                  <div class="layout-stage">
+                    <Row gap="8px" justify="end" fill>
+                      {@render cell("1", "width:48px;")}
+                      {@render cell("2", "width:48px;")}
+                      {@render cell("3", "width:48px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("justify=between — max space between")}
+                  <div class="layout-stage">
+                    <Row gap="8px" justify="between" fill>
+                      {@render cell("1", "width:48px;")}
+                      {@render cell("2", "width:48px;")}
+                      {@render cell("3", "width:48px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("justify=around")}
+                  <div class="layout-stage">
+                    <Row gap="8px" justify="around" fill>
+                      {@render cell("1", "width:48px;")}
+                      {@render cell("2", "width:48px;")}
+                      {@render cell("3", "width:48px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("justify=evenly")}
+                  <div class="layout-stage">
+                    <Row gap="8px" justify="evenly" fill>
+                      {@render cell("1", "width:48px;")}
+                      {@render cell("2", "width:48px;")}
+                      {@render cell("3", "width:48px;")}
+                    </Row>
+                  </div>
                 </Column>
-              </div>
-              {@render lbl("justify=center")}
-              <div class="layout-stage">
-                <Column gap="8px" justify="center" fill class="h-28">
-                  {@render cell("A", "width:80px;")}
-                  {@render cell("B", "width:80px;")}
+
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Row — fill &amp; wrap</p>
+                  {@render lbl("fill=false — Row shrinks to content width")}
+                  <div class="layout-stage">
+                    <Row gap="8px">
+                      {@render cell("A", "width:60px;")}
+                      {@render cell("B", "width:60px;")}
+                      {@render cell("C", "width:60px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("fill=true — Row stretches to 100% width")}
+                  <div class="layout-stage">
+                    <Row gap="8px" fill justify="between">
+                      {@render cell("A", "width:60px;")}
+                      {@render cell("B", "width:60px;")}
+                      {@render cell("C", "width:60px;")}
+                    </Row>
+                  </div>
+                  {@render lbl("wrap=true — items wrap to next line when out of room")}
+                  <div class="layout-stage">
+                    <Row gap="8px" wrap fill>
+                      {@render cell("1", "width:120px;height:36px;")}
+                      {@render cell("2", "width:120px;height:36px;")}
+                      {@render cell("3", "width:120px;height:36px;")}
+                      {@render cell("4", "width:120px;height:36px;")}
+                      {@render cell("5", "width:120px;height:36px;")}
+                      {@render cell("6", "width:120px;height:36px;")}
+                    </Row>
+                  </div>
                 </Column>
-              </div>
-              {@render lbl("justify=between — push to top &amp; bottom")}
-              <div class="layout-stage">
-                <Column gap="8px" justify="between" fill class="h-28">
-                  {@render cell("A", "width:80px;")}
-                  {@render cell("B", "width:80px;")}
+              </Grid>
+
+              <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Column</p>
+              <Grid columns={3} gap="16px" fill>
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Column — align (cross-axis = horizontal)</p>
+                  {@render lbl("align=start — items pin left")}
+                  <div class="layout-stage">
+                    <Column gap="8px" align="start" fill>
+                      {@render cell("A", "width:80px;")}
+                      {@render cell("B", "width:120px;")}
+                      {@render cell("C", "width:60px;")}
+                    </Column>
+                  </div>
+                  {@render lbl("align=center — items centered horizontally")}
+                  <div class="layout-stage">
+                    <Column gap="8px" align="center" fill>
+                      {@render cell("A", "width:80px;")}
+                      {@render cell("B", "width:120px;")}
+                      {@render cell("C", "width:60px;")}
+                    </Column>
+                  </div>
+                  {@render lbl("align=end — items pin right")}
+                  <div class="layout-stage">
+                    <Column gap="8px" align="end" fill>
+                      {@render cell("A", "width:80px;")}
+                      {@render cell("B", "width:120px;")}
+                      {@render cell("C", "width:60px;")}
+                    </Column>
+                  </div>
+                  {@render lbl("align=stretch — items fill cross axis (no fixed width)")}
+                  <div class="layout-stage">
+                    <Column gap="8px" align="stretch" fill>
+                      {@render cell("A", "")}
+                      {@render cell("B", "")}
+                      {@render cell("C", "")}
+                    </Column>
+                  </div>
                 </Column>
-              </div>
 
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Grid — align (align-items, cross-axis)
-              </p>
-              {@render lbl("align=start — cells pin to top of their track")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" align="start" class="h-24" fill>
-                  {@render cell("1", "height:28px;")}
-                  {@render cell("2", "height:28px;")}
-                  {@render cell("3", "height:28px;")}
-                  {@render cell("4", "height:28px;")}
-                  {@render cell("5", "height:28px;")}
-                  {@render cell("6", "height:28px;")}
-                </Grid>
-              </div>
-              {@render lbl("align=center")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" align="center" class="h-24" fill>
-                  {@render cell("1", "height:28px;")}
-                  {@render cell("2", "height:28px;")}
-                  {@render cell("3", "height:28px;")}
-                  {@render cell("4", "height:28px;")}
-                  {@render cell("5", "height:28px;")}
-                  {@render cell("6", "height:28px;")}
-                </Grid>
-              </div>
-              {@render lbl("align=end — cells pin to bottom of their track")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" align="end" class="h-24" fill>
-                  {@render cell("1", "height:28px;")}
-                  {@render cell("2", "height:28px;")}
-                  {@render cell("3", "height:28px;")}
-                  {@render cell("4", "height:28px;")}
-                  {@render cell("5", "height:28px;")}
-                  {@render cell("6", "height:28px;")}
-                </Grid>
-              </div>
-              {@render lbl("align=stretch — cells fill their track (no fixed height)")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" align="stretch" class="h-24" fill>
-                  {@render cell("1", "")}
-                  {@render cell("2", "")}
-                  {@render cell("3", "")}
-                </Grid>
-              </div>
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Column — justify (main-axis = vertical)</p>
+                  {@render lbl("justify=start (default)")}
+                  <div class="layout-stage">
+                    <Column gap="8px" justify="start" fill class="h-28">
+                      {@render cell("A", "width:80px;")}
+                      {@render cell("B", "width:80px;")}
+                    </Column>
+                  </div>
+                  {@render lbl("justify=center")}
+                  <div class="layout-stage">
+                    <Column gap="8px" justify="center" fill class="h-28">
+                      {@render cell("A", "width:80px;")}
+                      {@render cell("B", "width:80px;")}
+                    </Column>
+                  </div>
+                  {@render lbl("justify=between — push to top &amp; bottom")}
+                  <div class="layout-stage">
+                    <Column gap="8px" justify="between" fill class="h-28">
+                      {@render cell("A", "width:80px;")}
+                      {@render cell("B", "width:80px;")}
+                    </Column>
+                  </div>
+                </Column>
 
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Grid — justify (justify-items, within each cell's column track)
-              </p>
-              {@render lbl("justify=start — cells pin left")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" justify="start" fill>
-                  {@render cell("1", "width:50px;")}
-                  {@render cell("2", "width:50px;")}
-                  {@render cell("3", "width:50px;")}
-                </Grid>
-              </div>
-              {@render lbl("justify=center — cells centered in track")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" justify="center" fill>
-                  {@render cell("1", "width:50px;")}
-                  {@render cell("2", "width:50px;")}
-                  {@render cell("3", "width:50px;")}
-                </Grid>
-              </div>
-              {@render lbl("justify=end — cells pin right")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" justify="end" fill>
-                  {@render cell("1", "width:50px;")}
-                  {@render cell("2", "width:50px;")}
-                  {@render cell("3", "width:50px;")}
-                </Grid>
-              </div>
-              {@render lbl("justify=between — space between cells in each row track")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" justify="between" fill>
-                  {@render cell("1", "width:50px;")}
-                  {@render cell("2", "width:50px;")}
-                  {@render cell("3", "width:50px;")}
-                </Grid>
-              </div>
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Column — fill</p>
+                  {@render lbl("fill=false — Column shrinks to content width")}
+                  <div class="layout-stage">
+                    <Column gap="8px">
+                      {@render cell("A", "width:80px;")}
+                      {@render cell("B", "width:80px;")}
+                    </Column>
+                  </div>
+                  {@render lbl("fill=true — Column stretches to 100% width")}
+                  <div class="layout-stage">
+                    <Column gap="8px" fill>
+                      {@render cell("A", "")}
+                      {@render cell("B", "")}
+                    </Column>
+                  </div>
+                </Column>
+              </Grid>
 
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Grid — place-items (align + justify together)
-              </p>
-              {@render lbl("align=center + justify=center → cells centered both axes")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" align="center" justify="center" class="h-24" fill>
-                  {@render cell("1", "height:32px;width:50px;")}
-                  {@render cell("2", "height:32px;width:50px;")}
-                  {@render cell("3", "height:32px;width:50px;")}
-                  {@render cell("4", "height:32px;width:50px;")}
-                  {@render cell("5", "height:32px;width:50px;")}
-                  {@render cell("6", "height:32px;width:50px;")}
-                </Grid>
-              </div>
-              {@render lbl("align=end + justify=end → cells bottom-right of each track")}
-              <div class="layout-stage">
-                <Grid columns={3} gap="8px" align="end" justify="end" class="h-24" fill>
-                  {@render cell("1", "height:32px;width:50px;")}
-                  {@render cell("2", "height:32px;width:50px;")}
-                  {@render cell("3", "height:32px;width:50px;")}
-                </Grid>
-              </div>
+              <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid</p>
+              <Grid columns={3} gap="16px" fill>
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid — align (align-items, cross-axis)</p>
+                  {@render lbl("align=start — cells pin to top of their track")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" align="start" class="h-24" fill>
+                      {@render cell("1", "height:28px;")}
+                      {@render cell("2", "height:28px;")}
+                      {@render cell("3", "height:28px;")}
+                      {@render cell("4", "height:28px;")}
+                      {@render cell("5", "height:28px;")}
+                      {@render cell("6", "height:28px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl("align=center")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" align="center" class="h-24" fill>
+                      {@render cell("1", "height:28px;")}
+                      {@render cell("2", "height:28px;")}
+                      {@render cell("3", "height:28px;")}
+                      {@render cell("4", "height:28px;")}
+                      {@render cell("5", "height:28px;")}
+                      {@render cell("6", "height:28px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl("align=end — cells pin to bottom of their track")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" align="end" class="h-24" fill>
+                      {@render cell("1", "height:28px;")}
+                      {@render cell("2", "height:28px;")}
+                      {@render cell("3", "height:28px;")}
+                      {@render cell("4", "height:28px;")}
+                      {@render cell("5", "height:28px;")}
+                      {@render cell("6", "height:28px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl("align=stretch — cells fill their track (no fixed height)")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" align="stretch" class="h-24" fill>
+                      {@render cell("1", "")}
+                      {@render cell("2", "")}
+                      {@render cell("3", "")}
+                    </Grid>
+                  </div>
+                  {@render lbl("place-items: align=center + justify=center → centered both axes")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" align="center" justify="center" class="h-24" fill>
+                      {@render cell("1", "height:32px;width:50px;")}
+                      {@render cell("2", "height:32px;width:50px;")}
+                      {@render cell("3", "height:32px;width:50px;")}
+                      {@render cell("4", "height:32px;width:50px;")}
+                      {@render cell("5", "height:32px;width:50px;")}
+                      {@render cell("6", "height:32px;width:50px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl("place-items: align=end + justify=end → bottom-right of each track")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" align="end" justify="end" class="h-24" fill>
+                      {@render cell("1", "height:32px;width:50px;")}
+                      {@render cell("2", "height:32px;width:50px;")}
+                      {@render cell("3", "height:32px;width:50px;")}
+                    </Grid>
+                  </div>
+                </Column>
 
-              <p
-                class="demo-label text-xs font-semibold uppercase tracking-wide"
-                style="margin:0;"
-              >
-                Grid — responsive &amp; explicit rows
-              </p>
-              {@render lbl('columns="auto" minColumnWidth="100px" — auto-fill, wraps on narrow widths')}
-              <div class="layout-stage">
-                <Grid columns="auto" minColumnWidth="100px" gap="8px" fill>
-                  {@render cell("1", "height:40px;")}
-                  {@render cell("2", "height:40px;")}
-                  {@render cell("3", "height:40px;")}
-                  {@render cell("4", "height:40px;")}
-                  {@render cell("5", "height:40px;")}
-                </Grid>
-              </div>
-              {@render lbl('columns={3} rows="60px 60px" — fixed row tracks')}
-              <div class="layout-stage">
-                <Grid columns={3} rows="60px 60px" gap="8px" fill>
-                  {@render cell("1", "")}
-                  {@render cell("2", "")}
-                  {@render cell("3", "")}
-                  {@render cell("4", "")}
-                  {@render cell("5", "")}
-                  {@render cell("6", "")}
-                </Grid>
-              </div>
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid — justify (justify-items, within each cell's column track)</p>
+                  {@render lbl("justify=start — cells pin left")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" justify="start" fill>
+                      {@render cell("1", "width:50px;")}
+                      {@render cell("2", "width:50px;")}
+                      {@render cell("3", "width:50px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl("justify=center — cells centered in track")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" justify="center" fill>
+                      {@render cell("1", "width:50px;")}
+                      {@render cell("2", "width:50px;")}
+                      {@render cell("3", "width:50px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl("justify=end — cells pin right")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" justify="end" fill>
+                      {@render cell("1", "width:50px;")}
+                      {@render cell("2", "width:50px;")}
+                      {@render cell("3", "width:50px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl("justify=between — space between cells in each row track")}
+                  <div class="layout-stage">
+                    <Grid columns={3} gap="8px" justify="between" fill>
+                      {@render cell("1", "width:50px;")}
+                      {@render cell("2", "width:50px;")}
+                      {@render cell("3", "width:50px;")}
+                    </Grid>
+                  </div>
+                </Column>
+
+                <Column gap="12px" fill>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid — fill &amp; wrap (auto-fill / explicit rows)</p>
+                  {@render lbl('columns="auto" minColumnWidth="100px" — auto-fill, wraps on narrow widths')}
+                  <div class="layout-stage">
+                    <Grid columns="auto" minColumnWidth="100px" gap="8px" fill>
+                      {@render cell("1", "height:40px;")}
+                      {@render cell("2", "height:40px;")}
+                      {@render cell("3", "height:40px;")}
+                      {@render cell("4", "height:40px;")}
+                      {@render cell("5", "height:40px;")}
+                    </Grid>
+                  </div>
+                  {@render lbl('columns={3} rows="60px 60px" — fixed row tracks')}
+                  <div class="layout-stage">
+                    <Grid columns={3} rows="60px 60px" gap="8px" fill>
+                      {@render cell("1", "")}
+                      {@render cell("2", "")}
+                      {@render cell("3", "")}
+                      {@render cell("4", "")}
+                      {@render cell("5", "")}
+                      {@render cell("6", "")}
+                    </Grid>
+                  </div>
+                </Column>
+              </Grid>
             </Column>
           {:else}
             {@render codeBlock(
