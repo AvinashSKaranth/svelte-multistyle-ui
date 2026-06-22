@@ -140,6 +140,7 @@ pnpm install
 pnpm dev          # start the demo
 pnpm build        # build the demo (static HTML/CSS/JS) to docs/
 pnpm build:lib    # build the library for publishing (to dist/)
+pnpm gen:sample   # dry-run the CLI generator sample fixture
 pnpm preview      # preview the production demo
 pnpm test         # run Playwright visual tests
 pnpm test:ui      # open the Playwright UI runner
@@ -150,6 +151,64 @@ The demo supports URL parameters for quick visual regression checks:
 ```
 /?style=brutalist&theme=midnight&mode=dark
 ```
+
+## CLI page generator
+
+`svelte-multistyle-ui` ships a YAML → Svelte 5 page generator. It auto-detects three YAML input styles and emits token-efficient markup with auto-bound state and fake data injection.
+
+```bash
+npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+page.svelte
+```
+
+**Supported YAML styles:**
+
+1. **Compact tree DSL** (recommended):
+   ```yaml
+   Card:
+     - Row:
+         - Input:
+             label: Username
+             placeholder: Enter name
+         - Button:
+             label: Submit
+   ```
+2. **Root-level card list**:
+   ```yaml
+   - Card:
+       - Row:
+           - Input:
+               label: Username
+   - Card:
+       - Row:
+           - Button:
+               label: Submit
+   ```
+3. **Inline shorthand**:
+   ```yaml
+   Card
+     Row
+       Input: { label: Username }
+       Button: { label: Submit }
+   ```
+4. **Verbose schema**:
+   ```yaml
+   state:
+     - { name: username, type: string, default: "" }
+   body:
+     - component: Input
+       props:
+         label: Username
+       bind: username
+   ```
+
+**Features:**
+
+- **Auto-binding** — `Input`, `Select`, `Checkbox`, `Toggle`, `Radio`, `Slider`, `DatePicker`, `ButtonGroup`, `Rating`, `Tabs`, `Pagination`, `Popover`, `Modal`, `Drawer`, and `CommandPalette` get automatic `$state` vars and the correct `bind:*` directive.
+- **Fake data** — missing `options` for `Select`/`MultiSelect`, missing `data` for `Table`, and missing chart data are synthesized automatically.
+- **Option conversion** — `options: [Apple, Banana]` becomes `[{value:"apple",label:"Apple"}, ...]`.
+- **Lightweight output** — generated files import from `svelte-multistyle-ui`, declare `$state`, include an empty `onMount` stub, and emit markup only; dark/light mode is handled by `initMultistyleUI` in the app layout.
+
+See `skill/references/generator-cli.md` for the full CLI reference.
 
 ## Architecture notes
 

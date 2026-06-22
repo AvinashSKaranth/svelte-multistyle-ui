@@ -1,5 +1,6 @@
 <script>
   import "./multiselect-styles.css";
+  import { portal } from "../actions/portal.js";
   import { defaults } from "../config.js";
   import { cn } from "../utils/cn.js";
 
@@ -20,6 +21,8 @@
 
   let open = $state(false);
   let focused = $state(false);
+  let wrapperEl;
+  let dropdownEl;
   let hasValue = $derived(selected.length > 0);
   let floated = $derived(focused || hasValue);
 
@@ -55,15 +58,44 @@
     return opt ? opt.label : val;
   }
 
+  function positionDropdown() {
+    if (!wrapperEl || !dropdownEl) return;
+    const rect = wrapperEl.getBoundingClientRect();
+    const ddHeight = dropdownEl.offsetHeight || 200;
+    let top = rect.bottom + 4;
+    if (top + ddHeight > window.innerHeight - 8 && rect.top - ddHeight - 4 > 8) {
+      top = rect.top - ddHeight - 4;
+    }
+    dropdownEl.style.left = `${rect.left}px`;
+    dropdownEl.style.top = `${top}px`;
+    dropdownEl.style.width = `${rect.width}px`;
+  }
+
   function handleBlur(e) {
-    if (!e.currentTarget.contains(e.relatedTarget)) {
+    if (
+      wrapperEl && !wrapperEl.contains(e.relatedTarget) &&
+      !(dropdownEl && dropdownEl.contains(e.relatedTarget))
+    ) {
       open = false;
       focused = false;
     }
   }
+
+  $effect(() => {
+    if (!open) return;
+    const reposition = () => positionDropdown();
+    window.addEventListener("scroll", reposition, true);
+    window.addEventListener("resize", reposition);
+    queueMicrotask(reposition);
+    return () => {
+      window.removeEventListener("scroll", reposition, true);
+      window.removeEventListener("resize", reposition);
+    };
+  });
 </script>
 
 <div
+  bind:this={wrapperEl}
   class={cn("s-mselect-wrapper", styleClass, themeClass, className)}
   class:disabled
   class:focused
@@ -125,7 +157,11 @@
     </span>
   </div>
   {#if open}
-    <div class="mselect-dropdown">
+    <div
+      class="mselect-dropdown {styleClass} {themeClass}"
+      bind:this={dropdownEl}
+      use:portal
+    >
       {#each options as opt}
         <label
           class="mselect-option"

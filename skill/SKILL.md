@@ -126,9 +126,87 @@ Only override the tokens you want to change — every unset token inherits the b
 
 **Advanced** — [FAB](references/FAB.md)
 
-**Config & actions** — [config (initMultistyleUI)](references/config.md) · [theme-system](references/theme-system.md) · [portal](references/portal.md)
+**Config & actions** — [config (initMultistyleUI)](references/config.md) · [theme-system](references/theme-system.md) · [portal](references/portal.md) · [generator CLI](references/generator-cli.md)
 
 > `Carousel.svelte` exists in the source but is **not** exported from `index.js`. Do not recommend it unless the user is editing the library itself.
+
+## CLI generator
+
+The library ships a YAML → Svelte page generator under `cli/`. It is exposed as the `svelte-multistyle-ui generate` command and the `pnpm gen` script.
+
+```bash
+npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+page.svelte
+```
+
+The generator auto-detects three YAML input styles:
+
+**1. Compact tree DSL (recommended)** — component names as keys, children as lists, props as inline mappings:
+
+```yaml
+Card:
+  - Row:
+      - Input:
+          label: Username
+          placeholder: Enter name
+      - Button:
+          label: Submit
+```
+
+You can also write a root-level list where every top-level item is its own `Card`:
+
+```yaml
+- Card:
+    - Row:
+        - Input:
+            label: Username
+- Card:
+    - Row:
+        - Button:
+            label: Submit
+```
+
+**2. Inline shorthand** — for quick one-liners:
+
+```yaml
+Card
+  Row
+    Input: { label: Username }
+    Button: { label: Submit }
+```
+
+**3. Verbose schema** — explicit `body` / `state` arrays for full control:
+
+```yaml
+state:
+  - { name: username, type: string, default: "" }
+body:
+  - component: Input
+    props:
+      label: Username
+    bind: username
+```
+
+### Generator features
+
+- **Auto-bind**: bindable components (`Input`, `Select`, `Checkbox`, `Toggle`, `Radio`, `Slider`, `DatePicker`, `ButtonGroup`, `Rating`, `Tabs`, `Pagination`, `Popover`, etc.) automatically get a `$state` variable and the correct `bind:*` directive.
+- **Fake data**: if `options` are missing on `Select` / `MultiSelect`, or `data` is missing on `Table` / chart components, plausible defaults are injected.
+- **Option conversion**: a plain string list like `options: [Apple, Banana]` is converted into `{value, label}` objects automatically; you can also write `{value, label}` objects directly.
+- **Lightweight output**: generated `.svelte` files import components from `svelte-multistyle-ui`, declare `$state` vars, include an empty `onMount` stub, and emit markup — no dark/light mode effects or boilerplate.
+
+### Generator CLI options
+
+```bash
+npx svelte-multistyle-ui generate \
+  --input page.yaml \
+  --output ./src/routes/page.svelte \
+  --style material \
+  --theme ocean \
+  --mode light \
+  --dry-run        # print to stdout, do not write a file
+  --watch          # re-generate on YAML changes
+```
+
+When working inside the `svelte-multistyle-ui` repo, see `package.json` scripts: `pnpm gen` and `pnpm gen:sample`.
 
 ## Conventions to follow when advising users
 

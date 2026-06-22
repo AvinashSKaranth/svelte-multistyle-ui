@@ -383,6 +383,7 @@
   -webkit-backdrop-filter: blur(24px) saturate(1.6);
   box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
   transition: all 0.3s ease;
+  min-height: 59px;
 }
 .s-input-liquid-glass:hover {
   background: rgba(255,255,255,0.15);

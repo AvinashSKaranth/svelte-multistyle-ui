@@ -2,17 +2,20 @@
 /* Theme-controlled: colors, border-width, shadow, radius. Style-controlled: shape. */
 .s-select-wrapper {
   display: inline-flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
 }
-.s-select-wrapper select {
+.s-select-control {
+  display: flex;
+  align-items: center;
   width: 100%;
+  min-height: 56px;
   box-sizing: border-box;
   font-family: inherit;
   font-size: 15px;
+  line-height: 1.4;
   padding: 12px 36px 12px 14px;
-  appearance: none;
-  -webkit-appearance: none;
   outline: none;
   cursor: pointer;
   background: var(--t-surface);
@@ -21,10 +24,10 @@
   border-radius: var(--t-input-radius);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.s-select-wrapper select:hover {
+.s-select-control:hover {
   border-color: color-mix(in srgb, var(--t-text) 50%, var(--t-border));
 }
-.s-select-wrapper.focused select {
+.s-select-wrapper.focused .s-select-control {
   border-color: var(--t-primary);
   box-shadow: 0 0 0 3px var(--t-shadow);
 }
@@ -41,8 +44,47 @@
   color: var(--t-border);
   transition: color 0.2s, transform 0.2s;
 }
-.s-select-wrapper.focused .s-select-arrow {
+.s-select-wrapper.focused .s-select-arrow,
+.s-select-wrapper.open .s-select-arrow {
   color: var(--t-primary);
+}
+.s-select-wrapper.open .s-select-arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+.s-select-value,
+.s-select-placeholder {
+  flex: 1;
+}
+.s-select-placeholder {
+  color: var(--t-text-muted);
+}
+.s-select-dropdown {
+  position: fixed;
+  background: var(--t-surface);
+  border: var(--t-border-width) solid var(--t-border);
+  border-radius: var(--t-card-radius);
+  box-shadow: var(--t-shadow-md);
+  z-index: 10000;
+  max-height: 200px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.s-select-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+  color: var(--t-text);
+}
+.s-select-option:hover {
+  background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
+}
+.s-select-option.selected {
+  background: color-mix(in srgb, var(--t-primary) 15%, var(--t-surface));
+  color: var(--t-primary);
+  font-weight: 500;
 }
 .s-select-floating-label {
   position: absolute;
@@ -60,27 +102,27 @@
 }
 
 /* ===== FLOATING LABEL STYLES ===== */
-.s-select-material select,
-.s-select-material3 select,
-.s-select-fluent select,
-.s-select-carbon select,
-.s-select-bootstrap select {
+.s-select-material .s-select-control,
+.s-select-material3 .s-select-control,
+.s-select-fluent .s-select-control,
+.s-select-carbon .s-select-control,
+.s-select-bootstrap .s-select-control {
   padding-top: 24px;
   padding-bottom: 8px;
 }
 
 /* ===== MATERIAL ===== */
-.s-select-material select {
+.s-select-material .s-select-control {
   background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
   border: none;
   border-bottom: var(--t-border-width) solid var(--t-border);
   border-radius: var(--t-input-radius) var(--t-input-radius) 0 0;
 }
-.s-select-material select:hover {
+.s-select-material .s-select-control:hover {
   background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
   border-bottom-color: var(--t-text);
 }
-.s-select-material.focused select {
+.s-select-material.focused .s-select-control {
   border-bottom-color: var(--t-primary);
   background: color-mix(in srgb, var(--t-primary) 10%, var(--t-surface));
   box-shadow: none;
@@ -103,15 +145,15 @@
 }
 
 /* ===== MATERIAL 3 ===== */
-.s-select-material3 select {
+.s-select-material3 .s-select-control {
   background: var(--t-surface);
   border: var(--t-border-width) solid var(--t-border);
   border-radius: var(--t-input-radius);
 }
-.s-select-material3 select:hover {
+.s-select-material3 .s-select-control:hover {
   border-color: var(--t-text);
 }
-.s-select-material3.focused select {
+.s-select-material3.focused .s-select-control {
   border-color: var(--t-primary);
   border-width: calc(var(--t-border-width) + 0.5px);
 }
@@ -137,7 +179,7 @@
 /* ===== STYLE OVERRIDES ===== */
 
 /* Brutalist */
-.s-select-brutalist select {
+.s-select-brutalist .s-select-control {
   font-family: 'Courier New', monospace;
   font-weight: bold;
   border: var(--t-border-width) solid var(--t-text);
@@ -145,10 +187,10 @@
   box-shadow: 4px 4px 0 var(--t-text);
   background: var(--t-surface);
 }
-.s-select-brutalist.focused select { border-color: var(--t-primary); box-shadow: 5px 5px 0 var(--t-primary); }
+.s-select-brutalist.focused .s-select-control { border-color: var(--t-primary); box-shadow: 5px 5px 0 var(--t-primary); }
 
 /* Pixel */
-.s-select-pixel select {
+.s-select-pixel .s-select-control {
   font-family: 'Courier New', monospace;
   background: var(--t-surface);
   color: var(--t-text);
@@ -158,7 +200,7 @@
 }
 
 /* Neon */
-.s-select-neon select {
+.s-select-neon .s-select-control {
   background: var(--t-surface);
   color: var(--t-text);
   border-color: var(--t-primary);
@@ -166,55 +208,55 @@
 }
 
 /* Metro */
-.s-select-metro select {
+.s-select-metro .s-select-control {
   border-radius: 0;
   border: var(--t-border-width) solid var(--t-primary);
   background: var(--t-surface);
   font-weight: 600;
   box-shadow: none;
 }
-.s-select-metro.focused select { box-shadow: none; }
+.s-select-metro.focused .s-select-control { box-shadow: none; }
 
 /* Bootstrap */
-.s-select-bootstrap select {
+.s-select-bootstrap .s-select-control {
   border-radius: 6px;
   border: var(--t-border-width) solid var(--t-border);
   box-shadow: var(--t-shadow-xs);
   background: var(--t-surface);
 }
-.s-select-bootstrap.focused select {
+.s-select-bootstrap.focused .s-select-control {
   box-shadow: 0 0 0 3px var(--t-shadow);
   border-color: var(--t-primary);
 }
 
 /* Cartoon */
-.s-select-cartoon select {
+.s-select-cartoon .s-select-control {
   border-radius: 16px;
   border: var(--t-border-width) solid var(--t-text);
   box-shadow: 4px 4px 0 var(--t-primary);
   font-weight: 700;
   background: var(--t-surface);
 }
-.s-select-cartoon.focused select {
+.s-select-cartoon.focused .s-select-control {
   border-color: var(--t-primary);
   box-shadow: 5px 5px 0 var(--t-secondary);
 }
 
 /* Illustration */
-.s-select-illustration select {
+.s-select-illustration .s-select-control {
   border-radius: 8px;
   border: var(--t-border-width) solid var(--t-text);
   box-shadow: 3px 3px 0 var(--t-border);
   font-style: italic;
   background: var(--t-surface);
 }
-.s-select-illustration.focused select {
+.s-select-illustration.focused .s-select-control {
   border-color: var(--t-primary);
   box-shadow: 3px 3px 0 var(--t-primary);
 }
 
 /* Carbon */
-.s-select-carbon select {
+.s-select-carbon .s-select-control {
   border-radius: 0;
   border: var(--t-border-width) solid var(--t-border);
   border-bottom-width: 2px;
@@ -222,7 +264,7 @@
   background: var(--t-surface);
   box-shadow: none;
 }
-.s-select-carbon.focused select {
+.s-select-carbon.focused .s-select-control {
   border-bottom-color: var(--t-primary);
   box-shadow: none;
 }
@@ -231,22 +273,37 @@
 .s-select-liquid-glass {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
+  min-height: 54px;
   border-radius: 16px;
   backdrop-filter: blur(24px) saturate(1.6);
   -webkit-backdrop-filter: blur(24px) saturate(1.6);
   box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
 }
-.s-select-liquid-glass select {
-  background: rgba(255,255,255,0.15);
+.s-select-liquid-glass .s-select-control {
+  background: rgba(255,255,255,0);
   border: none;
   border-radius: 16px;
   color: #ffffff;
 }
-.s-select-liquid-glass option {
-  background: rgba(255,255,255,0.2);
+.s-select-dropdown.s-select-liquid-glass {
+  border-radius: 16px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: var(--t-shadow-md);
+}
+.s-select-dropdown.s-select-liquid-glass .s-select-option {
   color: #ffffff;
+}
+.s-select-dropdown.s-select-liquid-glass .s-select-option:hover {
+  background: rgba(255,255,255,0.12);
+}
+.s-select-dropdown.s-select-liquid-glass .s-select-option.selected {
+  background: rgba(255,255,255,0.2);
+  color: var(--t-primary);
 }
 .s-select-liquid-glass.focused {
   border-color: var(--t-primary);
 }
-.s-select-liquid-glass.focused select { box-shadow: none; }
+.s-select-liquid-glass.focused .s-select-control { box-shadow: none; }
