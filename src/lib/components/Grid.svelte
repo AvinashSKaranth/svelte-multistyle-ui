@@ -1,5 +1,6 @@
 <script>
   import "./grid-styles.css";
+  import { cn } from "../utils/cn.js";
 
   let {
     columns = 1,
@@ -46,6 +47,6 @@
   );
 </script>
 
-<div class="s-grid {className}" style={styleStr} {...rest}>
+<div class={cn("s-grid", className)} style={styleStr} {...rest}>
   {@render children?.()}
 </div>

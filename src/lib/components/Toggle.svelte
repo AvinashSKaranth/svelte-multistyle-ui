@@ -1,6 +1,7 @@
 <script>
   import "./toggle-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -9,6 +10,7 @@
     label = "",
     disabled = false,
     size = "md",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -23,7 +25,7 @@
 </script>
 
 <label
-  class="s-toggle {styleClass} {themeClass} {sizeClass}"
+  class={cn("s-toggle", styleClass, themeClass, sizeClass, className)}
   class:disabled
   class:checked
   for={internalId}

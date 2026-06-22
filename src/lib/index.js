@@ -7,6 +7,9 @@ export { themes, generateThemeCss, resolveLight, resolveDark, applyThemeToElemen
 // Actions
 export { portal } from "./actions/portal.js";
 
+// Class merge helper (tailwind-merge backed) for overriding component classes
+export { cn } from "./utils/cn.js";
+
 // Form Components
 export { default as SortableList } from "./components/SortableList.svelte";
 export { default as Input } from "./components/Input.svelte";

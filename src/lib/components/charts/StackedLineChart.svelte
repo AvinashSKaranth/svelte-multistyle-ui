@@ -1,6 +1,6 @@
 <script>
   import Chart from "./Chart.svelte";
-  let { data, series, labels, title, height, legend, animated, options: userOpts = {}, style, theme, ...rest } = $props();
+  let { data, series, labels, title, height, legend, animated, options: userOpts = {}, style, theme, class: className = "", ...rest } = $props();
   // Merge user options over the stacked defaults so users can override
   let mergedOptions = $derived.by(() => {
     const base = {
@@ -18,4 +18,4 @@
     return base;
   });
 </script>
-<Chart type="line" {data} {series} {labels} {title} {height} {legend} {animated} options={mergedOptions} {style} {theme} {...rest} />
+<Chart type="line" {data} {series} {labels} {title} {height} {legend} {animated} options={mergedOptions} {style} {theme} class={className} {...rest} />

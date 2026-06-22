@@ -1,11 +1,13 @@
 <script>
   import "./spinner-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
     theme: themeProp,
     size = "md",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -18,7 +20,7 @@
 </script>
 
 <div
-  class="s-spinner {styleClass} {themeClass} {sizeClass}"
+  class={cn("s-spinner", styleClass, themeClass, sizeClass, className)}
   role="status"
   aria-label="Loading"
   {...rest}

@@ -1,6 +1,7 @@
 <script>
   import "./textarea-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -14,6 +15,7 @@
     readonly = false,
     required = false,
     autoresize = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -54,7 +56,7 @@
 </script>
 
 <div
-  class="s-textarea-wrapper {styleClass} {themeClass}"
+  class={cn("s-textarea-wrapper", styleClass, themeClass, className)}
   class:disabled
   class:focused
   class:has-value={hasValue}

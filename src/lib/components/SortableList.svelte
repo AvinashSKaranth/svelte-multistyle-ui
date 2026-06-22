@@ -2,6 +2,7 @@
   import { draggable, droppable } from '@thisux/sveltednd';
   import "./sortablelist-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -10,6 +11,7 @@
     onUpdate,
     type = 'item',
     direction = 'vertical',
+    class: className = "",
     children
   } = $props();
 
@@ -95,7 +97,7 @@
   }
 </script>
 
-<div class="s-sortablelist {directionClass} {styleClass} {themeClass}" use:isolateEvents>
+<div class={cn("s-sortablelist", directionClass, styleClass, themeClass, className)} use:isolateEvents>
   {#each items as item, index (item.id)}
     <div
       use:droppable={{

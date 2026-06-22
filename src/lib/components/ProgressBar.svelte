@@ -1,6 +1,7 @@
 <script>
   import "./progressbar-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -9,6 +10,7 @@
     size = "md",
     animated = false,
     label = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -43,7 +45,7 @@
 </script>
 
 <div
-  class="s-progressbar {styleClass} {themeClass} {sizeClass}"
+  class={cn("s-progressbar", styleClass, themeClass, sizeClass, className)}
   role="progressbar"
   aria-valuenow={isIndeterminate ? undefined : clampedValue}
   aria-valuemin="0"

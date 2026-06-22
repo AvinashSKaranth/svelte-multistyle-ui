@@ -1,6 +1,7 @@
 <script>
   import "./accordion-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -8,6 +9,7 @@
     items = [],
     multiple = false,
     current = "",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -33,7 +35,7 @@
   }
 </script>
 
-<div class="s-accordion {styleClass} {themeClass}" {...rest}>
+<div class={cn("s-accordion", styleClass, themeClass, className)} {...rest}>
   {#each items as item}
     <div class="s-accordion-item" class:open={openItems.has(item.id)}>
       <button

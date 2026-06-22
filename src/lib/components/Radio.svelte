@@ -1,6 +1,7 @@
 <script>
   import "./radio-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -9,6 +10,7 @@
     group = $bindable(""),
     label = "",
     disabled = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -24,7 +26,7 @@
 </script>
 
 <label
-  class="s-radio {styleClass} {themeClass}"
+  class={cn("s-radio", styleClass, themeClass, className)}
   class:disabled
   class:selected={isSelected}
   for={internalId}

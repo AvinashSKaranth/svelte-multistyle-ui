@@ -1,6 +1,7 @@
 <script>
   import "./input-styles.css";
   import { defaults, iconClass } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -33,6 +34,7 @@
     form = undefined,
     inputmode = undefined,
     spellcheck = undefined,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -67,7 +69,7 @@
 </script>
 
 <div
-  class="s-input-wrapper {styleClass} {themeClass}"
+  class={cn("s-input-wrapper", styleClass, themeClass, className)}
   class:disabled
   class:focused
   class:has-value={hasValue}

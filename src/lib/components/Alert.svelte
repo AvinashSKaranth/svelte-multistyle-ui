@@ -2,15 +2,17 @@
   import "./alert-styles.css";
   import { defaults, iconClass } from "../config.js";
   import { slide } from "svelte/transition";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
     theme: themeProp,
-    variant = "info",
+    preset = "info",
     title = "",
     icon: iconProp,
     children,
     dismissible = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -27,7 +29,7 @@
     error: "✕"
   };
 
-  const icon = $derived(iconProp ?? defaultIcons[variant] ?? null);
+  const icon = $derived(iconProp ?? defaultIcons[preset] ?? null);
   const iconEl = $derived(icon && icon.length === 1 ? icon : null);
   const iconName = $derived(icon && icon.length > 1 ? icon : null);
 
@@ -36,7 +38,7 @@
 
 {#if visible}
   <div
-    class="s-alert {styleClass} {themeClass} s-alert-{variant}"
+    class={cn("s-alert", styleClass, themeClass, `s-alert-${preset}`, className)}
     role="alert"
     transition:slide={{ duration: 200 }}
     {...rest}

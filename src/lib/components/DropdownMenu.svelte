@@ -2,6 +2,7 @@
   import "./dropdown-styles.css";
   import { defaults } from "../config.js";
   import { fly } from "svelte/transition";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -12,6 +13,7 @@
     items = [],
     position = "bottom",
     align = "left",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -60,7 +62,7 @@
 </script>
 
 <div
-  class="s-dropdown {styleClass} {themeClass} dropdown-{align}"
+  class={cn("s-dropdown", styleClass, themeClass, `dropdown-${align}`, className)}
   class:open
   {...rest}
 >

@@ -1,6 +1,7 @@
 <script>
   import "./chip-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -12,6 +13,7 @@
     dismissible = false,
     icon = "",
     ondismiss,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -25,7 +27,7 @@
 
 {#if visible}
   <span
-    class="s-chip {styleClass} {themeClass} chip-{variant} chip-{color} chip-{size}"
+    class={cn("s-chip", styleClass, themeClass, `chip-${variant}`, `chip-${color}`, `chip-${size}`, className)}
     {...rest}
   >
     {#if icon}

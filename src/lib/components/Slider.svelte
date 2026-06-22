@@ -1,6 +1,7 @@
 <script>
   import "./slider-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -11,6 +12,7 @@
     step = 1,
     disabled = false,
     label = "",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -23,7 +25,7 @@
 </script>
 
 <div
-  class="s-slider-wrapper {styleClass} {themeClass}"
+  class={cn("s-slider-wrapper", styleClass, themeClass, className)}
   class:disabled
   {...rest}
 >

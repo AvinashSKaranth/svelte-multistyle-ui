@@ -6,12 +6,12 @@ Inline status message.
 
 ## Props
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `variant` | string | `"info"` | `info` / `success` / `warning` / `error` |
-| `title` | string | `""` | heading |
-| `icon` | string | — | 1-char glyph or icon name |
-| `dismissible` | boolean | `false` | show dismiss button (hides locally) |
+| Prop          | Type    | Default  | Notes                                    |
+| ------------- | ------- | -------- | ---------------------------------------- |
+| `variant`     | string  | `"info"` | `info` / `success` / `warning` / `error` |
+| `title`       | string  | `""`     | heading                                  |
+| `icon`        | string  | —        | 1-char glyph or icon name                |
+| `dismissible` | boolean | `false`  | show dismiss button (hides locally)      |
 
 Plus `style`, `theme` (optional). `...rest` spreads onto the root.
 
@@ -22,7 +22,7 @@ Plus `style`, `theme` (optional). `...rest` spreads onto the root.
 ## Example
 
 ```svelte
-<Alert variant="warning" title="Heads up" dismissible
+<Alert preset="warning" title="Heads up" dismissible
        style="brutalist" theme="gold">
   Save before you leave the page.
 </Alert>

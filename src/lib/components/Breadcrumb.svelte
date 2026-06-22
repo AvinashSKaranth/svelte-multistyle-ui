@@ -1,8 +1,9 @@
 <script>
   import "./breadcrumb-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
-  let { style: styleProp, theme: themeProp, items = [], ...rest } = $props();
+  let { style: styleProp, theme: themeProp, items = [], class: className = "", ...rest } = $props();
 
   const style = $derived(styleProp ?? defaults.style);
   const theme = $derived(themeProp ?? defaults.theme);
@@ -12,7 +13,7 @@
 </script>
 
 <nav
-  class="s-breadcrumb {styleClass} {themeClass}"
+  class={cn("s-breadcrumb", styleClass, themeClass, className)}
   aria-label="Breadcrumb"
   {...rest}
 >

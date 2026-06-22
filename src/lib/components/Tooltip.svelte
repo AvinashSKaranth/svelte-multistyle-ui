@@ -1,6 +1,7 @@
 <script>
   import "./tooltip-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -8,6 +9,7 @@
     text = "",
     position = "top",
     children,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -21,7 +23,7 @@
 </script>
 
 <div
-  class="s-tooltip-wrapper {styleClass} {themeClass}"
+  class={cn("s-tooltip-wrapper", styleClass, themeClass, className)}
   onmouseenter={() => (visible = true)}
   onmouseleave={() => (visible = false)}
   onfocusin={() => (visible = true)}

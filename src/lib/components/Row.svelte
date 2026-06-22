@@ -1,5 +1,6 @@
 <script>
   import "./row-styles.css";
+  import { cn } from "../utils/cn.js";
 
   let {
     gap = "8px",
@@ -34,6 +35,6 @@
   );
 </script>
 
-<div class="s-row {className}" style={styleStr} {...rest}>
+<div class={cn("s-row", className)} style={styleStr} {...rest}>
   {@render children?.()}
 </div>

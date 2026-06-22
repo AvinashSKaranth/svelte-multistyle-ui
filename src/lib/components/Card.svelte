@@ -1,6 +1,7 @@
 <script>
   import "./card-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -21,7 +22,7 @@
 </script>
 
 <div
-  class="s-card {styleClass} {themeClass} {padClass} {className}"
+  class={cn("s-card", styleClass, themeClass, padClass, className)}
   class:elevated
   {...rest}
 >

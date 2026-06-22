@@ -1,12 +1,14 @@
 <script>
   import "./stepper-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
     theme: themeProp,
     steps = [],
     current = 0,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -57,7 +59,7 @@
   });
 </script>
 
-<div class="s-stepper-wrap">
+<div class={cn("s-stepper-wrap", className)}>
   <div class="s-stepper {styleClass} {themeClass}" bind:this={el} {...rest}>
     {#each steps as step, i}
       <div

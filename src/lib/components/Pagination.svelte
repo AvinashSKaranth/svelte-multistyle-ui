@@ -1,6 +1,7 @@
 <script>
   import "./pagination-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -8,6 +9,7 @@
     total = 0,
     perPage = 10,
     current = $bindable(1),
+    class: className = "",
     ...rest
   } = $props();
 
@@ -26,7 +28,7 @@
 </script>
 
 <nav
-  class="s-pagination {styleClass} {themeClass}"
+  class={cn("s-pagination", styleClass, themeClass, className)}
   aria-label="Pagination"
   {...rest}
 >

@@ -1,6 +1,7 @@
 <script>
   import "./carousel-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -10,6 +11,7 @@
     interval = 4000,
     showArrows = true,
     showIndicators = true,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -48,7 +50,7 @@
 </script>
 
 <div
-  class="s-carousel {styleClass} {themeClass}"
+  class={cn("s-carousel", styleClass, themeClass, className)}
   onmouseenter={() => { isHovering = true; }}
   onmouseleave={() => { isHovering = false; }}
   role="region"

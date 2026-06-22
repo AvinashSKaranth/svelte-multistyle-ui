@@ -2,6 +2,7 @@
   import "./datepicker-styles.css";
   import { defaults, iconClass } from "../config.js";
   import { portal } from "../actions/portal.js";
+  import { cn } from "../utils/cn.js";
   import dayjs from "dayjs";
   import customParseFormat from "dayjs/plugin/customParseFormat";
   dayjs.extend(customParseFormat);
@@ -18,6 +19,7 @@
     min = undefined,
     max = undefined,
     locale = "en-US",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -286,7 +288,7 @@
 </script>
 
 <div
-  class="s-datepicker-wrapper {styleClass} {themeClass}"
+  class={cn("s-datepicker-wrapper", styleClass, themeClass, className)}
   class:s-datepicker-open={open}
   class:focused={open}
   class:floated

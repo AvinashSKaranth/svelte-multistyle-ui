@@ -1,12 +1,14 @@
 <script>
   import "./tabs-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
     theme: themeProp,
     tabs = [],
     active = $bindable(""),
+    class: className = "",
     ...rest
   } = $props();
 
@@ -17,7 +19,7 @@
   const themeClass = $derived(`theme-${theme}`);
 </script>
 
-<div class="s-tabs {styleClass} {themeClass}" role="tablist" {...rest}>
+<div class={cn("s-tabs", styleClass, themeClass, className)} role="tablist" {...rest}>
   {#each tabs as tab}
     <button
       class="s-tab"

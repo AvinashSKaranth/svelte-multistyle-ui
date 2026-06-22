@@ -3,6 +3,7 @@
   import { defaults } from "../config.js";
   import { fade } from "svelte/transition";
   import { portal } from "../actions/portal.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -10,6 +11,7 @@
     open = $bindable(false),
     groups = [],
     placeholder = "Type a command...",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -150,7 +152,7 @@
 {#if open}
   <div
     use:portal
-    class="s-cmdk-overlay"
+    class={cn("s-cmdk-overlay", className)}
     transition:fade={{ duration: 150 }}
     onclick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
     role="dialog"

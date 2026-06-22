@@ -1,6 +1,7 @@
 <script>
   import "./avatar-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -9,6 +10,7 @@
     alt = "",
     size = "md",
     fallback = "",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -22,7 +24,7 @@
   let imgError = $state(false);
 </script>
 
-<div class="s-avatar {styleClass} {themeClass} {sizeClass}" {...rest}>
+<div class={cn("s-avatar", styleClass, themeClass, sizeClass, className)} {...rest}>
   {#if src && !imgError}
     <img {src} {alt} onerror={() => (imgError = true)} />
   {:else}

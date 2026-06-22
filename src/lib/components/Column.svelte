@@ -1,5 +1,6 @@
 <script>
   import "./column-styles.css";
+  import { cn } from "../utils/cn.js";
 
   let {
     gap = "8px",
@@ -33,6 +34,6 @@
   );
 </script>
 
-<div class="s-column {className}" style={styleStr} {...rest}>
+<div class={cn("s-column", className)} style={styleStr} {...rest}>
   {@render children?.()}
 </div>

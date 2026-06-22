@@ -1,6 +1,7 @@
 <script>
   import "./buttongroup-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -10,6 +11,7 @@
     items = [],
     value = $bindable(""),
     orientation = "horizontal",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -25,7 +27,7 @@
 </script>
 
 <div
-  class="s-btn-group {styleClass} {themeClass} btn-group-{orientation} btn-group-{variant} btn-group-{size}"
+  class={cn("s-btn-group", styleClass, themeClass, `btn-group-${orientation}`, `btn-group-${variant}`, `btn-group-${size}`, className)}
   role="group"
   {...rest}
 >

@@ -1,6 +1,7 @@
 <script>
   import "./rating-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -11,6 +12,7 @@
     size = "md",
     readonly = false,
     showValue = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -64,7 +66,7 @@
 </script>
 
 <div
-  class="s-rating {styleClass} {themeClass} rating-{size}"
+  class={cn("s-rating", styleClass, themeClass, `rating-${size}`, className)}
   role="radiogroup"
   aria-label="Rating"
   {...rest}

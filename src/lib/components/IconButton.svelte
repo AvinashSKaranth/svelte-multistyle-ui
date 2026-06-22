@@ -1,6 +1,7 @@
 <script>
   import "./iconbutton-styles.css";
   import { defaults, iconClass } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -13,6 +14,7 @@
     children,
     onclick,
     ariaLabel = "",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -27,7 +29,7 @@
 </script>
 
 <button
-  class="s-iconbtn {styleClass} {themeClass} {variantClass} {presetClass} {sizeClass}"
+  class={cn("s-iconbtn", styleClass, themeClass, variantClass, presetClass, sizeClass, className)}
   {disabled}
   {onclick}
   aria-label={ariaLabel}

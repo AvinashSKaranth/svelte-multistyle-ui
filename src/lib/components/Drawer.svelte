@@ -3,6 +3,7 @@
   import { defaults } from "../config.js";
   import { fade } from "svelte/transition";
   import { portal } from "../actions/portal.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -11,6 +12,7 @@
     open = $bindable(false),
     children,
     onclose,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -51,7 +53,7 @@
 {#if open}
   <div
     use:portal
-    class="s-drawer-overlay"
+    class={cn("s-drawer-overlay", className)}
     transition:fade={{ duration: 200 }}
     onclick={handleBackdrop}
     role="presentation"

@@ -1,6 +1,7 @@
 <script>
   import "./checkbox-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -9,6 +10,7 @@
     label = "",
     disabled = false,
     indeterminate = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -22,7 +24,7 @@
 </script>
 
 <label
-  class="s-checkbox {styleClass} {themeClass}"
+  class={cn("s-checkbox", styleClass, themeClass, className)}
   class:disabled
   class:checked
   class:indeterminate

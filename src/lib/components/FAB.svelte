@@ -1,6 +1,7 @@
 <script>
   import "./fab-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -9,6 +10,7 @@
     children,
     position = "bottom-right",
     onclick,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -21,7 +23,7 @@
 </script>
 
 <button
-  class="s-fab {styleClass} {themeClass} {presetClass} fab-{position}"
+  class={cn("s-fab", styleClass, themeClass, presetClass, `fab-${position}`, className)}
   {onclick}
   {...rest}
 >

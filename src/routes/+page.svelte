@@ -187,7 +187,7 @@
   let skeletonTab = $state("preview");
   let tableTab = $state("preview");
   let alertTab = $state("preview");
-  let alertVariant = $state("info");
+  let alertPreset = $state("info");
   let toastTab = $state("preview");
   let ratingTab = $state("preview");
   let popoverTab = $state("preview");
@@ -366,9 +366,9 @@
   // Toast management
   let toasts = $state([]);
   let toastPosition = $state("top-right");
-  function addToastMsg(msg, variant, icon) {
+  function addToastMsg(msg, preset, icon) {
     const id = Date.now() + Math.random();
-    toasts = [...toasts, { id, message: msg, variant, duration: 3000, icon }];
+    toasts = [...toasts, { id, message: msg, preset, duration: 3000, icon }];
     setTimeout(() => {
       toasts = toasts.filter((t) => t.id !== id);
     }, 3000);
@@ -1666,10 +1666,10 @@ import "./custom-theme.css";
                 </Column>
               </Grid>
 
-              <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid</p>
+              <p class="demo-label  text-lg font-bold uppercase tracking-wide" style="margin:0;">Grid</p>
               <Grid columns={3} gap="16px" fill>
                 <Column gap="12px" fill>
-                  <p class="demo-label text-lg font-bold uppercase tracking-wide" style="margin:0;">Grid — align (align-items, cross-axis)</p>
+                  <p class="demo-label text-xs font-semibold uppercase tracking-wide" style="margin:0;">Grid — align (align-items, cross-axis)</p>
                   {@render lbl("align=start — cells pin to top of their track")}
                   <div class="layout-stage">
                     <Grid columns={3} gap="8px" align="start" class="h-24" fill>
@@ -2684,34 +2684,34 @@ import "./custom-theme.css";
                 <button
                   type="button"
                   class="px-3 py-1.5 text-xs font-semibold rounded border transition-colors"
-                  class:bg-indigo-500={alertVariant === v}
-                  class:text-white={alertVariant === v}
-                  class:border-indigo-500={alertVariant === v}
-                  onclick={() => (alertVariant = v)}>{v}</button
+                  class:bg-indigo-500={alertPreset === v}
+                  class:text-white={alertPreset === v}
+                  class:border-indigo-500={alertPreset === v}
+                  onclick={() => (alertPreset = v)}>{v}</button
                 >
               {/each}
             </div>
             <Alert
-              variant={alertVariant}
-              title={alertVariant.charAt(0).toUpperCase() +
-                alertVariant.slice(1)}
-              icon={alertVariant === "default"
+              preset={alertPreset}
+              title={alertPreset.charAt(0).toUpperCase() +
+                alertPreset.slice(1)}
+              icon={alertPreset === "default"
                 ? null
-                : alertVariant === "info"
+                : alertPreset === "info"
                   ? "info"
-                  : alertVariant === "success"
+                  : alertPreset === "success"
                     ? "check_circle"
-                    : alertVariant === "warning"
+                    : alertPreset === "warning"
                       ? "warning"
                       : "error"}
               dismissible
             >
               {#snippet children()}
-                {#if alertVariant === "info"}
+                {#if alertPreset === "info"}
                   This is an informational alert message.
-                {:else if alertVariant === "success"}
+                {:else if alertPreset === "success"}
                   Operation completed successfully.
-                {:else if alertVariant === "warning"}
+                {:else if alertPreset === "warning"}
                   Please review before proceeding.
                 {:else}
                   Something went wrong. Please try again.
@@ -2722,17 +2722,17 @@ import "./custom-theme.css";
             {@render codeBlock(
               "alert",
               `<script>
-  let variant = $state("info");
+  let preset = $state("info");
 </script>
 
-<!-- Icons auto-select based on variant.
+<!-- Icons auto-select based on preset.
      Pass icon="info" to use Material Icons instead.
      Default icons: info→ℹ, success→✓, warning→⚠, error→✕ -->
-<Alert variant={variant} title="Title" dismissible>
+<Alert preset={preset} title="Title" dismissible>
   Alert message here.
 </Alert>
 
-<!-- Variants: default, info, success, warning, error -->`,
+<!-- Presets: default, info, success, warning, error -->`,
             )}
           {/if}
         </Card>

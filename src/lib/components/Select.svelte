@@ -1,6 +1,7 @@
 <script>
   import "./select-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -10,6 +11,7 @@
     placeholder = "Select...",
     label = "",
     disabled = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -41,7 +43,7 @@
 </script>
 
 <div
-  class="s-select-wrapper {styleClass} {themeClass}"
+  class={cn("s-select-wrapper", styleClass, themeClass, className)}
   class:disabled
   class:focused
   class:has-value={hasValue}

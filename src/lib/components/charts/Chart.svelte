@@ -3,6 +3,7 @@
   import { Chart as ChartJS } from "chart.js";
   import "./chart-styles.css";
   import { defaults } from "../../config.js";
+  import { cn } from "../../utils/cn.js";
   import { buildData, buildOptions, readTokens } from "./chart-config.js";
 
   let {
@@ -20,6 +21,7 @@
     yAxisLabel = "",
     style: styleProp,
     theme: themeProp,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -219,7 +221,7 @@
 </script>
 
 <div
-  class="s-chart {styleClass} {themeClass} {typeClass} {downloadable ? 's-chart-downloadable' : ''}"
+  class={cn("s-chart", styleClass, themeClass, typeClass, downloadable ? "s-chart-downloadable" : "", className)}
   style="height:{heightStyle}"
   {...rest}
 >

@@ -2,6 +2,7 @@
   import "./popover-styles.css";
   import { defaults } from "../config.js";
   import { fly } from "svelte/transition";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -11,6 +12,7 @@
     position = "top",
     open = $bindable(false),
     trigger = "click",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -72,7 +74,7 @@
 </script>
 
 <div
-  class="s-popover-wrapper {styleClass} {themeClass}"
+  class={cn("s-popover-wrapper", styleClass, themeClass, className)}
   onmouseenter={trigger === "hover" ? show : undefined}
   onmouseleave={trigger === "hover" ? hide : undefined}
   {...rest}

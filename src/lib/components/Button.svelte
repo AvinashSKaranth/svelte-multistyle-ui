@@ -1,6 +1,7 @@
 <script>
   import "./button-styles.css";
   import { defaults, iconClass } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -12,6 +13,7 @@
     icon,
     children,
     onclick,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -26,7 +28,7 @@
 </script>
 
 <button
-  class="s-button {styleClass} {themeClass} {variantClass} {presetClass} {sizeClass}"
+  class={cn("s-button", styleClass, themeClass, variantClass, presetClass, sizeClass, className)}
   {disabled}
   {onclick}
   {...rest}

@@ -1,6 +1,7 @@
 <script>
   import "./multiselect-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -10,6 +11,7 @@
     placeholder = "Select...",
     label = "",
     disabled = false,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -62,7 +64,7 @@
 </script>
 
 <div
-  class="s-mselect-wrapper {styleClass} {themeClass}"
+  class={cn("s-mselect-wrapper", styleClass, themeClass, className)}
   class:disabled
   class:focused
   class:open

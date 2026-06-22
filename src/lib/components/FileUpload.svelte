@@ -1,6 +1,7 @@
 <script>
   import "./fileupload-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -9,6 +10,7 @@
     multiple = false,
     disabled = false,
     label = "Drop files or click to upload",
+    class: className = "",
     ...rest
   } = $props();
 
@@ -33,7 +35,7 @@
 </script>
 
 <div
-  class="s-fileupload {styleClass} {themeClass}"
+  class={cn("s-fileupload", styleClass, themeClass, className)}
   class:dragging
   class:disabled
   ondragover={(e) => {

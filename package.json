@@ -75,6 +75,7 @@
     "@thisux/sveltednd": "^0.4.1",
     "dayjs": "^1.11.21",
     "js-yaml": "^4.1.0",
-    "prismjs": "^1.30.0"
+    "prismjs": "^1.30.0",
+    "tailwind-merge": "^3.6.0"
   }
 }

@@ -1,6 +1,7 @@
 <script>
   import "./table-styles.css";
   import { defaults } from "../config.js";
+  import { cn } from "../utils/cn.js";
 
   let {
     style: styleProp,
@@ -8,6 +9,7 @@
     data = null,
     variant = "plain",
     caption: summary,
+    class: className = "",
     ...rest
   } = $props();
 
@@ -30,7 +32,7 @@
 </script>
 
 <div
-  class="s-table-wrapper {styleClass} {themeClass} {variantClass}"
+  class={cn("s-table-wrapper", styleClass, themeClass, variantClass, className)}
   {...rest}
 >
   <div class="s-table-scroll">
