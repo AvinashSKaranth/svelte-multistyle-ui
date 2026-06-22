@@ -34,6 +34,7 @@
   import Drawer from "../lib/components/Drawer.svelte";
   import Chip from "../lib/components/Chip.svelte";
   import ButtonGroup from "../lib/components/ButtonGroup.svelte";
+  import TextEditor from "../lib/components/TextEditor.svelte";
   import Rating from "../lib/components/Rating.svelte";
   import CommandPalette from "../lib/components/CommandPalette.svelte";
   import Row from "../lib/components/Row.svelte";
@@ -194,6 +195,7 @@
   let fabTab = $state("preview");
   let tabsDemoTab = $state("preview");
   let btnGroupTab = $state("preview");
+  let textEditorTab = $state("preview");
   let sortableListTab = $state("preview");
   let barChartTab = $state("preview");
   let lineChartTab = $state("preview");
@@ -285,6 +287,10 @@
   let popoverOpen = $state(false);
   let chipVals = $state(["React", "Svelte", "Vue"]);
   let btnGroupVal = $state("day");
+  let textEditorHtml = $state("<p>Hello from the <b>new editor</b>!</p>");
+  let textEditorInjectOpen = $state(false);
+  let textEditorExtractOpen = $state(false);
+  let textEditorInjectHtml = $state("");
   let btnGroupItems = [
     { value: "day", label: "Day" },
     { value: "week", label: "Week" },
@@ -1328,18 +1334,16 @@ import "./custom-theme.css";
             )}
           {/if}
         </Card>
-      </div>
 
-      <!-- Sortable List -->
-      <div class="mt-6">
+        <!-- TextEditor -->
         <Card
           style={selectedStyle}
           theme={selectedTheme}
           elevated={true}
-          class="space-y-3"
+          class="space-y-3 md:col-span-2"
         >
           <p class="demo-label text-xs font-semibold uppercase tracking-wide">
-            Sortable List
+            Rich Text Editor
           </p>
           <Tabs
             style={selectedStyle}
@@ -1348,80 +1352,97 @@ import "./custom-theme.css";
               { id: "preview", label: "👁 Preview" },
               { id: "code", label: "</> Code" },
             ]}
-            bind:active={sortableListTab}
+            bind:active={textEditorTab}
           />
-          {#if sortableListTab === "preview"}
-            <div class="space-y-6">
-              <div>
-                <p class="demo-label text-xs font-semibold">Horizontal</p>
-                <SortableList items={sortableItems} direction="horizontal" onUpdate={(v) => sortableItems = v}>
-                  {#snippet children(item)}
-                    <span>{item.label}</span>
-                  {/snippet}
-                </SortableList>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <p class="demo-label text-xs font-semibold">Vertical</p>
-                  <SortableList items={sortableItems} direction="vertical" onUpdate={(v) => sortableItems = v}>
-                    {#snippet children(item)}
-                      <span>{item.label}</span>
-                    {/snippet}
-                  </SortableList>
-                </div>
-                <div>
-                  <p class="demo-label text-xs font-semibold">Nested</p>
-                  <SortableList items={sortableNested} type="parent" direction="vertical" onUpdate={(v) => sortableNested = v}>
-                    {#snippet children(item)}
-                      <div class="flex-1">
-                        <span>{item.label}</span>
-                        {#if item.children?.length}
-                          <div class="mt-2">
-                            <SortableList items={item.children} type="child" direction="vertical" onUpdate={(v) => item.children = v}>
-                              {#snippet children(child)}
-                                <span>{child.label}</span>
-                              {/snippet}
-                            </SortableList>
-                          </div>
-                        {/if}
-                      </div>
-                    {/snippet}
-                  </SortableList>
-                </div>
-              </div>
+          {#if textEditorTab === "preview"}
+            <TextEditor
+              bind:value={textEditorHtml}
+              label="Editable content"
+              placeholder="Start typing..."
+              rows={6}
+            />
+            <div class="flex flex-wrap gap-2">
+              <Button
+                variant="filled"
+                onclick={() => {
+                  textEditorInjectHtml = textEditorHtml;
+                  textEditorInjectOpen = true;
+                }}
+              >
+                {#snippet children()}Inject HTML{/snippet}
+              </Button>
+              <Button
+                variant="outlined"
+                onclick={() => {
+                  textEditorExtractOpen = true;
+                }}
+              >
+                {#snippet children()}Extract HTML{/snippet}
+              </Button>
             </div>
+            <Modal
+              bind:open={textEditorInjectOpen}
+              title="Inject HTML"
+              size="large"
+            >
+              {#snippet children()}
+                <div class="space-y-3">
+                  <Textarea
+                    label="HTML to inject"
+                    rows={6}
+                    bind:value={textEditorInjectHtml}
+                  />
+                  <Button
+                    variant="filled"
+                    onclick={() => {
+                      textEditorHtml = textEditorInjectHtml;
+                      textEditorInjectOpen = false;
+                    }}
+                  >
+                    {#snippet children()}Apply to editor{/snippet}
+                  </Button>
+                </div>
+              {/snippet}
+            </Modal>
+            <Modal
+              bind:open={textEditorExtractOpen}
+              title="Extracted HTML"
+              size="large"
+            >
+              {#snippet children()}
+                <pre
+                  class="component-code"
+                  style="white-space: pre-wrap; word-break: break-word; max-height: 60vh;"
+                >{@html highlight(textEditorHtml)}</pre>
+              {/snippet}
+            </Modal>
           {:else}
             {@render codeBlock(
-              "sortableList",
-              `<SortableList items={items} direction="vertical" onUpdate={(v) => items = v}>
-  {#snippet children(item)}
-    <span>{item.label}</span>
-  {/snippet}
-</SortableList>
+              "textEditor",
+              `<script>
+  let html = $state("<p>Hello from the <b>new editor</b>!</p>");
+</script>
 
-<SortableList items={items} direction="horizontal" onUpdate={(v) => items = v}>
-  {#snippet children(item)}
-    <span>{item.label}</span>
-  {/snippet}
-</SortableList>
+<TextEditor
+  bind:value={html}
+  label="Editable content"
+  placeholder="Start typing..."
+  rows={6}
+/>
 
-<!-- Nested: Each parent item renders its own SortableList -->
-<SortableList items={nestedItems} type="parent" direction="vertical">
-  {#snippet children(item)}
-    <span>{item.label}</span>
-    {#if item.children?.length}
-      <SortableList items={item.children} type="child" direction="vertical">
-        {#snippet children(child)}
-          <span>{child.label}</span>
-        {/snippet}
-      </SortableList>
-    {/if}
-  {/snippet}
-</SortableList>`,
+<Button onclick={() => { /* open inject modal */ }}>
+  Inject HTML
+</Button>
+
+<Button onclick={() => { /* open extract modal */ }}>
+  Extract HTML
+</Button>`,
             )}
           {/if}
         </Card>
       </div>
+
+      
     </section>
 
     <!-- LAYOUT COMPONENTS -->
@@ -2210,6 +2231,98 @@ import "./custom-theme.css";
   bind:open={isOpen}
   placeholder="Type a command..."
 />`,
+            )}
+          {/if}
+        </Card>
+      </div>
+      <!-- Sortable List -->
+      <div class="mt-6">
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            Sortable List
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={sortableListTab}
+          />
+          {#if sortableListTab === "preview"}
+            <div class="space-y-6">
+              <div>
+                <p class="demo-label text-xs font-semibold">Horizontal</p>
+                <SortableList items={sortableItems} direction="horizontal" onUpdate={(v) => sortableItems = v}>
+                  {#snippet children(item)}
+                    <span>{item.label}</span>
+                  {/snippet}
+                </SortableList>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p class="demo-label text-xs font-semibold">Vertical</p>
+                  <SortableList items={sortableItems} direction="vertical" onUpdate={(v) => sortableItems = v}>
+                    {#snippet children(item)}
+                      <span>{item.label}</span>
+                    {/snippet}
+                  </SortableList>
+                </div>
+                <div>
+                  <p class="demo-label text-xs font-semibold">Nested</p>
+                  <SortableList items={sortableNested} type="parent" direction="vertical" onUpdate={(v) => sortableNested = v}>
+                    {#snippet children(item)}
+                      <div class="flex-1">
+                        <span>{item.label}</span>
+                        {#if item.children?.length}
+                          <div class="mt-2">
+                            <SortableList items={item.children} type="child" direction="vertical" onUpdate={(v) => item.children = v}>
+                              {#snippet children(child)}
+                                <span>{child.label}</span>
+                              {/snippet}
+                            </SortableList>
+                          </div>
+                        {/if}
+                      </div>
+                    {/snippet}
+                  </SortableList>
+                </div>
+              </div>
+            </div>
+          {:else}
+            {@render codeBlock(
+              "sortableList",
+              `<SortableList items={items} direction="vertical" onUpdate={(v) => items = v}>
+  {#snippet children(item)}
+    <span>{item.label}</span>
+  {/snippet}
+</SortableList>
+
+<SortableList items={items} direction="horizontal" onUpdate={(v) => items = v}>
+  {#snippet children(item)}
+    <span>{item.label}</span>
+  {/snippet}
+</SortableList>
+
+<!-- Nested: Each parent item renders its own SortableList -->
+<SortableList items={nestedItems} type="parent" direction="vertical">
+  {#snippet children(item)}
+    <span>{item.label}</span>
+    {#if item.children?.length}
+      <SortableList items={item.children} type="child" direction="vertical">
+        {#snippet children(child)}
+          <span>{child.label}</span>
+        {/snippet}
+      </SortableList>
+    {/if}
+  {/snippet}
+</SortableList>`,
             )}
           {/if}
         </Card>

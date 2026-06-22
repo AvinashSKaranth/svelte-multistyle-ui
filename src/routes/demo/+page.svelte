@@ -1,6 +1,6 @@
 <script>
 import { onMount } from "svelte";
-import { Accordion, Alert, Avatar, BarChart, Breadcrumb, Button, ButtonGroup, Card, Checkbox, Chip, Column, DatePicker, Divider, DoughnutChart, DropdownMenu, FileUpload, Grid, IconButton, Input, LineChart, MultiSelect, Pagination, PieChart, PolarAreaChart, Popover, ProgressBar, RadarChart, Radio, Rating, Row, Select, Skeleton, Slider, Spinner, Stepper, Table, Tabs, Textarea, Toggle, Tooltip } from "svelte-multistyle-ui";
+import { Accordion, Alert, Avatar, BarChart, Breadcrumb, Button, ButtonGroup, Card, Checkbox, Chip, Column, DatePicker, Divider, DoughnutChart, DropdownMenu, FileUpload, Grid, IconButton, Input, LineChart, Modal, MultiSelect, Pagination, PieChart, PolarAreaChart, Popover, ProgressBar, RadarChart, Radio, Rating, Row, Select, Skeleton, Slider, Spinner, Stepper, Table, Tabs, Textarea, TextEditor, Toggle, Tooltip } from "svelte-multistyle-ui";
 
   let username = $state("");
   let email = $state("");
@@ -18,6 +18,10 @@ import { Accordion, Alert, Avatar, BarChart, Breadcrumb, Button, ButtonGroup, Ca
   let tabs = $state(0);
   let pagination = $state(0);
   let popover = $state(false);
+  let editorHtml = $state("<p>Hello from the <b>new editor</b>!</p>");
+  let injectHtml = $state("");
+  let injectOpen = $state(false);
+  let extractOpen = $state(false);
 
   onMount(() => {
     // TODO: add setup logic here
@@ -240,3 +244,23 @@ import { Accordion, Alert, Avatar, BarChart, Breadcrumb, Button, ButtonGroup, Ca
     <PolarAreaChart title="Polar" data={[{label:"q1",value:12},{label:"q2",value:19},{label:"q3",value:8},{label:"q4",value:15}]} />
   </Row>
 </Card>
+<Card>
+  <Row>
+    <TextEditor label="Rich text editor" placeholder="Start typing..." rows={8} bind:value={editorHtml} />
+  </Row>
+  <Row>
+    <Button onclick={() => { injectHtml = editorHtml; injectOpen = true; }}>Inject HTML</Button>
+    <Button onclick={() => { extractOpen = true; }}>Extract HTML</Button>
+  </Row>
+</Card>
+
+<Modal bind:open={injectOpen} title="Inject HTML">
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <Textarea label="HTML to inject" rows={6} bind:value={injectHtml} />
+    <Button onclick={() => { editorHtml = injectHtml; injectOpen = false; }}>Apply to editor</Button>
+  </div>
+</Modal>
+
+<Modal bind:open={extractOpen} title="Extracted HTML" size="large">
+  <pre style="white-space: pre-wrap; word-break: break-word; background: var(--t-surface); color: var(--t-text); padding: 12px; border-radius: 8px; border: 1px solid var(--t-border); max-height: 60vh; overflow: auto;">{editorHtml}</pre>
+</Modal>

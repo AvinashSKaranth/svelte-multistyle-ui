@@ -1,108 +1,120 @@
-# Plan: Global style/theme init helper
+# Plan: Build a custom WYSIWYG TextEditor from scratch
 
-## Goal
-Add a single library-level command, `initMultistyleUI({ style, theme })`, that sets the default `style` and `theme` for every component so users do not have to pass the props to each instance. Surface this in the demo at the top of `App.svelte` and document custom-CSS usage in the theme-settings sidebar.
+## Context
 
-## Proposed implementation
+The current `TextEditor` component wraps `pell`, which is unmaintained, limited, and hard to style/theme. We need to replace it with a self-contained, framework-agnostic WYSIWYG editor core wrapped in a Svelte 5 component that matches the library's multi-style / multi-theme conventions.
 
-### 1. New shared config module: `src/lib/config.js`
-Create a tiny module-level runes store:
+## Goals
 
-```js
-export let defaultStyle = $state("material");
-export let defaultTheme = $state("default");
+- Remove the `pell` dependency from `TextEditor`.
+- Provide all 22 feature groups requested (formatting, font controls, paragraph formatting, lists, links, images, video, tables, HR, undo/redo, clipboard, drag/drop, code view, fullscreen, floating toolbar, context menu, keyboard shortcuts, selection engine, sanitizer, mobile support, status bar, output API).
+- Keep the existing public `TextEditor` prop API so the showcase pages keep working.
+- Stay theme-aware via `--t-*` tokens and support all 12 visual styles.
 
-export function initMultistyleUI({ style = "material", theme = "default" } = {}) {
-  defaultStyle = style;
-  defaultTheme = theme;
-}
+## Architecture
+
+### Vanilla-JS core + Svelte wrapper
+
+The editor engine is implemented as a vanilla-JS class (`TextEditorCore`) that owns a `contenteditable` element and a toolbar. The Svelte component only:
+
+1. Renders the outer shell (`label`, wrapper, toolbar container, editor body, status bar).
+2. Instantiates the core on mount.
+3. Binds `value` to the core's HTML.
+4. Forwards `style`/`theme` classes and `...rest` props.
+5. Cleans up on destroy.
+
+This keeps the editor "works without frameworks" and makes it easier to test/port.
+
+### Module layout
+
+```
+src/lib/components/
+  TextEditor.svelte                 # Svelte 5 wrapper (kept, rewritten)
+  texteditor-styles.css             # Theme-aware CSS (rewritten)
+  text-editor-core/
+    editor-core.js                  # TextEditorCore class
+    selection-engine.js             # SelectionState + format detection
+    sanitizer.js                    # DOM-based HTML sanitizer
+    history.js                      # Undo/redo stack (100 ops)
+    clipboard.js                    # Paste + drag/drop handlers
+    toolbar-config.js               # Default toolbar groups/actions
+    dialogs.js                      # Link, image, video, table dialogs
+    floating-toolbar.js             # Air-mode toolbar
+    context-menu.js                 # Right-click menu
+    keyboard.js                     # Shortcut map + handler
+    dom-utils.js                    # Small helpers
 ```
 
-Because these are module-level `$state` runes, all components that reference them react when `initMultistyleUI` is called.
+### CSS structure
 
-### 2. Export the helper from `src/lib/index.js`
-Add to the barrel file:
+- Base: `.s-texteditor`, `.s-texteditor-toolbar`, `.s-texteditor-btn`, `.s-texteditor-content`, `.s-texteditor-statusbar`, `.s-texteditor-dialog`, `.s-texteditor-floating-toolbar`, `.s-texteditor-context-menu`.
+- Style overrides for each design language in the same `texteditor-styles.css` file.
+- Use `--t-*` tokens for colors, borders, radii, shadows.
 
-```js
-export { initMultistyleUI } from "./config.js";
-```
+## Key technical decisions
 
-### 3. Wire every component to the global defaults
-In each component, replace the hard-coded prop defaults with the shared defaults. For example, `Button.svelte` changes from:
+1. **Formatting commands**: Use `document.execCommand` for simple formatting (bold, italic, lists, justify, etc.) because it handles selection boundaries and cross-browser quirks reasonably well. For operations `execCommand` can't do cleanly (font size, table cell merge/split, image alignment), use manual DOM selection APIs.
+2. **Selection engine**: Maintain a `SelectionState` object updated on `selectionchange` and `keyup`/`mouseup`. Used for active-format toolbar highlighting, floating toolbar positioning, and context menu.
+3. **Sanitizer**: Parse HTML through `DOMParser`, walk the tree, keep only allowed tags/attributes, strip `script`/`style`/etc. Run on paste, `setHTML`, and code-view switch.
+4. **History**: Capture editor HTML snapshots before each mutating operation; stack depth 100. Undo/redo restore snapshots and preserve selection when possible.
+5. **Code view**: Swap the visual editor with a `<textarea>` or `<pre contenteditable>` showing formatted/syntax-highlighted HTML. Use Prism for highlighting (already a dependency).
+6. **Fullscreen**: Toggle a class on the editor wrapper; ESC listener exits; toolbar stays visible via sticky/fixed positioning.
+7. **Dialogs**: Rendered inside the Svelte component (link, image, video, table). The core emits events that the Svelte component handles, or the core can open simple inline modals. Prefer Svelte-driven modals for consistency with existing `Modal` component.
+8. **Mobile**: Toolbar becomes horizontally scrollable; touch-friendly button sizes (min 44×44); image resize handled with touch events.
 
-```js
-let {
-  style = "material",
-  theme = "default",
-  ...
-} = $props();
-```
+## Implementation phases
 
-to:
+Because the requested feature set is very large, I recommend implementing in waves so each wave can be reviewed and tested independently. The component stays usable after every phase.
 
-```js
-import { defaultStyle, defaultTheme } from "../config.js";
+### Phase 1 — Core foundation
+- Remove pell; create `TextEditorCore` with `contenteditable`, toolbar container, status bar.
+- Output API: `getHTML()`, `setHTML()`, `getText()`, `clear()`, `focus()`.
+- Basic text formatting: bold, italic, underline, strikethrough, clear formatting.
+- Paragraph formatting: headings H1–H6, paragraph, blockquote, pre/code, alignment, outdent/indent.
+- Lists: unordered (disc/circle/square) and ordered (numeric, alpha, roman).
+- HR insertion.
+- Selection engine + active-format toolbar state.
+- HTML sanitizer + paste sanitization.
+- Status bar (words, chars, selection length, current tag).
+- Update `TextEditor.svelte` wrapper and `texteditor-styles.css` for all 12 styles.
 
-let {
-  style: styleProp,
-  theme: themeProp,
-  ...
-} = $props();
+### Phase 2 — Typography & color
+- Font family dropdown.
+- Font size dropdown.
+- Foreground / background color pickers.
+- Superscript / subscript.
+- Line height control.
 
-const style = $derived(styleProp ?? defaultStyle);
-const theme = $derived(themeProp ?? defaultTheme);
-```
+### Phase 3 — Links & images
+- Link insert/edit/remove dialog.
+- Image upload + URL insert.
+- Image alignment (left/center/right/float) and resize handles.
+- Alt text, caption, replace, remove.
 
-All existing derived classes (`s-button-${style}`, `theme-${theme}`) continue to work because `style` and `theme` remain reactive strings. Explicit per-instance props still override the global defaults.
+### Phase 4 — Rich embeds & tables
+- Video embed dialog (YouTube, Vimeo, direct URL) → `<iframe>`.
+- Table insertion grid + table actions (add/delete rows/columns, merge/split cells, cell background, vertical alignment, border/width, delete table).
 
-**Files to update:** all `src/lib/components/*.svelte` files (~38 components).
+### Phase 5 — History, clipboard, drag/drop
+- Undo/redo stack (100 ops) with toolbar buttons and keyboard shortcuts.
+- Copy/cut/paste/plain-text paste handling.
+- Drag-and-drop image insertion.
 
-### 4. Demo the global init in `src/App.svelte`
+### Phase 6 — Advanced UX
+- Code view (visual ↔ HTML) with Prism highlighting, format, validate.
+- Fullscreen mode (ESC exits).
+- Floating selection toolbar (air mode).
+- Context menu (text, image, table sections).
+- Complete keyboard shortcut map.
+- Mobile toolbar responsiveness.
 
-- Import `initMultistyleUI` and call it once with the demo’s selected values:
+## Deliverables after each phase
 
-  ```js
-  import { initMultistyleUI } from "./lib/config.js";
+- Working `TextEditor` on both `/` and `/demo` showcase pages.
+- Updated `texteditor-styles.css` theme support.
+- No broken existing functionality.
+- `pnpm build` passes.
 
-  initMultistyleUI({ style: selectedStyle, theme: selectedTheme });
-  ```
+## Open question
 
-  A reactive call (e.g., inside a small `$effect` or at the top of the script) keeps the gallery responsive to the header selects.
-
-- Add a new **"Global Defaults"** card at the very top of `<main>` (before "Form Components") that shows the init API and a live example using components **without** `style`/`theme` props:
-
-  ```svelte
-  <Card elevated>
-    <p class="demo-label">Global init</p>
-    <pre class="component-code"><code>{`import { initMultistyleUI } from "svelte-multistyle-ui";
-
-initMultistyleUI({ style: "fluent", theme: "ocean" });
-
-<!-- Now every component uses those defaults -->
-<Button variant="filled">Click me</Button>`}</code></pre>
-    <div class="flex flex-wrap gap-2">
-      <Button variant="filled">Default Button</Button>
-      <Badge>Default Badge</Badge>
-    </div>
-  </Card>
-  ```
-
-  This demonstrates that the defaults propagate without per-instance props.
-
-### 5. Explain custom CSS in the theme sidebar
-In the settings sidebar, below the generated custom CSS code block, add a short explanatory section:
-
-- Import order: `theme.css` first, then your custom stylesheet.
-- Create a `.theme-custom` class (or any name) and override `--t-*` tokens.
-- Apply it with `theme="custom"` on components, or put the class on a parent element.
-- Mention that `theme-base.css` can be imported alone if you want to define every preset yourself.
-- Note that component-specific overrides can still be added by targeting `.s-<component>-<style>` classes.
-
-### 6. Verify
-Run `pnpm build:lib` and `pnpm dev` to ensure:
-- Library builds without errors.
-- Demo loads and the new Global Defaults card renders.
-- Changing the header style/theme updates both the explicitly-wired components and the global-defaults example.
-
-## Open question for you
-Should I also remove the repetitive `style={selectedStyle} theme={selectedTheme}` props from the existing demo component usages so the whole page demonstrates global defaults in action, or keep those explicit passes and only add the new top example card? Removing them is a larger diff but proves the feature; keeping them is safer and still shows the API.
+Should I implement all six phases in one large change, or would you prefer to start with Phase 1 (usable core) and add the remaining features incrementally? Phase 1 alone replaces pell cleanly and gives a solid editor; the rest can be layered on top without API breakage.
