@@ -23,6 +23,7 @@ const registry = {
   // ---------------- Form ----------------
   Input:         { importName: "Input",         kind: "leaf",     bindable: ["value"],    primaryBindable: "value" },
   Textarea:      { importName: "Textarea",      kind: "leaf",     bindable: ["value"],    primaryBindable: "value" },
+  TextEditor:    { importName: "TextEditor",    kind: "leaf",     bindable: ["value"],    primaryBindable: "value" },
   Select:        { importName: "Select",        kind: "leaf",     bindable: ["value"],    primaryBindable: "value", listProps: ["options"] },
   MultiSelect:   { importName: "MultiSelect",   kind: "leaf",     bindable: ["selected"], primaryBindable: "selected", listProps: ["options"] },
   Checkbox:      { importName: "Checkbox",      kind: "leaf",     bindable: ["checked"],  primaryBindable: "checked" },

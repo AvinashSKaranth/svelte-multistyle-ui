@@ -309,7 +309,9 @@ export class TextEditorCore {
         title: action.title || action.label,
         "data-command": action.command,
         "data-active": action.active || "",
-        innerHTML: action.icon ? `<span class="${action.icon}">${action.label}</span>` : action.label,
+        ...(action.icon
+          ? { innerHTML: `<span class="${action.icon}">${action.label}</span>` }
+          : { textContent: action.label }),
         onclick: (e) => {
           e.preventDefault();
           this._handleCommand(action);
@@ -337,9 +339,15 @@ export class TextEditorCore {
 
     if (action.type === "color") {
       const label = createElement("label", {
-        className: `s-texteditor-color-btn s-texteditor-color-${action.id}`,
+        className: `s-texteditor-color-btn s-texteditor-color-${action.id}${action.label ? " s-texteditor-color-btn--icon" : ""}`,
         title: action.title,
       });
+      if (action.label) {
+        label.appendChild(createElement("span", {
+          className: "s-texteditor-color-icon",
+          textContent: action.label,
+        }));
+      }
       const input = createElement("input", {
         type: "color",
         "data-command": action.command,

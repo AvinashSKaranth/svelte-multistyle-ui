@@ -93,8 +93,8 @@ export const DEFAULT_TOOLBAR = [
   [
     { id: "fontName", type: "select", title: "Font family", command: "fontName", options: FONT_FAMILIES },
     { id: "fontSize", type: "select", title: "Font size", command: "fontSize", options: FONT_SIZES },
-    { id: "foreColor", type: "color", title: "Text color", command: "foreColor" },
-    { id: "hiliteColor", type: "color", title: "Highlight", command: "hiliteColor" },
+    { id: "foreColor", type: "color", title: "Text color", command: "foreColor", label: "🎨" },
+    { id: "hiliteColor", type: "color", title: "Highlight", command: "hiliteColor", label: "🖍️" },
   ],
   // Paragraph formatting
   [
@@ -115,14 +115,14 @@ export const DEFAULT_TOOLBAR = [
   // Insert
   [
     { id: "insertLink", type: "button", label: "🔗", title: "Insert link", command: "createLink" },
-    { id: "insertImage", type: "button", label: "🖼", title: "Insert image", command: "insertImage" },
-    { id: "insertVideo", type: "button", label: "▶", title: "Insert video", command: "insertVideo" },
-    { id: "insertTable", type: "button", label: "▦", title: "Insert table", command: "insertTable" },
+    { id: "insertImage", type: "button", label: "🖼️", title: "Insert image", command: "insertImage" },
+    { id: "insertVideo", type: "button", label: "🎥", title: "Insert video", command: "insertVideo" },
+    { id: "insertTable", type: "button", label: "📋", title: "Insert table", command: "insertTable" },
     { id: "insertHorizontalRule", type: "button", label: "—", title: "Horizontal rule", command: "insertHorizontalRule" },
   ],
   // View
   [
-    { id: "toggleCodeView", type: "button", label: "C", title: "Toggle code view", command: "toggleCodeView" },
+    { id: "toggleCodeView", type: "button", label: "</>", title: "Toggle code view", command: "toggleCodeView" },
   ],
 ];
 
@@ -134,5 +134,5 @@ export const FLOATING_TOOLBAR = [
   { id: "italic", type: "button", label: "I", title: "Italic", command: "italic", active: "italic" },
   { id: "underline", type: "button", label: "U", title: "Underline", command: "underline", active: "underline" },
   { id: "createLink", type: "button", label: "🔗", title: "Link", command: "createLink" },
-  { id: "foreColor", type: "color", title: "Color", command: "foreColor" },
+  { id: "foreColor", type: "color", title: "Color", command: "foreColor", label: "🎨" },
 ];

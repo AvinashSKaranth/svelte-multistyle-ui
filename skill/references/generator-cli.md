@@ -99,7 +99,7 @@ body:
 
 Bindable components automatically receive a `$state` declaration and the correct `bind:*` directive:
 
-- `Input`, `Textarea`, `DatePicker` → `bind:value`
+- `Input`, `Textarea`, `TextEditor`, `DatePicker` → `bind:value`
 - `Select` → `bind:value`
 - `MultiSelect` → `bind:selected`
 - `Checkbox`, `Toggle` → `bind:checked`

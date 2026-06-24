@@ -145,6 +145,16 @@
   border: 1px solid var(--t-border);
 }
 
+.s-texteditor-color-btn--icon::before {
+  display: none;
+}
+
+.s-texteditor-color-icon {
+  font-size: 18px;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .s-texteditor-color-btn input[type="color"] {
   position: absolute;
   inset: 0;

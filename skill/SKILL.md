@@ -109,10 +109,10 @@ Only override the tokens you want to change — every unset token inherits the b
 
 ## Components
 
-48 exported components + `initMultistyleUI` + the `portal` action. Each component has its own reference page under `references/`. Open the page for the component the user asks about — it has the full prop list, bindables, snippets, and events.
+49 exported components + `initMultistyleUI` + the `portal` action. Each component has its own reference page under `references/`. Open the page for the component the user asks about — it has the full prop list, bindables, snippets, and events.
 
 **Forms** — `references/<name>.md`:
-[Input](references/Input.md) · [Button](references/Button.md) · [IconButton](references/IconButton.md) · [Textarea](references/Textarea.md) · [Select](references/Select.md) · [MultiSelect](references/MultiSelect.md) · [Checkbox](references/Checkbox.md) · [Radio](references/Radio.md) · [Toggle](references/Toggle.md) · [Slider](references/Slider.md) · [FileUpload](references/FileUpload.md) · [DatePicker](references/DatePicker.md) · [DropdownMenu](references/DropdownMenu.md) · [SortableList](references/SortableList.md)
+[Input](references/Input.md) · [Button](references/Button.md) · [IconButton](references/IconButton.md) · [Textarea](references/Textarea.md) · [TextEditor](references/TextEditor.md) · [Select](references/Select.md) · [MultiSelect](references/MultiSelect.md) · [Checkbox](references/Checkbox.md) · [Radio](references/Radio.md) · [Toggle](references/Toggle.md) · [Slider](references/Slider.md) · [FileUpload](references/FileUpload.md) · [DatePicker](references/DatePicker.md) · [DropdownMenu](references/DropdownMenu.md) · [SortableList](references/SortableList.md)
 
 **Layout** — [Card](references/Card.md) · [Divider](references/Divider.md) · [Tabs](references/Tabs.md) · [Accordion](references/Accordion.md) · [Modal](references/Modal.md) · [Drawer](references/Drawer.md) · [CommandPalette](references/CommandPalette.md) · [Row](references/Row.md) · [Column](references/Column.md) · [Grid](references/Grid.md)
 
@@ -188,7 +188,7 @@ body:
 
 ### Generator features
 
-- **Auto-bind**: bindable components (`Input`, `Select`, `Checkbox`, `Toggle`, `Radio`, `Slider`, `DatePicker`, `ButtonGroup`, `Rating`, `Tabs`, `Pagination`, `Popover`, etc.) automatically get a `$state` variable and the correct `bind:*` directive.
+- **Auto-bind**: bindable components (`Input`, `Textarea`, `TextEditor`, `Select`, `Checkbox`, `Toggle`, `Radio`, `Slider`, `DatePicker`, `ButtonGroup`, `Rating`, `Tabs`, `Pagination`, `Popover`, `Modal`, `Drawer`, and `CommandPalette`) automatically get a `$state` variable and the correct `bind:*` directive.
 - **Fake data**: if `options` are missing on `Select` / `MultiSelect`, or `data` is missing on `Table` / chart components, plausible defaults are injected.
 - **Option conversion**: a plain string list like `options: [Apple, Banana]` is converted into `{value, label}` objects automatically; you can also write `{value, label}` objects directly.
 - **Lightweight output**: generated `.svelte` files import components from `svelte-multistyle-ui`, declare `$state` vars, include an empty `onMount` stub, and emit markup — no dark/light mode effects or boilerplate.
