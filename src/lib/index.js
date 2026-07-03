@@ -17,6 +17,7 @@ export { default as Button } from "./components/Button.svelte";
 export { default as IconButton } from "./components/IconButton.svelte";
 export { default as Textarea } from "./components/Textarea.svelte";
 export { default as TextEditor } from "./components/TextEditor.svelte";
+export { default as CodeEditor } from "./components/CodeEditor.svelte";
 export { default as Select } from "./components/Select.svelte";
 export { default as MultiSelect } from "./components/MultiSelect.svelte";
 export { default as Checkbox } from "./components/Checkbox.svelte";

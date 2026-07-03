@@ -35,6 +35,7 @@
   import Chip from "../lib/components/Chip.svelte";
   import ButtonGroup from "../lib/components/ButtonGroup.svelte";
   import TextEditor from "../lib/components/TextEditor.svelte";
+  import CodeEditor from "../lib/components/CodeEditor.svelte";
   import Rating from "../lib/components/Rating.svelte";
   import CommandPalette from "../lib/components/CommandPalette.svelte";
   import Row from "../lib/components/Row.svelte";
@@ -196,6 +197,10 @@
   let tabsDemoTab = $state("preview");
   let btnGroupTab = $state("preview");
   let textEditorTab = $state("preview");
+  let codeEditorTab = $state("preview");
+  let codeEditorVal = $state(
+    "function hello(name) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(hello('world'));",
+  );
   let sortableListTab = $state("preview");
   let barChartTab = $state("preview");
   let lineChartTab = $state("preview");
@@ -1440,9 +1445,64 @@ import "./custom-theme.css";
             )}
           {/if}
         </Card>
+
+        <!-- CodeEditor -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <p class="demo-label text-xs font-semibold uppercase tracking-wide">
+            CodeEditor
+          </p>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={codeEditorTab}
+          />
+          {#if codeEditorTab === "preview"}
+            <div class="space-y-3">
+              <CodeEditor
+                bind:value={codeEditorVal}
+                language="javascript"
+                label="Editable"
+                rows={6}
+              />
+              <CodeEditor
+                value={codeEditorVal}
+                language="javascript"
+                editable={false}
+                label="Readonly"
+                rows={6}
+              />
+            </div>
+          {:else}
+            {@render codeBlock(
+              "codeEditor",
+              `<CodeEditor
+  bind:value={code}
+  language="javascript"
+  label="Code"
+  rows={8}
+/>
+
+<!-- readonly display -->
+<CodeEditor
+  value={code}
+  language="javascript"
+  editable={false}
+/>`,
+            )}
+          {/if}
+        </Card>
       </div>
 
-      
+
     </section>
 
     <!-- LAYOUT COMPONENTS -->

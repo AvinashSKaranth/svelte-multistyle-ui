@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-`svelte-multistyle-ui` is a Svelte 5 component library whose components can render in many visual *styles* (Material, Fluent, Brutalist, etc.) and *themes* (color palettes). The published package is built from `src/lib/`; the Vite app in `src/App.svelte` is a visual demo/gallery for local development.
+`svelte-multistyle-ui` is a Svelte 5 component library whose components can render in many visual *styles* (Material, Fluent, Brutalist, etc.) and *themes* (color palettes). The published package is built from `src/lib/`; the visual demo/gallery is a **SvelteKit** app under `src/routes/` (root `src/routes/+page.svelte`), prerendered to static HTML in `docs/` via `@sveltejs/adapter-static`. There is no `src/App.svelte` — do not look for one.
 
 ## Tech stack
 
-- **Svelte 5** with runes (`$props`, `$state`, `$derived`, `$effect`, `$bindable`) and snippets (`{@render children?.()}`).
-- **Vite 8** + `@sveltejs/vite-plugin-svelte`.
-- **Tailwind CSS v4** configured through CSS (`@import "tailwindcss"` in `src/app.css`), no `tailwind.config.js`.
+- **Svelte 5** with runes (`$props`, `$state`, `$derived`, `$effect`, `$bindable`) and snippets (`{@render children?.()}`). Runes mode is forced project-wide in `svelte.config.js` (`compilerOptions.runes`).
+- **SvelteKit 2** + `@sveltejs/adapter-static` (prerenders the gallery to `docs/`) + **Vite 8** + `@sveltejs/vite-plugin-svelte`. Kit/adapter config lives in `svelte.config.js`; `vite.config.js` only wires the `tailwindcss` and `sveltekit` plugins (kit options there would make SvelteKit ignore `svelte.config.js`). `output.bundleStrategy: "single"` emits one shared `bundle.js`/`bundle.css`.
+- **Tailwind CSS v4** configured through CSS (`@import "tailwindcss"` in `src/app.css`, imported by `src/routes/+layout.svelte`), no `tailwind.config.js`.
 - **Playwright** for visual regression tests of the demo gallery.
 - **pnpm** is the intended package manager (`pnpm-lock.yaml` is present; `package-lock.json` also exists but `package.json` scripts use `pnpm`).
 
@@ -19,15 +19,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 All scripts are in `package.json`. Use pnpm:
 
 - `pnpm install` — install dependencies.
-- `pnpm dev` — start the Vite dev server for the component gallery.
-- `pnpm build` — build the demo app to `dist/`.
-- `pnpm gen:theme` — regenerate `src/lib/components/theme.css` from `src/lib/themes/presets.js` + `generator.js` via `scripts/gen-theme.js`. Run whenever presets change; `build:lib` runs it automatically first.
-- `pnpm build:lib` — build the library for publishing. Runs `gen:theme` then `svelte-package -i src/lib`, emits to `dist/`.
+- `pnpm dev` — start the SvelteKit dev server for the component gallery.
+- `pnpm build` — build the demo gallery: `vite build` (SvelteKit → prerendered static HTML in `docs/`) then `node scripts/rename-bundle.js` (renames the single bundle output). The demo build target is `docs/`, **not** `dist/`.
+- `pnpm gen:theme` — regenerate `src/lib/components/theme.css` from `src/lib/themes/presets.js` + `generator.js` via `scripts/gen-theme.js`. Run whenever presets change; `build:lib` runs it automatically.
+- `pnpm build:lib` — build the library for publishing. First auto-bumps the **patch** version in `package.json` (inline `node -e` script), then runs `gen:theme`, then `svelte-package -i src/lib` → emits to `dist/`.
 - `pnpm preview` — preview the production demo build.
-- `pnpm test` — run Playwright visual tests across Chromium and WebKit in light and dark mode.
+- `pnpm gen` — run the CLI generator (`node cli/bin.js generate`); see CLI section below.
+- `pnpm gen:sample` — generate the sample route from `cli/fixtures/sample.yaml` into `src/routes/demo/+page.svelte`.
+- `pnpm test:gen` — run the CLI's own test suite (`node cli/test.js`).
+- `pnpm test` — run Playwright visual tests across Chromium and WebKit in light and dark mode. Run a single project: `pnpm test --project chromium-light`.
 - `pnpm test:ui` — open the Playwright UI runner.
 - `pnpm test:install` — install Playwright browsers (chromium + webkit, with deps).
-- `pnpm publish` — auto-bumps the patch version, builds demo + lib, then publishes. (`prepublishOnly` also runs `build:lib`.)
+- Publishing: there is **no `publish` script**. `pnpm publish` runs the `prepublishOnly` hook, which runs `build:lib` (version bump + gen:theme + svelte-package). It does **not** build the demo.
 
 There is currently no linter or formatter configured.
 
@@ -64,11 +67,11 @@ Each preset in `presets.js` has the shape `{ common, light, dark }`:
 
 Derived (NOT configurable, set by `generator.js`): `--t-text-hint`/`--t-text-muted`/`--t-text-disabled` = 50% transparency of `--t-text`; `--t-card-bg` = surface; `--t-card-border-color` = `color-mix(text 14%, surface)`; `--t-surface-bg` = `color-mix(surface 85%, #000)`; `--t-btn-bg` = primary; `--t-text-*` brand/status colors mirror their status counterparts. The hint/muted/disabled derivations are re-emitted per mode (light and dark) on purpose — a `color-mix()` custom property bakes at the declaring element using that element's `--t-text`, so a single `:root` derivation would freeze the light value and never follow the theme/dark block. Output is byte-stable across runs (fixed `TOKEN_ORDER`).
 
-Runtime theme API (`src/lib/themes/`, exported from the package root and `./themes`): `themes`, `generateThemeCss`, `resolveLight`, `resolveDark`, `applyThemeToElement`, plus color utils `hexToHsl`/`hslToCss`/`invert`/`invertHex`. `applyThemeToElement(el, config, isDark)` sets every resolved `--t-*` var directly on a DOM element and clears stale ones — used for live theme preview (e.g. the editor in `src/App.svelte`).
+Runtime theme API (`src/lib/themes/`, exported from the package root and `./themes`): `themes`, `generateThemeCss`, `resolveLight`, `resolveDark`, `applyThemeToElement`, plus color utils `hexToHsl`/`hslToCss`/`invert`/`invertHex`. `applyThemeToElement(el, config, isDark)` sets every resolved `--t-*` var directly on a DOM element and clears stale ones — used for live theme preview (e.g. the Theme Editor in `src/routes/+page.svelte`).
 
 Consuming apps can: import the full presets (`import 'svelte-multistyle-ui/theme.css'`); import only the base (`import 'svelte-multistyle-ui/theme-base.css'`) and define their own `.theme-*` class; or use the JS API (`import { generateThemeCss, applyThemeToElement } from 'svelte-multistyle-ui/themes'`) to build/apply a custom theme at runtime.
 
-Dark/light mode is applied by toggling `dark` / `light` classes on `<html>`; the demo in `src/App.svelte` does this with `window.matchMedia('(prefers-color-scheme: dark)')`.
+Dark/light mode is applied by toggling `dark` / `light` classes on `<html>`; the demo in `src/routes/+page.svelte` does this with `window.matchMedia('(prefers-color-scheme: dark)')`, and also accepts `?mode=light|dark` URL params (used by the visual tests).
 
 ### Per-component styles
 
@@ -81,7 +84,7 @@ Style overrides control the shape/interaction language of a design system and ar
 
 ### Library exports
 
-`src/lib/index.js` re-exports every component, the runtime theme API, the global config (`initMultistyleUI`), and actions (`portal`). Package `exports` are:
+`src/lib/index.js` re-exports every component, the runtime theme API, the global config (`initMultistyleUI`), actions (`portal`), and the `cn` class-merge helper (backed by `tailwind-merge`, for overriding component classes). Package `exports` are:
 
 - `.` → `dist/index.js` / `dist/index.d.ts`
 - `./theme.css` → `dist/components/theme.css` (generated)
@@ -92,7 +95,7 @@ Style overrides control the shape/interaction language of a design system and ar
 
 ### Global config
 
-`src/lib/config.js` re-exports `initMultistyleUI` (from `config.svelte.js`). Call it once in the app (e.g. `App.svelte` or a `+layout.svelte`) to set default `style` and `theme` for every component; per-component `style`/`theme` props still override.
+`src/lib/config.js` re-exports `initMultistyleUI` (from `config.svelte.js`). Call it once in the app (e.g. `src/routes/+layout.svelte`) to set default `style` and `theme` for every component; per-component `style`/`theme` props still override.
 
 ### Charts
 
@@ -105,15 +108,22 @@ Style overrides control the shape/interaction language of a design system and ar
 - Keep component-specific styles in `<component>-styles.css` and rely on `theme.css` tokens; do not hardcode theme colors in component styles.
 - To add or change a theme preset, edit `src/lib/themes/presets.js` then run `pnpm gen:theme`. Never hand-edit `src/lib/components/theme.css` (it is generated).
 - Use Svelte 5 snippets for content slots (`{#snippet children()}...{/snippet}` and `{@render children?.()}`).
-- The demo app (`src/App.svelte`) imports components from `./lib/components/...` for live testing; update it if you add a new public component.
+- The demo gallery (`src/routes/+page.svelte`) imports components from `../lib/components/...` for live testing; update it if you add a new public component. The CLI registry (`cli/registry.js`) also maps component names to their import paths and props — update it when adding/changing components so the YAML generator can emit them.
 - Re-export new components from `src/lib/index.js`.
+
+## CLI — YAML to Svelte page generator
+
+`cli/` contains a standalone Node CLI (shipped via the package `bin` as `svelte-multistyle-ui`) that converts a YAML page spec into a Svelte 5 route page. Entry: `cli/bin.js`; core: `generate.js` (orchestrates), `schema.js` (YAML schema/validation), `registry.js` (component registry: import paths, props, snippet contracts), `emit.js` (Svelte source emission). `cli/fixtures/sample.yaml` is the reference input; `cli/test.js` is its self-test (`pnpm test:gen`).
+
+Usage: `npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+page.svelte`. Supports `--dry-run`, `-w/--watch`, `-h/--help`, `-v/--version`. The generator depends on the registry staying in sync with the actual component APIs in `src/lib/`.
 
 ## Visual tests
 
-Playwright tests live in `tests/visual-demo.spec.js`. They load the demo with `?style=<style>&mode=<light|dark>`, verify every section renders, and capture full-page screenshots to `test-results/screenshots/` for manual review. Run `pnpm test` to execute them; `pnpm test --project chromium-light` runs a single project.
+Playwright tests live in `tests/visual-demo.spec.js`. They load the root route (`/?style=<style>&mode=<light|dark>`), assert the `#style-sel`/`#mode-sel` controls reflect the URL params, verify every section heading renders, and capture full-page screenshots to `test-results/screenshots/` for manual review. Run `pnpm test` to execute them; `pnpm test --project chromium-light` runs a single project.
 
 ## Notes
 
-- `src/App.svelte` duplicates some theme default values for its theme editor; the authoritative source for presets is `src/lib/themes/presets.js`, and `src/lib/components/theme-base.css` is the authoritative `:root` token default. `theme.css` is generated from both.
+- `src/routes/+page.svelte` duplicates some theme default values for its Theme Editor; the authoritative source for presets is `src/lib/themes/presets.js`, and `src/lib/components/theme-base.css` is the authoritative `:root` token default. `theme.css` is generated from both.
+- `src/routes/+layout.js` sets `export const prerender = true` — the entire gallery is prerendered to `docs/` by `adapter-static`.
 - `README.md` is the generic Vite + Svelte template readme and does not describe this library.
 - No Cursor rules (`.cursor/rules/`, `.cursorrules`) or GitHub Copilot instructions (`.github/copilot-instructions.md`) were found in this repository.
