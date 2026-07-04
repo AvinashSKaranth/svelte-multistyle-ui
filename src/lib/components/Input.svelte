@@ -55,15 +55,14 @@
   const uid = Math.random().toString(36).slice(2, 9);
   const internalId = $derived(id || `input-${uid}`);
 
-  const floatingStyles = [
-    "material",
-    "material3",
-    "fluent",
-    "carbon",
-    "bootstrap",
-  ];
-  const hasFloatingLabel = $derived(
-    floatingStyles.includes(style) && (label || placeholder),
+  // Floating label (animates inside the field) — Material / Material 3 only.
+  // Every other style renders a static label above the field.
+  const floatingLabelStyles = ["material", "material3"];
+  const useFloatingLabel = $derived(
+    floatingLabelStyles.includes(style) && (label || placeholder),
+  );
+  const useAboveLabel = $derived(
+    !floatingLabelStyles.includes(style) && (label || placeholder),
   );
   const displayLabel = $derived(label || placeholder);
 </script>
@@ -76,48 +75,53 @@
   class:floated
   class:has-icon-start={hasIconStart}
   class:has-icon-end={hasIconEnd}
+  class:above-label={useAboveLabel}
 >
-  {#if iconStart}
-    <span class="s-input-icon s-input-icon-start {iconClass}">{iconStart}</span>
+  {#if useAboveLabel}
+    <label class="s-input-label-above" for={internalId}>{displayLabel}</label>
   {/if}
-  {#if hasFloatingLabel}
+  {#if useFloatingLabel}
     <label class="s-input-floating-label" for={internalId}>{displayLabel}</label
     >
   {/if}
-  <input
-    {type}
-    bind:value
-    placeholder={hasFloatingLabel ? "" : placeholder}
-    {disabled}
-    {readonly}
-    {required}
-    {name}
-    id={internalId}
-    {min}
-    {max}
-    {minlength}
-    {maxlength}
-    {step}
-    {pattern}
-    {autocomplete}
-    {autofocus}
-    {multiple}
-    {accept}
-    {list}
-    {size}
-    {tabindex}
-    {title}
-    {form}
-    {inputmode}
-    {spellcheck}
-    onfocus={() => (focused = true)}
-    onblur={() => (focused = false)}
-    {...rest}
-  />
-  {#if iconEnd}
-    <span class="s-input-icon s-input-icon-end {iconClass}">{iconEnd}</span>
-  {/if}
-  {#if style === "fluent"}
-    <span class="s-input-fluent-border-indicator"></span>
-  {/if}
+  <div class="s-input-field">
+    {#if iconStart}
+      <span class="s-input-icon s-input-icon-start {iconClass}">{iconStart}</span>
+    {/if}
+    <input
+      {type}
+      bind:value
+      placeholder={useFloatingLabel || (useAboveLabel && !label)
+        ? ""
+        : placeholder}
+      {disabled}
+      {readonly}
+      {required}
+      {name}
+      id={internalId}
+      {min}
+      {max}
+      {minlength}
+      {maxlength}
+      {step}
+      {pattern}
+      {autocomplete}
+      {autofocus}
+      {multiple}
+      {accept}
+      {list}
+      {size}
+      {tabindex}
+      {title}
+      {form}
+      {inputmode}
+      {spellcheck}
+      onfocus={() => (focused = true)}
+      onblur={() => (focused = false)}
+      {...rest}
+    />
+    {#if iconEnd}
+      <span class="s-input-icon s-input-icon-end {iconClass}">{iconEnd}</span>
+    {/if}
+  </div>
 </div>

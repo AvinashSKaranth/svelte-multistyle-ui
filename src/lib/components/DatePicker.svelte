@@ -58,17 +58,16 @@
   );
   const inputPlaceholder = $derived(placeholder || dispFormat.toLowerCase());
 
-  // Floating-label support — mirrors Input.svelte so the label sits inside the
-  // border (floats up on focus/value) for outlined styles, and renders no
-  // in-field label for the non-floating styles, exactly like Input.
-  const floatingStyles = [
-    "material",
-    "material3",
-    "fluent",
-    "carbon",
-    "bootstrap",
-  ];
-  const hasFloatingLabel = $derived(floatingStyles.includes(style) && !!label);
+  // Floating-label support — mirrors Input.svelte. Material / Material 3 float
+  // the label inside the border; every other style renders a static label above.
+  const floatingLabelStyles = ["material", "material3"];
+  const useFloatingLabel = $derived(
+    floatingLabelStyles.includes(style) && !!label,
+  );
+  const useAboveLabel = $derived(
+    !floatingLabelStyles.includes(style) && (label || placeholder),
+  );
+  const displayLabel = $derived(label || placeholder);
   const hasValue = $derived(!!value);
   const floated = $derived(open || hasValue);
 
@@ -294,32 +293,38 @@
   class:floated
   class:has-value={hasValue}
   class:disabled
+  class:above-label={useAboveLabel}
   bind:this={wrapperEl}
   {...rest}
 >
-  {#if hasFloatingLabel}
+  {#if useAboveLabel}
+    <label class="s-dp-label-above" for={internalId}>{displayLabel}</label>
+  {/if}
+  {#if useFloatingLabel}
     <label class="s-dp-floating-label" for={internalId}>{label}</label>
   {/if}
-  <input
-    id={internalId}
-    type="text"
-    readonly
-    value={displayValue}
-    placeholder={hasFloatingLabel ? "" : inputPlaceholder}
-    {disabled}
-    onfocus={() => {
-      if (!disabled) open = true;
-    }}
-    onclick={() => {
-      if (!disabled) open = true;
-    }}
-    role="combobox"
-    aria-expanded={open}
-    aria-haspopup="dialog"
-  />
-  <span class="s-datepicker-trigger-icon {iconClass}" aria-hidden="true"
-    >calendar_today</span
-  >
+  <div class="s-dp-field">
+    <input
+      id={internalId}
+      type="text"
+      readonly
+      value={displayValue}
+      placeholder={useFloatingLabel ? "" : inputPlaceholder}
+      {disabled}
+      onfocus={() => {
+        if (!disabled) open = true;
+      }}
+      onclick={() => {
+        if (!disabled) open = true;
+      }}
+      role="combobox"
+      aria-expanded={open}
+      aria-haspopup="dialog"
+    />
+    <span class="s-datepicker-trigger-icon {iconClass}" aria-hidden="true"
+      >calendar_today</span
+    >
+  </div>
 
   {#if open}
     <div

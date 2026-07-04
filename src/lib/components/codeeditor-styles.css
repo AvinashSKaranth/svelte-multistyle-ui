@@ -285,8 +285,18 @@
   background: rgba(0, 0, 0, 0.12);
 }
 .s-codeeditor-liquid-glass .s-codeeditor-copy-btn {
-  background: rgba(255, 255, 255, 0.15);
+  background: color-mix(in srgb, var(--t-primary) 78%, transparent);
   border-color: rgba(255, 255, 255, 0.3);
-  color: var(--t-text);
+  color: #ffffff;
   backdrop-filter: blur(8px);
+}
+.s-codeeditor-liquid-glass .s-codeeditor-copy-btn.copied {
+  background: color-mix(in srgb, var(--t-success) 78%, transparent);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+.s-codeeditor-liquid-glass .s-codeeditor-copy-btn.failed {
+  background: color-mix(in srgb, var(--t-error) 78%, transparent);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
 }

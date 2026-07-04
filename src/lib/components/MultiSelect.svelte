@@ -29,17 +29,19 @@
   const styleClass = $derived(`s-mselect-${style}`);
   const themeClass = $derived(`theme-${theme}`);
 
-  const floatingStyles = [
-    "material",
-    "material3",
-    "fluent",
-    "carbon",
-    "bootstrap",
-  ];
-  const hasFloatingLabel = $derived(
-    floatingStyles.includes(style) && (label || placeholder),
+  // Floating label (animates inside the field) — Material / Material 3 only.
+  // Every other style renders a static label above the field.
+  const floatingLabelStyles = ["material", "material3"];
+  const useFloatingLabel = $derived(
+    floatingLabelStyles.includes(style) && (label || placeholder),
+  );
+  const useAboveLabel = $derived(
+    !floatingLabelStyles.includes(style) && (label || placeholder),
   );
   const displayLabel = $derived(label || placeholder);
+  const showInFieldPlaceholder = $derived(
+    !(useFloatingLabel || (useAboveLabel && !label)),
+  );
 
   function toggle(val) {
     if (selected.includes(val)) {
@@ -102,6 +104,7 @@
   class:open
   class:has-value={hasValue}
   class:floated
+  class:above-label={useAboveLabel}
   tabindex="-1"
   role="listbox"
   aria-label={displayLabel}
@@ -109,7 +112,10 @@
   onfocusout={handleBlur}
   {...rest}
 >
-  {#if hasFloatingLabel}
+  {#if useAboveLabel}
+    <label class="s-mselect-label-above">{displayLabel}</label>
+  {/if}
+  {#if useFloatingLabel}
     <label class="s-mselect-floating-label">{displayLabel}</label>
   {/if}
   <div
@@ -141,7 +147,7 @@
           </span>
         {/each}
       </div>
-    {:else if !hasFloatingLabel}
+    {:else if showInFieldPlaceholder}
       <span class="mselect-placeholder">{placeholder}</span>
     {/if}
     <span class="mselect-arrow">

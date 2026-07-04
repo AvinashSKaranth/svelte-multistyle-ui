@@ -475,9 +475,21 @@
   border-color: rgba(255, 255, 255, 0.15);
 }
 .s-texteditor-liquid-glass .s-texteditor-btn,
-.s-texteditor-liquid-glass .s-texteditor-select,
 .s-texteditor-liquid-glass .s-texteditor-label {
   color: rgba(255, 255, 255, 0.92);
+}
+/* Closed native <select>: transparent so it sits on the glass toolbar, with
+   the same white text as the toolbar buttons. */
+.s-texteditor-liquid-glass .s-texteditor-select {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.92);
+}
+/* The OS-rendered option popup can't be made glassy and the glass context
+   forces --t-text to white, which would be white-on-white. Use a solid light
+   surface + dark text so the dropdown list is readable in both modes. */
+.s-texteditor-liquid-glass .s-texteditor-select option {
+  background: #ffffff;
+  color: #1e293b;
 }
 .s-texteditor-liquid-glass .s-texteditor-btn.active {
   background: var(--t-primary);

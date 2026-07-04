@@ -34,15 +34,14 @@
   const uid = Math.random().toString(36).slice(2, 9);
   const internalId = `textarea-${uid}`;
 
-  const floatingStyles = [
-    "material",
-    "material3",
-    "fluent",
-    "carbon",
-    "bootstrap",
-  ];
-  const hasFloatingLabel = $derived(
-    floatingStyles.includes(style) && (label || placeholder),
+  // Floating label (animates inside the field) — Material / Material 3 only.
+  // Every other style renders a static label above the field.
+  const floatingLabelStyles = ["material", "material3"];
+  const useFloatingLabel = $derived(
+    floatingLabelStyles.includes(style) && (label || placeholder),
+  );
+  const useAboveLabel = $derived(
+    !floatingLabelStyles.includes(style) && (label || placeholder),
   );
   const displayLabel = $derived(label || placeholder);
 
@@ -61,15 +60,21 @@
   class:focused
   class:has-value={hasValue}
   class:floated
+  class:above-label={useAboveLabel}
 >
-  {#if hasFloatingLabel}
+  {#if useAboveLabel}
+    <label class="s-textarea-label-above" for={internalId}>{displayLabel}</label>
+  {/if}
+  {#if useFloatingLabel}
     <label class="s-textarea-floating-label" for={internalId}
       >{displayLabel}</label
     >
   {/if}
   <textarea
     bind:value
-    placeholder={hasFloatingLabel ? "" : placeholder}
+    placeholder={useFloatingLabel || (useAboveLabel && !label)
+      ? ""
+      : placeholder}
     {disabled}
     {readonly}
     {required}

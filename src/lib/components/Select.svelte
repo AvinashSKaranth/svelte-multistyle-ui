@@ -31,17 +31,21 @@
   const styleClass = $derived(`s-select-${style}`);
   const themeClass = $derived(`theme-${theme}`);
 
-  const floatingStyles = [
-    "material",
-    "material3",
-    "fluent",
-    "carbon",
-    "bootstrap",
-  ];
-  const hasFloatingLabel = $derived(
-    floatingStyles.includes(style) && (label || placeholder),
+  // Floating label (animates inside the field) — Material / Material 3 only.
+  // Every other style renders a static label above the field.
+  const floatingLabelStyles = ["material", "material3"];
+  const useFloatingLabel = $derived(
+    floatingLabelStyles.includes(style) && (label || placeholder),
+  );
+  const useAboveLabel = $derived(
+    !floatingLabelStyles.includes(style) && (label || placeholder),
   );
   const displayLabel = $derived(label || placeholder);
+  // Show the in-field placeholder hint only when it isn't lifted to the
+  // above-label (label set) and there's no floating label acting as placeholder.
+  const showInFieldPlaceholder = $derived(
+    !(useFloatingLabel || (useAboveLabel && !label)),
+  );
 
   function getLabel(val) {
     const opt = options.find((o) => o.value === val);
@@ -119,6 +123,7 @@
   class:has-value={hasValue}
   class:floated
   class:open
+  class:above-label={useAboveLabel}
   tabindex="-1"
   role="listbox"
   aria-label={displayLabel}
@@ -126,7 +131,10 @@
   onfocusout={handleBlur}
   {...rest}
 >
-  {#if hasFloatingLabel}
+  {#if useAboveLabel}
+    <label class="s-select-label-above">{displayLabel}</label>
+  {/if}
+  {#if useFloatingLabel}
     <label class="s-select-floating-label"
       >{displayLabel}</label
     >
@@ -138,13 +146,10 @@
     onclick={() => (open = !open)}
     onkeydown={handleKeydown}
   >
-    {#if hasValue && !hasFloatingLabel}
+    {#if hasValue}
       <span class="s-select-value">{getLabel(value)}</span>
-    {:else if !hasFloatingLabel}
+    {:else if showInFieldPlaceholder}
       <span class="s-select-placeholder">{placeholder}</span>
-    {/if}
-    {#if hasFloatingLabel && hasValue}
-      <span class="s-select-value">{getLabel(value)}</span>
     {/if}
     <span class="s-select-arrow">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">

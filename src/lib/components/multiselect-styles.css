@@ -11,6 +11,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 4px;
+  position: relative;
   min-height: 56px;
   padding: 14px 36px 14px 12px;
   background: var(--t-surface);
@@ -120,12 +121,21 @@
   color: var(--t-primary);
 }
 
-/* ===== FLOATING LABEL PADDING ===== */
+/* ===== STATIC LABEL ABOVE (fluent, carbon, bootstrap, brutalist, pixel, neon,
+   metro, cartoon, illustration, liquid-glass) ===== */
+.s-mselect-label-above {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t-text);
+  padding: 0 2px;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+/* ===== FLOATING LABEL PADDING (Material / Material 3 only) ===== */
 .s-mselect-material .mselect-control,
-.s-mselect-material3 .mselect-control,
-.s-mselect-fluent .mselect-control,
-.s-mselect-carbon .mselect-control,
-.s-mselect-bootstrap .mselect-control {
+.s-mselect-material3 .mselect-control {
   padding-top: 27px;
   padding-bottom: 9px;
 }
@@ -192,33 +202,35 @@
   transform: translateY(-22px) scale(0.75);
 }
 
-/* Fluent */
+/* Fluent 2 — label above, 4px radius, 32px control */
 .s-mselect-fluent .mselect-control {
+  min-height: 32px;
+  padding: 6px 36px 6px 10px;
+  font-size: 14px;
   background: var(--t-surface);
-  border: var(--t-border-width) solid var(--t-border);
-  border-radius: var(--t-input-radius);
-  border-bottom: 2px solid var(--t-border);
+  border: 1px solid var(--t-border);
+  border-radius: 4px;
+  box-shadow: none;
 }
 .s-mselect-fluent .mselect-control:hover {
-  border-color: color-mix(in srgb, var(--t-text) 50%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--t-text) 50%, transparent);
+  border-color: color-mix(in srgb, var(--t-text) 60%, transparent);
 }
-.s-mselect-fluent .s-mselect-floating-label {
-  left: 12px;
-  top: 13px;
-  font-size: 14px;
+.s-mselect-fluent.focused .mselect-control {
+  border-bottom: 2px solid var(--t-primary);
+  padding-bottom: 5px;
+  box-shadow: none;
 }
-.s-mselect-fluent.floated .s-mselect-floating-label {
-  transform: translateY(-9px) scale(0.78);
-  color: var(--t-primary);
+.s-mselect-fluent .s-mselect-label-above {
+  font-size: 13px;
   font-weight: 600;
+  color: color-mix(in srgb, var(--t-text) 70%, transparent);
+  margin-bottom: 4px;
 }
-.s-mselect-fluent:not(.focused).has-value .s-mselect-floating-label {
-  color: var(--t-text);
-  font-weight: 400;
+.s-mselect-fluent.focused .s-mselect-label-above {
+  color: var(--t-primary);
 }
 
-/* Bootstrap */
+/* Bootstrap — label above */
 .s-mselect-bootstrap .mselect-control {
   border-radius: 6px;
   border: var(--t-border-width) solid var(--t-border);
@@ -229,24 +241,21 @@
   border-color: var(--t-primary);
 }
 .mselect-dropdown.s-mselect-bootstrap { border-radius: 6px; }
-.s-mselect-bootstrap .s-mselect-floating-label {
-  left: 12px;
-  top: 13px;
-  font-size: 15px;
-}
-.s-mselect-bootstrap.floated .s-mselect-floating-label {
-  transform: translateY(-10px) scale(0.75);
-  color: color-mix(in srgb, var(--t-text) 50%, transparent);
-}
-.s-mselect-bootstrap:not(.focused).has-value .s-mselect-floating-label {
-  color: var(--t-text-hint);
+.s-mselect-bootstrap .s-mselect-label-above {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
-/* Carbon */
+/* Carbon — label above, 0 radius, 40px control */
 .s-mselect-carbon .mselect-control {
+  min-height: 40px;
+  padding: 8px 36px 8px 12px;
+  font-size: 14px;
   border-radius: 0;
-  border: var(--t-border-width) solid var(--t-border);
-  border-bottom-width: 2px;
+  border: 1px solid var(--t-border);
+  border-bottom: 2px solid var(--t-border);
+  font-family: 'IBM Plex Sans', sans-serif;
   box-shadow: none;
 }
 .s-mselect-carbon.focused .mselect-control {
@@ -254,18 +263,14 @@
   box-shadow: none;
 }
 .mselect-dropdown.s-mselect-carbon { border-radius: 0; }
-.s-mselect-carbon .s-mselect-floating-label {
-  left: 12px;
-  top: 6px;
+.s-mselect-carbon .s-mselect-label-above {
   font-size: 12px;
-  color: color-mix(in srgb, var(--t-text) 50%, transparent);
-  transform: none;
+  font-weight: 400;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--t-text);
+  margin-bottom: 8px;
 }
-.s-mselect-carbon.floated .s-mselect-floating-label {
-  transform: none;
-  color: color-mix(in srgb, var(--t-text) 50%, transparent);
-}
-.s-mselect-carbon.focused .s-mselect-floating-label {
+.s-mselect-carbon.focused .s-mselect-label-above {
   color: var(--t-primary);
 }
 /* Brutalist */
