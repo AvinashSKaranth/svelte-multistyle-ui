@@ -320,10 +320,6 @@
     { id: "n3", label: "Project Gamma", children: [] },
   ]);
   let ratingVal = $state(3);
-  async function copyCode(code) {
-    await navigator.clipboard.writeText(code);
-    addToastMsg("Copied!", "success");
-  }
 
   let cmdPaletteOpen = $state(false);
   let cmdGroups = [
@@ -481,12 +477,12 @@ import "./custom-theme.css";
   </header>
 
   {#snippet codeBlock(id, code)}
-    <div class="component-code-wrapper">
-      <button type="button" class="copy-btn" onclick={() => copyCode(code)}>
-        Copy
-      </button>
-      <pre class="component-code"><code>{@html highlight(code)}</code></pre>
-    </div>
+    <CodeEditor
+      value={code}
+      language="markup"
+      editable={false}
+      rows={Math.max(3, Math.min(40, code.split("\n").length))}
+    />
   {/snippet}
 
   <main class="max-w-7xl mx-auto p-6 space-y-10">
