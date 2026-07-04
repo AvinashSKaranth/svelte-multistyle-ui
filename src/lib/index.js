@@ -2,7 +2,7 @@
 export { initMultistyleUI } from "./config.js";
 
 // Theme system — structured config + CSS generator (runtime API for custom themes)
-export { themes, generateThemeCss, resolveLight, resolveDark, applyThemeToElement, hexToHsl, hslToCss, invert, invertHex } from "./themes/index.js";
+export { themes, generateThemeCss, resolveLight, resolveDark, applyThemeToElement, hexToHsl, hslToCss, invert, invertHex, styleFonts, fontOptions, SYSTEM_FONT } from "./themes/index.js";
 
 // Actions
 export { portal } from "./actions/portal.js";

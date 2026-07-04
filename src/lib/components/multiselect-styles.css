@@ -59,6 +59,10 @@
 .mselect-dropdown {
   position: fixed;
   background: var(--t-surface);
+  /* The dropdown is portaled to <body>, so it cannot inherit the wrapper's
+   * --t-text. Apply the theme text color here so option text contrasts the
+   * surface in both light and dark mode (dark text on white, light on dark). */
+  color: var(--t-text);
   border: var(--t-border-width) solid var(--t-border);
   border-radius: var(--t-card-radius);
   box-shadow: var(--t-shadow-md);
@@ -74,6 +78,7 @@
   padding: 8px 12px;
   cursor: pointer;
   transition: background 0.15s;
+  color: var(--t-text);
 }
 .mselect-option:hover {
   background: color-mix(in srgb, var(--t-primary) 8%, var(--t-surface));
@@ -335,6 +340,25 @@
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
 }
-.mselect-dropdown.s-mselect-liquid-glass { border-radius: 16px; backdrop-filter: blur(24px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+.mselect-dropdown.s-mselect-liquid-glass {
+  border-radius: 16px;
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  /* Portaled to <body>, outside .glass-page-bg, so make the glass dark enough
+   * that white option text reads in both light and dark mode. */
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+.mselect-dropdown.s-mselect-liquid-glass .mselect-option {
+  color: #ffffff;
+}
+.mselect-dropdown.s-mselect-liquid-glass .mselect-option:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.mselect-dropdown.s-mselect-liquid-glass .mselect-option.selected {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--t-primary);
+}
 
 

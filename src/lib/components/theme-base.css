@@ -46,6 +46,12 @@
   --t-border-width: 1.5px;
   --t-border-w: var(--t-border-width); /* backward-compatible alias */
 
+  /* Font — the active font stack. Per-style defaults ship in theme.css as
+   * .ms-font-<style> rules; initMultistyleUI({ font }) or a wrapper class can
+   * override it. Components inherit font-family, so setting --t-font upstream
+   * is enough. */
+  --t-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
   /* Shadow tokens (color-independent elevation) */
   --t-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
   --t-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);

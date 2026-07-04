@@ -42,7 +42,7 @@
   import Column from "../lib/components/Column.svelte";
   import Grid from "../lib/components/Grid.svelte";
 
-  import { themes as presetConfigs, generateThemeCss, applyThemeToElement, invertHex } from "../lib/themes/index.js";
+  import { themes as presetConfigs, generateThemeCss, applyThemeToElement, invertHex, fontOptions } from "../lib/themes/index.js";
 
   // Chart Components
   import BarChart from "../lib/components/charts/BarChart.svelte";
@@ -98,6 +98,7 @@
   let selectedStyle = $state(urlParams.get("style") || "material");
   let selectedTheme = $state(urlParams.get("theme") || "default");
   let mode = $state(urlParams.get("mode") || "system");
+  let selectedFont = $state(urlParams.get("font") || "auto");
 
   // Theme editor state — single config object { common, light, dark }.
   // Loaded from the selected preset; edits mutate it directly (live preview).
@@ -122,7 +123,7 @@
 
   // Keep the global library defaults in sync with the demo controls
   $effect(() => {
-    initMultistyleUI({ style: selectedStyle, theme: selectedTheme, mode });
+    initMultistyleUI({ style: selectedStyle, theme: selectedTheme, mode, font: selectedFont });
   });
 
   // Apply effective mode to document
@@ -460,6 +461,14 @@ import "./custom-theme.css";
           <option value="light">☀️ Light</option>
           <option value="dark">🌙 Dark</option>
           <option value="system">💻 System</option>
+        </select>
+        <label for="font-sel" class="text-sm header-label">Font:</label>
+        <select
+          id="font-sel"
+          bind:value={selectedFont}
+          class="header-select rounded-lg px-3 py-1.5 text-sm border focus:border-indigo-500 focus:outline-none"
+        >
+          {#each fontOptions as f}<option value={f.value}>{f.label}</option>{/each}
         </select>
         <button
           type="button"

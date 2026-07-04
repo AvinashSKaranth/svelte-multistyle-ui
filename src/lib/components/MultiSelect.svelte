@@ -74,9 +74,16 @@
   }
 
   function handleBlur(e) {
+    const related = e.relatedTarget;
+    // Clicking a non-focusable element (e.g. the option label text) leaves
+    // relatedTarget null. Don't close here — the document mousedown handler
+    // below handles outside clicks. Closing now would unmount the checkbox
+    // before the label-forwarded click toggles it, so the option wouldn't
+    // select when its text is clicked.
+    if (related === null) return;
     if (
-      wrapperEl && !wrapperEl.contains(e.relatedTarget) &&
-      !(dropdownEl && dropdownEl.contains(e.relatedTarget))
+      wrapperEl && !wrapperEl.contains(related) &&
+      !(dropdownEl && dropdownEl.contains(related))
     ) {
       open = false;
       focused = false;
@@ -86,12 +93,23 @@
   $effect(() => {
     if (!open) return;
     const reposition = () => positionDropdown();
+    const onDocMouseDown = (e) => {
+      if (
+        wrapperEl && !wrapperEl.contains(e.target) &&
+        !(dropdownEl && dropdownEl.contains(e.target))
+      ) {
+        open = false;
+        focused = false;
+      }
+    };
     window.addEventListener("scroll", reposition, true);
     window.addEventListener("resize", reposition);
+    document.addEventListener("mousedown", onDocMouseDown);
     queueMicrotask(reposition);
     return () => {
       window.removeEventListener("scroll", reposition, true);
       window.removeEventListener("resize", reposition);
+      document.removeEventListener("mousedown", onDocMouseDown);
     };
   });
 </script>

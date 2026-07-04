@@ -21,6 +21,12 @@ body {
   color: var(--t-text);
   transition: background 0.3s, color 0.3s;
 }
+/* The active font stack. --t-font is set by .ms-font-<style> (per-style default)
+ * in theme.css, overridden inline by initMultistyleUI({ font }) / the header
+ * font selector. Children inherit, so applying it on .demo-root is enough. */
+.demo-root {
+  font-family: var(--t-font);
+}
 /* Demo theme editor uses inline custom properties; force the page surface
    to a dark palette when the demo is in dark mode so components can be
    reviewed against a dark background. */
