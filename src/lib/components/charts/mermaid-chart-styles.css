@@ -1,0 +1,27 @@
+.s-mermaid-chart {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--t-text);
+}
+
+.s-mermaid-chart figcaption {
+  margin-block-end: 0.75rem;
+  font-weight: 600;
+}
+
+.s-mermaid-chart-diagram {
+  overflow-x: auto;
+}
+
+.s-mermaid-chart-diagram > svg {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+  margin-inline: auto;
+}
+
+.s-mermaid-chart-error {
+  color: var(--t-error);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}

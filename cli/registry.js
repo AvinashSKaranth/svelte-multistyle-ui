@@ -91,6 +91,7 @@ const registry = {
   StackedBarChart: { importName: "StackedBarChart", kind: "leaf", chart: true, listProps: ["data", "series", "labels"], objectProps: ["options"] },
   StackedLineChart:{ importName: "StackedLineChart",kind: "leaf", chart: true, listProps: ["data", "series", "labels"], objectProps: ["options"] },
   ComboChart:      { importName: "ComboChart",      kind: "leaf", chart: true, listProps: ["data", "series", "labels"], objectProps: ["options"] },
+  MermaidChart:    { importName: "MermaidChart",    kind: "leaf" },
 };
 
 // Exported component names — used by the registry-completeness check to diff

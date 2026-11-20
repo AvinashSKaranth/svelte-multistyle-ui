@@ -23,7 +23,7 @@ Both are optional. If omitted, the component falls back to the global defaults s
 ## Quick start (consuming app)
 
 ```bash
-pnpm add svelte-multistyle-ui chart.js
+pnpm add svelte-multistyle-ui chart.js mermaid
 ```
 
 ```js
@@ -122,7 +122,7 @@ Each exported component has a reference page under `references/`. Open the relev
 
 **Feedback** — [Alert](references/Alert.md) · [Rating](references/Rating.md) · [Popover](references/Popover.md) · [Toast](references/Toast.md)
 
-**Charts** (chart.js wrappers, shared props in [charts-base](references/charts-base.md)) — [BarChart](references/BarChart.md) · [LineChart](references/LineChart.md) · [PieChart](references/PieChart.md) · [DoughnutChart](references/DoughnutChart.md) · [RadarChart](references/RadarChart.md) · [PolarAreaChart](references/PolarAreaChart.md) · [ScatterChart](references/ScatterChart.md) · [BubbleChart](references/BubbleChart.md) · [StackedBarChart](references/StackedBarChart.md) · [StackedLineChart](references/StackedLineChart.md) · [ComboChart](references/ComboChart.md)
+**Charts** (shared Chart.js props in [charts-base](references/charts-base.md)) — [BarChart](references/BarChart.md) · [LineChart](references/LineChart.md) · [PieChart](references/PieChart.md) · [DoughnutChart](references/DoughnutChart.md) · [RadarChart](references/RadarChart.md) · [PolarAreaChart](references/PolarAreaChart.md) · [ScatterChart](references/ScatterChart.md) · [BubbleChart](references/BubbleChart.md) · [StackedBarChart](references/StackedBarChart.md) · [StackedLineChart](references/StackedLineChart.md) · [ComboChart](references/ComboChart.md) · [MermaidChart for text-defined diagrams](references/MermaidChart.md)
 
 **Advanced** — [GraphEditor for flowcharts, blueprints, and subgraphs](references/GraphEditor.md) · [FAB](references/FAB.md)
 

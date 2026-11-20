@@ -21,7 +21,7 @@ npm install svelte-multistyle-ui
 pnpm add svelte-multistyle-ui
 ```
 
-> Requires Svelte `^5.0.0` and Chart.js `^4.5.1` as peer dependencies (Chart.js is only needed if you use the chart components).
+> Peer dependencies are Svelte `^5.0.0`, Chart.js `^4.5.1` for data charts, and Mermaid `^12.3.0` for Mermaid diagrams.
 
 ## LLM skill
 
@@ -89,7 +89,7 @@ The library exports the following components from `svelte-multistyle-ui`:
 - Navigation: `Breadcrumb`, `Pagination`, `Stepper`
 - Data display: `Avatar`, `Chip`, `Tooltip`, `ProgressBar`, `Table`, `Spinner`, `Skeleton`, `Rating`
 - Feedback: `Alert`, `Toast`
-- Charts: `BarChart`, `LineChart`, `PieChart`, `DoughnutChart`, `RadarChart`, `PolarAreaChart`, `ScatterChart`, `BubbleChart`, `StackedBarChart`, `StackedLineChart`, `ComboChart`
+- Charts: `BarChart`, `LineChart`, `PieChart`, `DoughnutChart`, `RadarChart`, `PolarAreaChart`, `ScatterChart`, `BubbleChart`, `StackedBarChart`, `StackedLineChart`, `ComboChart`, `MermaidChart`
 - Graphs: `GraphEditor` for flowcharts and executable blueprints
 
 You can also import individual files from `svelte-multistyle-ui/components/<Component>.svelte`, and chart components from `svelte-multistyle-ui/charts/<Chart>.svelte`.
@@ -293,6 +293,27 @@ Chart components are thin styled wrappers around [Chart.js](https://www.chartjs.
 ```
 
 A shared `Chart` base component is also exported from `svelte-multistyle-ui/charts/Chart.svelte` for building custom chart types.
+
+### Mermaid diagrams
+
+`MermaidChart` renders Mermaid source as SVG in the browser. Use it for diagrams such as flowcharts, sequence diagrams, and pie charts. Install the `mermaid` peer dependency alongside the library.
+
+```bash
+npm install svelte-multistyle-ui mermaid
+```
+
+```svelte
+<script>
+  import { MermaidChart } from 'svelte-multistyle-ui';
+  import 'svelte-multistyle-ui/theme.css';
+
+  const source = 'flowchart LR\n  A[Draft] --> B[Review] --> C[Publish]';
+</script>
+
+<MermaidChart {source} title="Release workflow" />
+```
+
+The diagram updates when `source` changes and shows Mermaid’s error message for invalid syntax. It follows the library’s light or dark mode by default. Set `diagramTheme="neutral"` or another Mermaid theme to override it. The usual `style`, `theme`, and `class` props customize the wrapper. Try editable examples in the gallery’s **Charts** tab. [MermaidChart API](skill/references/MermaidChart.md)
 
 ## License
 

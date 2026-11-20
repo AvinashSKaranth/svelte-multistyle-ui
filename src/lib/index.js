@@ -75,6 +75,7 @@ export { default as BubbleChart } from "./components/charts/BubbleChart.svelte";
 export { default as StackedBarChart } from "./components/charts/StackedBarChart.svelte";
 export { default as StackedLineChart } from "./components/charts/StackedLineChart.svelte";
 export { default as ComboChart } from "./components/charts/ComboChart.svelte";
+export { default as MermaidChart } from "./components/charts/MermaidChart.svelte";
 
 // Advanced Components
 export { default as GraphEditor } from "./components/GraphEditor.svelte";

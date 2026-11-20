@@ -48,6 +48,7 @@
   },
   "peerDependencies": {
     "chart.js": "^4.5.1",
+    "mermaid": "^12.3.0",
     "svelte": "^5.0.0"
   },
   "devDependencies": {
@@ -58,6 +59,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "chart.js": "^4.5.1",
+    "mermaid": "^12.3.0",
     "svelte": "^5.55.4",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.9"

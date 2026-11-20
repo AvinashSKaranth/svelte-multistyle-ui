@@ -68,6 +68,7 @@
   import { afterNavigate, replaceState } from "$app/navigation";
   import { page } from "$app/state";
   import GraphGallery from "./graph-demo/GraphGallery.svelte";
+  import MermaidDemo from "./MermaidDemo.svelte";
 
   const styles = [
     { value: "material", label: "Material Design" },
@@ -3279,6 +3280,9 @@ import "./custom-theme.css";
           Chart Components
         </h2>
       </div>
+      {#if activeCat === "charts"}
+        <MermaidDemo style={selectedStyle} theme={selectedTheme} />
+      {/if}
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Bar Chart -->
         <Card
