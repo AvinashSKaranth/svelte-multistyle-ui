@@ -22,15 +22,15 @@ All scripts are in `package.json`. Use pnpm:
 - `pnpm dev` — start the SvelteKit dev server for the component gallery.
 - `pnpm build` — build the demo gallery: `vite build` (SvelteKit → prerendered static HTML in `docs/`) then `node scripts/rename-bundle.js` (renames the single bundle output). The demo build target is `docs/`, **not** `dist/`.
 - `pnpm gen:theme` — regenerate `src/lib/components/theme.css` from `src/lib/themes/presets.js` + `generator.js` via `scripts/gen-theme.js`. Run whenever presets change; `build:lib` runs it automatically.
-- `pnpm build:lib` — build the library for publishing. First auto-bumps the **patch** version in `package.json` (inline `node -e` script), then runs `gen:theme`, then `svelte-package -i src/lib` → emits to `dist/`.
+- `pnpm build:lib` — run `gen:theme` and package `src/lib/` into `dist/`. Set the package version explicitly before publishing.
 - `pnpm preview` — preview the production demo build.
 - `pnpm gen` — run the CLI generator (`node cli/bin.js generate`); see CLI section below.
-- `pnpm gen:sample` — generate the sample route from `cli/fixtures/sample.yaml` into `src/routes/demo/+page.svelte`.
+- `pnpm gen:sample` — print the Svelte output for `cli/fixtures/sample.yaml` to standard output.
 - `pnpm test:gen` — run the CLI's own test suite (`node cli/test.js`).
 - `pnpm test` — run Playwright visual tests across Chromium and WebKit in light and dark mode. Run a single project: `pnpm test --project chromium-light`.
 - `pnpm test:ui` — open the Playwright UI runner.
 - `pnpm test:install` — install Playwright browsers (chromium + webkit, with deps).
-- Publishing: there is **no `publish` script**. `pnpm publish` runs the `prepublishOnly` hook, which runs `build:lib` (version bump + gen:theme + svelte-package). It does **not** build the demo.
+- `pnpm publish` runs `build:lib` through the `prepublishOnly` hook and uses the version in `package.json`. The demo build runs separately.
 
 There is currently no linter or formatter configured.
 
@@ -115,7 +115,7 @@ Style overrides control the shape/interaction language of a design system and ar
 
 `cli/` contains a standalone Node CLI (shipped via the package `bin` as `svelte-multistyle-ui`) that converts a YAML page spec into a Svelte 5 route page. Entry: `cli/bin.js`; core: `generate.js` (orchestrates), `schema.js` (YAML schema/validation), `registry.js` (component registry: import paths, props, snippet contracts), `emit.js` (Svelte source emission). `cli/fixtures/sample.yaml` is the reference input; `cli/test.js` is its self-test (`pnpm test:gen`).
 
-Usage: `npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+page.svelte`. Supports `--dry-run`, `-w/--watch`, `-h/--help`, `-v/--version`. The generator depends on the registry staying in sync with the actual component APIs in `src/lib/`.
+Usage: `npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/example/+page.svelte`. Supports `--dry-run`, `-w/--watch`, `-h/--help`, `-v/--version`. The generator depends on the registry staying in sync with the actual component APIs in `src/lib/`.
 
 ## Visual tests
 

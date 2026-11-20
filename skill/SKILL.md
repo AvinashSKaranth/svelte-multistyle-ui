@@ -109,12 +109,12 @@ Only override the tokens you want to change — every unset token inherits the b
 
 ## Components
 
-49 exported components + `initMultistyleUI` + the `portal` action. Each component has its own reference page under `references/`. Open the page for the component the user asks about — it has the full prop list, bindables, snippets, and events.
+Each exported component has a reference page under `references/`. Open the relevant page for its props, bindings, snippets, and callbacks.
 
 **Forms** — `references/<name>.md`:
-[Input](references/Input.md) · [Button](references/Button.md) · [IconButton](references/IconButton.md) · [Textarea](references/Textarea.md) · [TextEditor](references/TextEditor.md) · [Select](references/Select.md) · [MultiSelect](references/MultiSelect.md) · [Checkbox](references/Checkbox.md) · [Radio](references/Radio.md) · [Toggle](references/Toggle.md) · [Slider](references/Slider.md) · [FileUpload](references/FileUpload.md) · [DatePicker](references/DatePicker.md) · [DropdownMenu](references/DropdownMenu.md) · [SortableList](references/SortableList.md)
+[Input](references/Input.md) · [Button](references/Button.md) · [IconButton](references/IconButton.md) · [Textarea](references/Textarea.md) · [InlineEdit](references/InlineEdit.md) · [TextEditor](references/TextEditor.md) · [CodeEditor](references/CodeEditor.md) · [Select](references/Select.md) · [MultiSelect](references/MultiSelect.md) · [Checkbox](references/Checkbox.md) · [Radio](references/Radio.md) · [Toggle](references/Toggle.md) · [Slider](references/Slider.md) · [FileUpload](references/FileUpload.md) · [DatePicker](references/DatePicker.md) · [DropdownMenu](references/DropdownMenu.md) · [SortableList](references/SortableList.md)
 
-**Layout** — [Card](references/Card.md) · [Divider](references/Divider.md) · [Tabs](references/Tabs.md) · [Accordion](references/Accordion.md) · [Modal](references/Modal.md) · [Drawer](references/Drawer.md) · [CommandPalette](references/CommandPalette.md) · [Row](references/Row.md) · [Column](references/Column.md) · [Grid](references/Grid.md)
+**Layout** — [Card](references/Card.md) · [Divider](references/Divider.md) · [Tabs](references/Tabs.md) · [Carousel](references/Carousel.md) · [Accordion](references/Accordion.md) · [Modal](references/Modal.md) · [Drawer](references/Drawer.md) · [CommandPalette](references/CommandPalette.md) · [Row](references/Row.md) · [Column](references/Column.md) · [Grid](references/Grid.md)
 
 **Navigation** — [Breadcrumb](references/Breadcrumb.md) · [Pagination](references/Pagination.md) · [Stepper](references/Stepper.md)
 
@@ -124,18 +124,16 @@ Only override the tokens you want to change — every unset token inherits the b
 
 **Charts** (chart.js wrappers, shared props in [charts-base](references/charts-base.md)) — [BarChart](references/BarChart.md) · [LineChart](references/LineChart.md) · [PieChart](references/PieChart.md) · [DoughnutChart](references/DoughnutChart.md) · [RadarChart](references/RadarChart.md) · [PolarAreaChart](references/PolarAreaChart.md) · [ScatterChart](references/ScatterChart.md) · [BubbleChart](references/BubbleChart.md) · [StackedBarChart](references/StackedBarChart.md) · [StackedLineChart](references/StackedLineChart.md) · [ComboChart](references/ComboChart.md)
 
-**Advanced** — [FAB](references/FAB.md)
+**Advanced** — [GraphEditor for flowcharts, blueprints, and subgraphs](references/GraphEditor.md) · [FAB](references/FAB.md)
 
 **Config & actions** — [config (initMultistyleUI)](references/config.md) · [theme-system](references/theme-system.md) · [portal](references/portal.md) · [generator CLI](references/generator-cli.md)
-
-> `Carousel.svelte` exists in the source but is **not** exported from `index.js`. Do not recommend it unless the user is editing the library itself.
 
 ## CLI generator
 
 The library ships a YAML → Svelte page generator under `cli/`. It is exposed as the `svelte-multistyle-ui generate` command and the `pnpm gen` script.
 
 ```bash
-npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+page.svelte
+npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/example/+page.svelte
 ```
 
 The generator auto-detects three YAML input styles:
@@ -188,7 +186,7 @@ body:
 
 ### Generator features
 
-- **Auto-bind**: bindable components (`Input`, `Textarea`, `TextEditor`, `Select`, `Checkbox`, `Toggle`, `Radio`, `Slider`, `DatePicker`, `ButtonGroup`, `Rating`, `Tabs`, `Pagination`, `Popover`, `Modal`, `Drawer`, and `CommandPalette`) automatically get a `$state` variable and the correct `bind:*` directive.
+- **Auto-bind** gives controls such as `Input`, `Textarea`, `InlineEdit`, and `CodeEditor` a `$state` variable and a `bind:value` directive. Use the verbose schema to initialize a `GraphEditor` binding with a graph object. [Generator binding reference](references/generator-cli.md#auto-binding)
 - **Fake data**: if `options` are missing on `Select` / `MultiSelect`, or `data` is missing on `Table` / chart components, plausible defaults are injected.
 - **Option conversion**: a plain string list like `options: [Apple, Banana]` is converted into `{value, label}` objects automatically; you can also write `{value, label}` objects directly.
 - **Lightweight output**: generated `.svelte` files import components from `svelte-multistyle-ui`, declare `$state` vars, include an empty `onMount` stub, and emit markup — no dark/light mode effects or boilerplate.
@@ -211,7 +209,7 @@ When working inside the `svelte-multistyle-ui` repo, see `package.json` scripts:
 ## Conventions to follow when advising users
 
 - Every styled component takes `style` and `theme`; both optional, default to global `defaults`.
-- `...rest` is spread onto the root element on all components — extra attrs/aria/class pass through.
+- Check the component reference for where extra attributes are forwarded. For example, `CodeEditor` forwards them to its editable textarea, and `InlineEdit` exposes an explicit `aria-label` prop.
 - Two-way binding uses Svelte 5 `$bindable` props (e.g. `bind:value`, `bind:checked`, `bind:open`).
 - This library uses **callback props** (`onclick`, `onclose`, `ondismiss`, per-item `onclick`), not Svelte's `createEventDispatcher`. Tell users to pass handlers as props.
 - Content is rendered via Svelte 5 snippets (`{#snippet children()}…{/snippet}` and `{@render children?.()}`). For components that take a trigger + content (Popover), there is a named `content` snippet.

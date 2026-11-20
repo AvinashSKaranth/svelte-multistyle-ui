@@ -6,9 +6,9 @@ const bendPenalty = 16;
 const swap = ({ x, y }) => ({ x: y, y: x });
 
 // The routing algorithm always moves along +X. Vertical flow swaps the axes.
-export function flowObstacles(items, direction = "horizontal") {
+export function flowObstacles(items, direction = "horizontal", diagram = true) {
   return items.map(({ node, ports }) => {
-    const { width, height } = nodeSize(node, ports, true);
+    const { width, height } = nodeSize(node, ports, diagram);
     const vertical = direction === "vertical";
     const { x, y } = vertical ? swap(node) : node;
     return {

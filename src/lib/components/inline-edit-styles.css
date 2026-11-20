@@ -1,0 +1,113 @@
+.s-inline-edit {
+  --inline-edit-lines: 1;
+  --inline-edit-padding-block: 0.625rem;
+  --inline-edit-padding-inline: 0.75rem;
+  --inline-edit-display-border: 0px;
+  width: 100%;
+  min-width: 0;
+  color: var(--t-text);
+}
+
+.s-inline-edit.multiline {
+  --inline-edit-lines: var(--inline-edit-rows, 3);
+}
+
+.s-inline-edit-liquid-glass {
+  --inline-edit-padding-block: var(--liquid-glass-field-padding-block);
+  --inline-edit-padding-inline: var(--liquid-glass-field-padding-inline);
+}
+
+.s-inline-edit-liquid-glass .s-inline-edit-field:not(.editing) {
+  --inline-edit-display-border: var(--liquid-glass-field-border-width);
+}
+
+.s-inline-edit .s-inline-edit-field {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Share the focused border geometry with the field to keep the text box aligned. */
+.s-inline-edit .s-inline-edit-field .s-inline-edit-value {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  color: inherit;
+  transition: none;
+  animation: none;
+}
+
+.s-inline-edit-field.editing .s-inline-edit-value {
+  visibility: hidden;
+}
+
+.s-inline-edit-text {
+  display: block;
+  box-sizing: content-box;
+  min-block-size: calc(var(--inline-edit-lines) * 1lh);
+  padding-block: calc(var(--inline-edit-padding-block) + var(--inline-edit-display-border));
+  padding-inline: calc(var(--inline-edit-padding-inline) + var(--inline-edit-display-border));
+}
+
+.s-inline-edit.multiline :is(.s-inline-edit-text, .s-inline-edit-control) {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+/* Keep the empty final line after a trailing line break, as a textarea does. */
+.s-inline-edit.multiline .s-inline-edit-text::after {
+  content: "\200b";
+}
+
+.s-inline-edit:not(.multiline) .s-inline-edit-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s-inline-edit-trigger {
+  cursor: text;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.2em;
+}
+
+.s-inline-edit-trigger.empty::before {
+  display: inline-block;
+  inline-size: 1.5em;
+  border-bottom: 1px dotted currentColor;
+  content: "";
+}
+
+.s-inline-edit-trigger:focus-visible {
+  outline: 2px solid var(--t-primary);
+  outline-offset: -2px;
+}
+
+.s-inline-edit .s-inline-edit-field .s-inline-edit-control {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 0;
+  margin: 0;
+  padding-block: var(--inline-edit-padding-block);
+  padding-inline: var(--inline-edit-padding-inline);
+  font: inherit;
+  outline: none;
+  overflow: hidden;
+  resize: none;
+}
+
+.s-inline-edit-liquid-glass .s-inline-edit-control {
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+}

@@ -1,0 +1,29 @@
+.s-input-liquid-glass, .s-inline-edit-liquid-glass {
+  --liquid-glass-field-padding-block: 12px;
+  --liquid-glass-field-padding-inline: 18px;
+  --liquid-glass-field-border-width: 1px;
+}
+
+.s-input-liquid-glass .s-input-field,
+.s-inline-edit-liquid-glass .s-inline-edit-field.editing {
+  background: rgba(255,255,255,0.1);
+  border: var(--liquid-glass-field-border-width) solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: all 0.3s ease;
+}
+
+.s-input-liquid-glass:hover .s-input-field,
+.s-inline-edit-liquid-glass:hover .s-inline-edit-field.editing {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.s-input-liquid-glass.focused .s-input-field,
+.s-inline-edit-liquid-glass .s-inline-edit-field.editing:focus-within {
+  background: rgba(255,255,255,0.18);
+  border-color: var(--t-primary);
+  box-shadow: var(--t-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.4), 0 0 20px var(--t-shadow);
+}

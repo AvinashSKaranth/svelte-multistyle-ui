@@ -2,7 +2,7 @@
   import { resolve } from "$app/paths";
 
   let { tab, label } = $props();
-  const destination = $derived(`${resolve("/")}?tab=${tab}`);
+  const destination = $derived(`${resolve("/")}?tab=graph-editor${tab === "blueprint" ? "&variant=blueprint" : ""}`);
 </script>
 
 <svelte:head>

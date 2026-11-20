@@ -84,19 +84,45 @@ A Svelte action for portaling content to `document.body`:
 The library exports the following components from `svelte-multistyle-ui`:
 
 - Actions: `Button`, `IconButton`, `FAB`, `ButtonGroup`, `DropdownMenu`, `Popover`
-- Form: `Input`, `Textarea`, `TextEditor`, `Select`, `MultiSelect`, `Checkbox`, `Radio`, `Toggle`, `Slider`, `FileUpload`, `DatePicker`, `SortableList`
-- Layout: `Card`, `Divider`, `Tabs`, `Carousel`, `Accordion`, `Modal`, `Drawer`, `CommandPalette`, `Row`, `Column`, `Grid`
+- Form: `Input`, `Textarea`, `InlineEdit`, `TextEditor`, [`CodeEditor`](skill/references/CodeEditor.md), `Select`, `MultiSelect`, `Checkbox`, `Radio`, `Toggle`, `Slider`, `FileUpload`, `DatePicker`, `SortableList`
+- Layout: `Card`, `Divider`, `Tabs`, [`Carousel`](skill/references/Carousel.md), `Accordion`, `Modal`, `Drawer`, `CommandPalette`, `Row`, `Column`, `Grid`
 - Navigation: `Breadcrumb`, `Pagination`, `Stepper`
 - Data display: `Avatar`, `Chip`, `Tooltip`, `ProgressBar`, `Table`, `Spinner`, `Skeleton`, `Rating`
 - Feedback: `Alert`, `Toast`
 - Charts: `BarChart`, `LineChart`, `PieChart`, `DoughnutChart`, `RadarChart`, `PolarAreaChart`, `ScatterChart`, `BubbleChart`, `StackedBarChart`, `StackedLineChart`, `ComboChart`
-- Graphs: `GraphEditor`
+- Graphs: `GraphEditor` for flowcharts and executable blueprints
 
 You can also import individual files from `svelte-multistyle-ui/components/<Component>.svelte`, and chart components from `svelte-multistyle-ui/charts/<Chart>.svelte`.
 
+### InlineEdit
+
+`InlineEdit` displays dotted-underlined text as a paragraph. Activate the text to edit it in place. The default variant uses a single-line input. Set `variant="multiline"` to use a textarea.
+
+```svelte
+<script>
+  import { InlineEdit } from "svelte-multistyle-ui";
+
+  let title = $state("Project Atlas");
+  let notes = $state("Review the new layout.");
+</script>
+
+<InlineEdit aria-label="Project title" bind:value={title} />
+<InlineEdit
+  aria-label="Release notes"
+  variant="multiline"
+  value={notes}
+  rows={4}
+  onUpdate={(next) => (notes = next)}
+/>
+```
+
+When the field loses focus, a changed value updates `bind:value` and calls `onUpdate(value, previousValue)`. Enter leaves a single-line edit. In a multiline edit, Enter inserts a newline and Ctrl/⌘+Enter leaves the field. Escape discards the draft. Use `aria-label` to name the field for assistive technology.
+
+Display and edit mode occupy the same height for the same text. Multiline fields use `rows` as a minimum and grow to fit their content without an internal scrollbar. The active field uses the selected style’s borders. [InlineEdit API](skill/references/InlineEdit.md)
+
 ## Graph editor
 
-The component gallery has **Flowchart** and **Blueprint** tabs. In **Flowchart**, choose **Load conversation example** to edit support messages, yes/no branches, and a billing subgraph. In **Blueprint**, run the order subtotal example. Both workspaces save locally and can open, export, or embed graph JSON.
+Open **Graph Editor** in the component gallery and choose the **Flowchart** or **Blueprint** variant. Flowchart includes a support conversation with yes/no branches and a billing subgraph. Blueprint includes a runnable order subtotal example. Each variant saves locally and can open, export, or embed graph JSON. The in-page guide includes copyable examples for setup, custom nodes, and connection styles.
 
 ```svelte
 <script>
@@ -114,11 +140,15 @@ Drag nodes from the palette or click to add them. Drag from an output to an inpu
 
 Add a **Subgraph** node and open it to edit its contents. **Graph input** and **Graph output** nodes inside it define ports on the parent node. Their IDs remain stable when their labels change. Call `editor.embedGraph(graph)` on a bound editor instance to insert an independent copy of another graph.
 
-`mode="flowchart"` uses conventional shapes and right-angle connectors, and supports loops. Choose **Horizontal** for left-to-right flow or **Vertical** for top-to-bottom flow. Each graph and subgraph saves its own direction. Use `orientFlowGraph(graph, direction)` to change it in code. Select a shape to resize it using its corner handle or the inspector.
+`mode="flowchart"` uses conventional shapes and supports loops. Choose **Horizontal** for left-to-right flow or **Vertical** for top-to-bottom flow. Each graph and subgraph saves its own direction. Use `orientFlowGraph(graph, direction)` to change it in code. Select a shape to resize it using its corner handle or the inspector.
 
 `mode="blueprint"` shows data nodes for synchronous execution. `mode="all"` shows both sets. Use `runGraph(graph, { inputs, nodeTypes })` to evaluate data links in dependency order. Inputs and outputs are keyed by their boundary node IDs. The runner reports circular data dependencies.
 
 Pass custom definitions as `nodeTypes` to both `GraphEditor` and `runGraph`. A definition has a title, input and output ports with stable IDs and types, optional inspector fields, and a synchronous `run(inputs, data)` function that returns values keyed by output port ID. The standalone `svelte-multistyle-ui/graph` entry also exports `createGraphNode`, `connectGraphNodes`, and `parseGraph` for building and validating graphs outside the editor.
+
+Use `edgeStyle="straight"`, `"curve"`, or `"orthogonal"` to set the default connection style. Flowcharts default to right-angle routing and blueprints default to curves. Pass a connection’s `style` to `connectGraphNodes` or set it in the inspector to override the default. The override travels with exported graph JSON.
+
+[GraphEditor API](skill/references/GraphEditor.md)
 
 ## Theming
 
@@ -160,7 +190,7 @@ Key tokens include `--t-primary`, `--t-secondary`, `--t-surface`, `--t-card-bg`,
 
 ## Demo & development
 
-The SvelteKit demo app in `src/routes/` contains the component gallery and the Graph Workbench.
+The SvelteKit demo at `/` contains the component gallery, including Graph Editor.
 
 ```bash
 pnpm install
@@ -184,7 +214,7 @@ The demo supports URL parameters for quick visual regression checks:
 `svelte-multistyle-ui` ships a YAML → Svelte 5 page generator. It auto-detects three YAML input styles and emits token-efficient markup with auto-bound state and fake data injection.
 
 ```bash
-npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+page.svelte
+npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/example/+page.svelte
 ```
 
 **Supported YAML styles:**
@@ -230,7 +260,7 @@ npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+
 
 **Features:**
 
-- **Auto-binding** — `Input`, `Select`, `Checkbox`, `Toggle`, `Radio`, `Slider`, `DatePicker`, `ButtonGroup`, `Rating`, `Tabs`, `Pagination`, `Popover`, `Modal`, `Drawer`, and `CommandPalette` get automatic `$state` vars and the correct `bind:*` directive.
+- **Auto-binding** gives controls such as `Input`, `Textarea`, `InlineEdit`, and `CodeEditor` a `$state` variable and a `bind:value` directive in compact and shorthand pages. Use the verbose schema to initialize a `GraphEditor` binding with a graph object. [Generator binding reference](skill/references/generator-cli.md#auto-binding)
 - **Fake data** — missing `options` for `Select`/`MultiSelect`, missing `data` for `Table`, and missing chart data are synthesized automatically.
 - **Option conversion** — `options: [Apple, Banana]` becomes `[{value:"apple",label:"Apple"}, ...]`.
 - **Lightweight output** — generated files import from `svelte-multistyle-ui`, declare `$state`, include an empty `onMount` stub, and emit markup only; dark/light mode is handled by `initMultistyleUI` in the app layout.

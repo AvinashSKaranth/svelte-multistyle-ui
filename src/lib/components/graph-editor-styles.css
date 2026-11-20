@@ -1,5 +1,6 @@
 .s-graph-editor {
-  --graph-bg: var(--t-surface-bg, #f1f3f5);
+  --graph-surface: var(--t-surface-bg, #f1f3f5);
+  --graph-bg: var(--graph-surface);
   --graph-panel: var(--t-card-bg, white);
   --graph-ink: var(--t-text, #17202a);
   --graph-muted: color-mix(in srgb, var(--graph-ink) 65%, var(--graph-panel));
@@ -32,6 +33,17 @@
 .s-graph-editor-material3, .s-graph-editor-cartoon, .s-graph-editor-liquid-glass {
   --graph-radius: 20px;
   --graph-field-radius: 10px;
+}
+
+/* Liquid Glass uses light text in light mode, so give both graph modes a matching surface. */
+html:not(.dark) .s-graph-editor-liquid-glass {
+  --graph-ink: #f5f7ff;
+  --graph-panel: #253352;
+  --graph-surface: #192541;
+  --graph-line: #596681;
+  --graph-accent: color-mix(in srgb, var(--t-primary, #5254bd) 45%, white);
+  background: rgb(37 51 82 / 91%);
+  color-scheme: dark;
 }
 
 .s-graph-editor *, .s-graph-editor *::before, .s-graph-editor *::after { box-sizing: border-box; }
@@ -287,7 +299,7 @@
 .s-graph-node[data-tone="graph"] .s-graph-node-summary { display: none; }
 
 .s-graph-editor[data-mode="flowchart"] {
-  --graph-bg: color-mix(in srgb, var(--t-surface-bg, #f1f3f5) 46%, var(--graph-panel));
+  --graph-bg: color-mix(in srgb, var(--graph-surface) 46%, var(--graph-panel));
   --graph-flow: color-mix(in srgb, var(--graph-ink) 61%, var(--graph-panel));
 }
 .s-graph-editor[data-mode="flowchart"] .s-graph-canvas {

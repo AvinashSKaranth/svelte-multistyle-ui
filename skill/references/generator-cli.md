@@ -5,13 +5,13 @@
 ## Usage
 
 ```bash
-npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/demo/+page.svelte
+npx svelte-multistyle-ui generate --input page.yaml --output ./src/routes/example/+page.svelte
 ```
 
 In this repository:
 
 ```bash
-pnpm gen --input page.yaml --output ./src/routes/demo/+page.svelte
+pnpm gen --input page.yaml --output ./src/routes/example/+page.svelte
 pnpm gen:sample   # dry-runs the sample fixture
 ```
 
@@ -99,7 +99,7 @@ body:
 
 Bindable components automatically receive a `$state` declaration and the correct `bind:*` directive:
 
-- `Input`, `Textarea`, `TextEditor`, `DatePicker` → `bind:value`
+- `Input`, `Textarea`, `InlineEdit`, `TextEditor`, `CodeEditor`, `DatePicker` → `bind:value`
 - `Select` → `bind:value`
 - `MultiSelect` → `bind:selected`
 - `Checkbox`, `Toggle` → `bind:checked`
@@ -111,6 +111,19 @@ Bindable components automatically receive a `$state` declaration and the correct
 - `Popover`, `Modal`, `Drawer`, `CommandPalette` → `bind:open`
 
 State variable names are derived from `label`, `placeholder`, `title`, or the component name, and de-duplicated automatically.
+
+Use the verbose schema for [GraphEditor](GraphEditor.md) so its `bind:graph` state starts with a graph object.
+
+```yaml
+state:
+  - name: conversation
+    type: object
+    default: { version: 1, title: Support conversation, direction: vertical, nodes: [], edges: [] }
+body:
+  - component: GraphEditor
+    props: { mode: flowchart }
+    bind: conversation
+```
 
 ## Fake data injection
 

@@ -103,22 +103,38 @@ export function orientFlowGraph(graph, direction) {
   return { ...graph, direction, nodes: graph.nodes.map((node) => ({ ...node, x: x.get(node.id), y: y.get(node.id) })) };
 }
 
-export function arrowPath({ x, y }, direction) {
+export function arrowPath({ x, y }, direction, from = undefined) {
+  if (from) {
+    const dx = x - from.x;
+    const dy = y - from.y;
+    const length = Math.hypot(dx, dy);
+    if (length < 12) return "";
+    const ux = dx / length;
+    const uy = dy / length;
+    const bx = x - 12 * ux;
+    const by = y - 12 * uy;
+    return `M${bx - 4 * uy} ${by + 4 * ux} L${x - 4 * ux} ${y - 4 * uy} L${bx + 4 * uy} ${by - 4 * ux} Z`;
+  }
   return direction === "vertical"
     ? `M${x - 4} ${y - 12} L${x} ${y - 4} L${x + 4} ${y - 12} Z`
     : `M${x - 12} ${y - 4} L${x - 4} ${y} L${x - 12} ${y + 4} Z`;
 }
 
-export function wirePath(from, to) {
-  const { x, y } = from;
-  if (to.x < x - 20) {
-    const bend = Math.max(y, to.y) + 66;
-    const middle = (x + to.x) / 2;
-    return `M ${x} ${y} C ${x + 62} ${y}, ${x + 62} ${bend}, ${middle} ${bend}
-      C ${to.x - 62} ${bend}, ${to.x - 62} ${to.y}, ${to.x} ${to.y}`;
+export function wirePath(from, to, direction = "horizontal") {
+  const vertical = direction === "vertical";
+  const x = vertical ? from.y : from.x;
+  const y = vertical ? from.x : from.y;
+  const endX = vertical ? to.y : to.x;
+  const endY = vertical ? to.x : to.y;
+  const point = (a, b) => vertical ? `${b} ${a}` : `${a} ${b}`;
+  if (endX < x - 20) {
+    const bend = Math.max(y, endY) + 66;
+    const middle = (x + endX) / 2;
+    return `M ${point(x, y)} C ${point(x + 62, y)}, ${point(x + 62, bend)}, ${point(middle, bend)}
+      C ${point(endX - 62, bend)}, ${point(endX - 62, endY)}, ${point(endX, endY)}`;
   }
-  const bend = Math.max(32, (to.x - x) * 0.45);
-  return `M ${x} ${y} C ${x + bend} ${y}, ${to.x - bend} ${to.y}, ${to.x} ${to.y}`;
+  const bend = Math.max(32, (endX - x) * 0.45);
+  return `M ${point(x, y)} C ${point(x + bend, y)}, ${point(endX - bend, endY)}, ${point(endX, endY)}`;
 }
 
 export function graphBounds(items, diagram = false) {

@@ -4,9 +4,10 @@
   import GraphEditor from "$lib/components/GraphEditor.svelte";
   import { createGraph, orientFlowGraph, parseGraph, runGraph } from "$lib/graph/index.js";
   import { createBlueprintExample, createFlowchartExample } from "./examples.js";
+  import nodeTypes from "./custom-nodes.js";
 
-  /** @type {{mode: "blueprint" | "flowchart", style: string, theme: string}} */
-  let { mode, style, theme } = $props();
+  /** @type {{mode: "blueprint" | "flowchart", edgeStyle?: import("$lib/graph/index.js").GraphEdgeStyle, style: string, theme: string}} */
+  let { mode, edgeStyle, style, theme } = $props();
 
   const modes = {
     blueprint: {
@@ -41,10 +42,10 @@
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved !== null) {
-        active = parseGraph(saved);
+        active = parseGraph(saved, nodeTypes);
       } else {
         const legacyGraph = JSON.parse(localStorage.getItem(legacyStorageKey) ?? "{}")?.[mode];
-        if (legacyGraph) active = parseGraph(JSON.stringify(legacyGraph));
+        if (legacyGraph) active = parseGraph(JSON.stringify(legacyGraph), nodeTypes);
       }
     } catch {
       notice = "A saved graph could not be restored.";
@@ -80,7 +81,7 @@
     input.value = "";
     if (!file) return;
     try {
-      const graph = parseGraph(await file.text());
+      const graph = parseGraph(await file.text(), nodeTypes);
       if (editor !== targetEditor) return;
       if (action === "embed") {
         targetEditor.embedGraph(graph);
@@ -107,7 +108,7 @@
 
   function execute() {
     try {
-      const { outputs } = runGraph(active);
+      const { outputs } = runGraph(active, { nodeTypes });
       const rows = active.nodes.filter((node) => Object.hasOwn(outputs, node.id))
         .map((node) => ({ id: node.id, label: node.title, value: JSON.stringify(outputs[node.id]) ?? "Unconnected" }));
       lastRun = { graph: active, rows };
@@ -159,6 +160,8 @@
         bind:this={editor}
         bind:graph={active}
         {mode}
+        {edgeStyle}
+        {nodeTypes}
         {style}
         {theme}
         inspectorFooter={mode === "blueprint" ? runOutput : undefined}

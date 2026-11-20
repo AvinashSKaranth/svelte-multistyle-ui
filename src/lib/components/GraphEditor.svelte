@@ -2,7 +2,7 @@
   import { untrack } from "svelte";
   import { on } from "svelte/events";
   import { defaults } from "../config.js";
-  import { graphNodeTypes, createGraph, createGraphNode, connectGraphNodes, orientFlowGraph, parseGraph, pruneGraphEdges } from "../graph/index.js";
+  import { graphNodeTypes, createGraph, createGraphNode, connectGraphNodes, edgeStyles, orientFlowGraph, parseGraph, pruneGraphEdges } from "../graph/index.js";
   import { getDefinition, getPorts } from "../graph/node-types.js";
   import { arrowPath, constrainFlowSize, flowPortPoint, flowShape, flowSizeLimit, graphBounds, nodeSize, portPoint, wirePath } from "../graph/geometry.js";
   import { flowDraft, flowObstacles, routeFlowWire } from "../graph/flow-routing.js";
@@ -14,6 +14,7 @@
    *   graph?: import("../graph/index.js").Graph,
    *   nodeTypes?: import("../graph/index.js").NodeTypes,
    *   mode?: "blueprint" | "flowchart" | "all",
+   *   edgeStyle?: import("../graph/index.js").GraphEdgeStyle,
    *   style?: string, theme?: string, class?: string,
    *   inspectorFooter?: import("svelte").Snippet
    * }} */
@@ -21,6 +22,7 @@
     graph = $bindable(createGraph()),
     nodeTypes = {},
     mode = "all",
+    edgeStyle,
     style = undefined,
     theme = undefined,
     class: className = "",
@@ -29,6 +31,7 @@
 
   const portTypes = ["any", "number", "text", "boolean", "flow"];
   const diagram = $derived(mode === "flowchart");
+  const defaultEdgeStyle = $derived(edgeStyle ?? (diagram ? "orthogonal" : "curve"));
   const definitions = $derived({ ...graphNodeTypes, ...nodeTypes });
   let query = $state("");
   let activePath = $state.raw([]);
@@ -85,7 +88,8 @@
       : item));
   const byId = $derived(new Map(drawnNodes.map((item) => [item.node.id, item])));
   const bounds = $derived(graphBounds(drawnNodes, diagram));
-  const obstacles = $derived(diagram ? flowObstacles(drawnNodes, direction) : []);
+  const obstacles = $derived(defaultEdgeStyle === "orthogonal" || current.edges.some((edge) => edge.style === "orthogonal")
+    ? flowObstacles(drawnNodes, direction, diagram) : []);
   const obstaclesById = $derived(new Map(obstacles.map((rect) => [rect.id, rect])));
   const mapScale = $derived(Math.min(122 / (bounds.width + 30), 66 / (bounds.height + 30)));
   const mapView = $derived({
@@ -100,23 +104,32 @@
     return diagram ? flowPortPoint(item.node, item.ports, index, side, direction) : portPoint(item.node, index, side);
   }
 
+  function directPath(start, end, style) {
+    return style === "straight" ? `M ${start.x} ${start.y} L ${end.x} ${end.y}` : wirePath(start, end, direction);
+  }
+
   const wires = $derived(current.edges.flatMap((edge) => {
     const start = location(edge.source, edge.sourcePort, "output");
     const end = location(edge.target, edge.targetPort, "input");
     if (!start || !end) return [];
     const { outputs } = byId.get(edge.source).ports;
     const output = outputs.find((port) => port.id === edge.sourcePort);
-    const route = diagram
+    const style = edge.style ?? defaultEdgeStyle;
+    const route = style === "orthogonal"
       ? routeFlowWire(start, end, obstaclesById.get(edge.source), obstaclesById.get(edge.target), obstacles, direction)
-      : { path: wirePath(start, end) };
-    return [{ edge, end, type: output.type, ...route, label: outputs.length > 1 && route.label
-      ? { ...route.label, text: output.label } : undefined }];
+      : { path: directPath(start, end, style), label: { x: start.x + 8, y: start.y - 10 } };
+    return [{
+      edge, path: route.path, type: output.type,
+      arrow: arrowPath(end, direction, style === "straight" ? start : undefined),
+      label: diagram && outputs.length > 1 ? { ...route.label, text: output.label } : undefined,
+    }];
   }));
 
   const draft = $derived.by(() => {
     if (gesture?.kind !== "connect") return undefined;
     const start = location(gesture.source, gesture.sourcePort, "output");
-    return start && (diagram ? flowDraft(start, gesture.position, direction) : wirePath(start, gesture.position));
+    return start && (defaultEdgeStyle === "orthogonal"
+      ? flowDraft(start, gesture.position, direction) : directPath(start, gesture.position, defaultEdgeStyle));
   });
 
   $effect(() => {
@@ -565,7 +578,7 @@
             {#each wires as wire (wire.edge.id)}
               <g data-type={wire.type} class:selected={selectedEdge?.id === wire.edge.id}>
                 <path class="s-graph-edge" d={wire.path} />
-                <path class="s-graph-arrow" d={arrowPath(wire.end, direction)} />
+                <path class="s-graph-arrow" d={wire.arrow} />
                 {#if wire.label}
                   <text class="s-flow-edge-label" x={wire.label.x} y={wire.label.y}>{wire.label.text}</text>
                 {/if}
@@ -681,6 +694,18 @@
       {/key}
     {:else if selectedEdge}
       <p class="s-graph-hint">{byId.get(selectedEdge.source)?.node.title} → {byId.get(selectedEdge.target)?.node.title}</p>
+      <label>Connection style
+        <select value={selectedEdge.style ?? ""} onchange={(event) => {
+          const style = /** @type {import("../graph/index.js").GraphEdgeStyle | ""} */ (event.currentTarget.value);
+          replaceLevel((level) => ({
+            ...level,
+            edges: level.edges.map((edge) => edge.id === selectedEdge.id ? { ...edge, style: style || undefined } : edge),
+          }));
+        }}>
+          <option value="">Editor default</option>
+          {#each Object.entries(edgeStyles) as [value, label]}<option {value}>{label}</option>{/each}
+        </select>
+      </label>
       <button type="button" class="s-graph-remove" onclick={removeSelected}>Delete connection</button>
     {:else}
       <label>{levels.length > 1 ? "Subgraph title" : "Graph title"}

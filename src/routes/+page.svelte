@@ -3,6 +3,7 @@
   import Button from "../lib/components/Button.svelte";
   import IconButton from "../lib/components/IconButton.svelte";
   import Textarea from "../lib/components/Textarea.svelte";
+  import InlineEdit from "../lib/components/InlineEdit.svelte";
   import Select from "../lib/components/Select.svelte";
   import MultiSelect from "../lib/components/MultiSelect.svelte";
   import Checkbox from "../lib/components/Checkbox.svelte";
@@ -66,7 +67,7 @@
   import { browser } from "$app/environment";
   import { afterNavigate, replaceState } from "$app/navigation";
   import { page } from "$app/state";
-  import GraphDemo from "./graph-demo/GraphDemo.svelte";
+  import GraphGallery from "./graph-demo/GraphGallery.svelte";
 
   const styles = [
     { value: "material", label: "Material Design" },
@@ -139,6 +140,8 @@
   // Demo state
   let inputVal = $state("");
   let textareaVal = $state("");
+  let projectTitle = $state("Project Atlas");
+  let releaseNotes = $state("Review the new layout.\nSend feedback by Friday.");
   let selectVal = $state("");
   let multiSelectVal = $state([]);
   let checkVal = $state(false);
@@ -156,23 +159,40 @@
     { id: "datadisplay", label: "Data Display" },
     { id: "feedback", label: "Feedback" },
     { id: "charts", label: "Charts" },
-    { id: "flowchart", label: "Flowchart" },
-    { id: "blueprint", label: "Blueprint" },
+    { id: "graph-editor", label: "Graph Editor" },
   ];
   let activeCat = $state("form");
-  const isGraphTab = (tab) => tab === "flowchart" || tab === "blueprint";
+  let graphVariant = $state("flowchart");
+  const isGraphTab = (tab) => ["graph-editor", "flowchart", "blueprint"].includes(tab);
 
   afterNavigate(({ to }) => {
     const tab = to?.url.searchParams.get("tab");
-    if (isGraphTab(tab)) activeCat = tab;
+    if (!isGraphTab(tab)) return;
+    activeCat = "graph-editor";
+    graphVariant = tab === "blueprint" || to.url.searchParams.get("variant") === "blueprint"
+      ? "blueprint" : "flowchart";
   });
 
   function selectCategory(tab) {
     activeCat = tab;
+    updateGraphURL();
+  }
+
+  function selectGraphVariant(variant) {
+    graphVariant = variant;
+    updateGraphURL();
+  }
+
+  function updateGraphURL() {
     const url = new URL(window.location.href);
-    const previous = url.searchParams.get("tab");
-    if (isGraphTab(tab)) url.searchParams.set("tab", tab);
-    else if (isGraphTab(previous)) url.searchParams.delete("tab");
+    if (activeCat === "graph-editor") {
+      url.searchParams.set("tab", activeCat);
+      if (graphVariant === "blueprint") url.searchParams.set("variant", graphVariant);
+      else url.searchParams.delete("variant");
+    } else if (isGraphTab(url.searchParams.get("tab"))) {
+      url.searchParams.delete("tab");
+      url.searchParams.delete("variant");
+    }
     if (url.href !== window.location.href) replaceState(url, page.state);
   }
   let layoutTab = $state("preview");
@@ -183,6 +203,7 @@
   let btnPreset = $state("primary");
   let btnVariant = $state("filled");
   let textareaTab = $state("preview");
+  let inlineEditTab = $state("preview");
   let selectTab = $state("preview");
   let multiSelectTab = $state("preview");
   let checkboxTab = $state("preview");
@@ -238,7 +259,7 @@
     {
       image: "https://picsum.photos/seed/welcome/600/300",
       alt: "Welcome slide",
-      caption: "Explore the component gallery",
+      caption: "Explore svelte-multistyle-ui",
     },
     {
       image: "https://picsum.photos/seed/styles/600/300",
@@ -257,7 +278,7 @@
       id: "1",
       title: "What is this?",
       content:
-        "A comprehensive UI component library with multiple styles and themes.",
+        "A multi-style Svelte 5 component library with 12+ design languages.",
     },
     {
       id: "2",
@@ -450,7 +471,7 @@ import "./custom-theme.css";
     class="page-header sticky top-0 z-50 backdrop-blur-md border-b px-6 py-4 transition-colors duration-300"
   >
     <div class="max-w-7xl mx-auto flex flex-wrap items-center gap-4">
-      <h1 class="page-title text-xl font-bold">UI Component Gallery</h1>
+      <h1 class="page-title text-xl font-bold">svelte-multistyle-ui</h1>
       <div class="flex items-center gap-3 ml-auto flex-wrap">
         <label for="style-sel" class="text-sm header-label">Style:</label>
         <select
@@ -893,6 +914,54 @@ import "./custom-theme.css";
           {/if}
         </Card>
 
+        <!-- Inline Edit -->
+        <Card
+          style={selectedStyle}
+          theme={selectedTheme}
+          elevated={true}
+          class="space-y-3"
+        >
+          <h3 class="demo-label text-xs font-semibold uppercase tracking-wide">Inline Edit</h3>
+          <Tabs
+            style={selectedStyle}
+            theme={selectedTheme}
+            tabs={[
+              { id: "preview", label: "👁 Preview" },
+              { id: "code", label: "</> Code" },
+            ]}
+            bind:active={inlineEditTab}
+          />
+          {#if inlineEditTab === "preview"}
+            <InlineEdit style={selectedStyle} theme={selectedTheme} aria-label="Project title" bind:value={projectTitle} />
+            <InlineEdit
+              style={selectedStyle}
+              theme={selectedTheme}
+              aria-label="Release notes"
+              variant="multiline"
+              value={releaseNotes}
+              onUpdate={(next) => (releaseNotes = next)}
+            />
+          {:else}
+            {@render codeBlock(
+              "inlineEdit",
+              `<script>
+  import { InlineEdit } from "svelte-multistyle-ui";
+
+  let title = $state("Project Atlas");
+  let notes = $state("Review the new layout.");
+</script>
+
+<InlineEdit aria-label="Project title" bind:value={title} />
+<InlineEdit
+  aria-label="Release notes"
+  variant="multiline"
+  value={notes}
+  onUpdate={(next) => (notes = next)}
+/>`,
+            )}
+          {/if}
+        </Card>
+
         <!-- Select -->
         <Card
           style={selectedStyle}
@@ -924,7 +993,11 @@ import "./custom-theme.css";
               "select",
               `<Select
   bind:value={val}
-  options={options}
+  options={[
+    { value: "opt1", label: "Option One" },
+    { value: "opt2", label: "Option Two" },
+    { value: "opt3", label: "Option Three" },
+  ]}
   label="Choose"
   placeholder="Choose"
 />`,
@@ -962,7 +1035,11 @@ import "./custom-theme.css";
               "multiSelect",
               `<MultiSelect
   bind:selected={selected}
-  options={options}
+  options={[
+    { value: "opt1", label: "Option One" },
+    { value: "opt2", label: "Option Two" },
+    { value: "opt3", label: "Option Three" },
+  ]}
   placeholder="Pick items"
 />`,
             )}
@@ -1152,36 +1229,34 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "datePicker",
-              `<script>
-  let date = $state("2025-06-15");
-</script>
+              `<!-- Default: save as ISO (YYYY-MM-DD) -->
+<DatePicker bind:value={date} label="Date (ISO)" placeholder="Pick a date" />
 
-<!-- Default: save as ISO (YYYY-MM-DD) -->
-<DatePicker bind:value={date} label="Date" />
-
-<!-- Custom save & display formats:
-     value stores as DD/MM/YYYY but shows as "Jun 15, 2025" -->
+<!-- Custom save & display formats -->
 <DatePicker
   bind:value={date}
   format="DD/MM/YYYY"
   displayFormat="MMM DD, YYYY"
   label="Custom format"
+  placeholder="DD/MM/YYYY"
 />
 
-<!-- With time: when format includes hh/mm, time picker appears -->
+<!-- With time: when format includes hh:mm, time picker appears -->
 <DatePicker
   bind:value={date}
   format="YYYY-MM-DD hh:mm"
   displayFormat="MMM DD, YYYY hh:mm"
   label="With time"
+  placeholder="YYYY-MM-DD hh:mm"
 />
 
-<!-- Restrict with min/max (values use the same format as the format prop): -->
+<!-- Restrict with min/max -->
 <DatePicker
   bind:value={date}
   min="2025-01-01"
   max="2025-12-31"
-  label="Date range"
+  label="Date range (min/max)"
+  placeholder="Pick a date in 2025"
 />`,
             )}
           {/if}
@@ -1272,7 +1347,13 @@ import "./custom-theme.css";
             {@render codeBlock(
               "dropdown",
               `<DropdownMenu
-  items={items}
+  items={[
+    { label: "Profile", icon: "👤", onclick: () => alert("Profile clicked") },
+    { label: "Settings", icon: "⚙", onclick: () => alert("Settings clicked") },
+    { divider: true },
+    { label: "Help", icon: "❓", shortcut: "⌘H", onclick: () => alert("Help clicked") },
+    { label: "Logout", icon: "🚪", shortcut: "⌘Q", onclick: () => alert("Logout clicked") },
+  ]}
   variant="primary"
   position="bottom"
 >
@@ -1280,7 +1361,10 @@ import "./custom-theme.css";
 </DropdownMenu>
 
 <DropdownMenu
-  items={items}
+  items={[
+    { label: "Profile", icon: "👤" },
+    { label: "Settings", icon: "⚙" },
+  ]}
   variant="secondary"
   position="bottom"
 >
@@ -1345,19 +1429,31 @@ import "./custom-theme.css";
             {@render codeBlock(
               "btnGroup",
               `<ButtonGroup
-  items={items}
+  items={[
+    { value: "day", label: "Day" },
+    { value: "week", label: "Week" },
+    { value: "month", label: "Month" },
+  ]}
   bind:value={val}
   variant="outlined"
 />
 
 <ButtonGroup
-  items={items}
+  items={[
+    { value: "left", label: "Left" },
+    { value: "center", label: "Center" },
+    { value: "right", label: "Right" },
+  ]}
   bind:value={val}
   variant="filled"
 />
 
 <ButtonGroup
-  items={items}
+  items={[
+    { value: "sm", label: "S", icon: "🔽" },
+    { value: "md", label: "M", icon: "⏸" },
+    { value: "lg", label: "L", icon: "🔼" },
+  ]}
   bind:value={val}
   variant="outlined"
   orientation="vertical"
@@ -1450,22 +1546,24 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "textEditor",
-              `<script>
-  let html = $state("<p>Hello from the <b>new editor</b>!</p>");
-</script>
-
-<TextEditor
+              `<TextEditor
   bind:value={html}
   label="Editable content"
   placeholder="Start typing..."
   rows={6}
 />
 
-<Button onclick={() => { /* open inject modal */ }}>
+<Button
+  variant="filled"
+  onclick={() => { /* open inject modal */ }}
+>
   Inject HTML
 </Button>
 
-<Button onclick={() => { /* open extract modal */ }}>
+<Button
+  variant="outlined"
+  onclick={() => { /* open extract modal */ }}
+>
   Extract HTML
 </Button>`,
             )}
@@ -1513,15 +1611,17 @@ import "./custom-theme.css";
               `<CodeEditor
   bind:value={code}
   language="javascript"
-  label="Code"
-  rows={8}
+  label="Editable"
+  rows={6}
 />
 
-<!-- readonly display -->
+<!-- Readonly display -->
 <CodeEditor
   value={code}
   language="javascript"
   editable={false}
+  label="Readonly"
+  rows={6}
 />`,
             )}
           {/if}
@@ -2082,7 +2182,11 @@ import "./custom-theme.css";
             {@render codeBlock(
               "accordion",
               `<Accordion
-  items={items}
+  items={[
+    { id: "1", title: "What is this?", content: "A multi-style Svelte 5 component library with 12+ design languages." },
+    { id: "2", title: "How to use?", content: "Import any component and pass style and theme props." },
+    { id: "3", title: "Customizable?", content: "Yes! Every component adapts to the selected style and theme." },
+  ]}
   current="1"
 />`,
             )}
@@ -2113,26 +2217,15 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "carousel",
-              `<script>
-  let slides = [
-    {
-      image: "https://picsum.photos/seed/welcome/600/300",
-      alt: "Welcome slide",
-      caption: "Explore the component gallery"
-    },
-    {
-      image: "https://picsum.photos/seed/styles/600/300",
-      alt: "Styles slide",
-      caption: "13 visual design languages"
-    },
-    {
-      image: "https://picsum.photos/seed/themes/600/300",
-      alt: "Themes slide",
-      caption: "10 color themes available"
-    }
-  ];
-</script>
-<Carousel slides={slides} autoPlay={true} interval={4000} />`,
+              `<Carousel
+  slides={[
+    { image: "https://picsum.photos/seed/welcome/600/300", alt: "Welcome slide", caption: "Explore svelte-multistyle-ui" },
+    { image: "https://picsum.photos/seed/styles/600/300", alt: "Styles slide", caption: "12 visual design languages" },
+    { image: "https://picsum.photos/seed/themes/600/300", alt: "Themes slide", caption: "10 color themes available" },
+  ]}
+  autoPlay={true}
+  interval={4000}
+/>`,
             )}
           {/if}
         </Card>
@@ -2313,7 +2406,24 @@ import "./custom-theme.css";
             {@render codeBlock(
               "cmdPalette",
               `<CommandPalette
-  groups={groups}
+  groups={[
+    {
+      label: "Navigation",
+      items: [
+        { label: "Go to Dashboard", icon: "📊", shortcut: "⌘1", onclick: () => alert("Dashboard") },
+        { label: "Go to Projects", icon: "📁", shortcut: "⌘2", onclick: () => alert("Projects") },
+        { label: "Go to Settings", icon: "⚙", shortcut: "⌘,", onclick: () => alert("Settings") },
+      ],
+    },
+    {
+      label: "Actions",
+      items: [
+        { label: "New File", icon: "📄", shortcut: "⌘N", onclick: () => alert("New File") },
+        { label: "Search", icon: "🔍", shortcut: "⌘F", onclick: () => alert("Search") },
+        { label: "Toggle Dark Mode", icon: "🌙", shortcut: "⌘D", onclick: () => alert("Toggle Dark") },
+      ],
+    },
+  ]}
   bind:open={isOpen}
   placeholder="Type a command..."
 />`,
@@ -2384,20 +2494,53 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "sortableList",
-              `<SortableList items={items} direction="vertical" onUpdate={(v) => items = v}>
+              `<SortableList
+  items={[
+    { id: "1", label: "Design Review" },
+    { id: "2", label: "Frontend Development" },
+    { id: "3", label: "API Integration" },
+    { id: "4", label: "QA Testing" },
+    { id: "5", label: "Deployment" },
+  ]}
+  direction="vertical"
+  onUpdate={(v) => items = v}
+>
   {#snippet children(item)}
     <span>{item.label}</span>
   {/snippet}
 </SortableList>
 
-<SortableList items={items} direction="horizontal" onUpdate={(v) => items = v}>
+<SortableList
+  items={[
+    { id: "1", label: "Design Review" },
+    { id: "2", label: "Frontend Development" },
+    { id: "3", label: "API Integration" },
+    { id: "4", label: "QA Testing" },
+    { id: "5", label: "Deployment" },
+  ]}
+  direction="horizontal"
+  onUpdate={(v) => items = v}
+>
   {#snippet children(item)}
     <span>{item.label}</span>
   {/snippet}
 </SortableList>
 
 <!-- Nested: Each parent item renders its own SortableList -->
-<SortableList items={nestedItems} type="parent" direction="vertical">
+<SortableList
+  items={[
+    { id: "n1", label: "Project Alpha", children: [
+      { id: "n1a", label: "Setup" },
+      { id: "n1b", label: "Design" },
+    ]},
+    { id: "n2", label: "Project Beta", children: [
+      { id: "n2a", label: "Research" },
+    ]},
+    { id: "n3", label: "Project Gamma", children: [] },
+  ]}
+  type="parent"
+  direction="vertical"
+>
   {#snippet children(item)}
     <span>{item.label}</span>
     {#if item.children?.length}
@@ -2715,7 +2858,10 @@ import "./custom-theme.css";
   value={65}
   animated={true}
   label={true}
-/>`,
+/>
+
+<!-- Indeterminate: pass value={-1} or omit -->
+<ProgressBar value={-1} label={true} />`,
             )}
           {/if}
         </Card>
@@ -2832,18 +2978,14 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "table",
-              `<script>
-  // Data keys become column headers automatically.
-  // Multi-word keys work too:
-  // { "First Name": "Alice", "Job Title": "Engineer", Status: "Active" }
-  const data = [
+              `<Table
+  data={[
     { Name: "Alice", Role: "Engineer", Status: "Active" },
     { Name: "Bob", Role: "Designer", Status: "Away" },
     { Name: "Carol", Role: "Manager", Status: "Active" },
-  ];
-</script>
-
-<Table data={data} variant="striped" />
+  ]}
+  variant="striped"
+/>
 
 <!-- Variants: "plain", "striped", "hoverable", "bordered", "compact" -->`,
             )}
@@ -2920,15 +3062,40 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "alert",
-              `<script>
-  let preset = $state("info");
-</script>
+              `<Alert
+  preset="info"
+  title="Info"
+  icon="info"
+  dismissible
+>
+  This is an informational alert message.
+</Alert>
 
-<!-- Icons auto-select based on preset.
-     Pass icon="info" to use Material Icons instead.
-     Default icons: info→ℹ, success→✓, warning→⚠, error→✕ -->
-<Alert preset={preset} title="Title" dismissible>
-  Alert message here.
+<Alert
+  preset="success"
+  title="Success"
+  icon="check_circle"
+  dismissible
+>
+  Operation completed successfully.
+</Alert>
+
+<Alert
+  preset="warning"
+  title="Warning"
+  icon="warning"
+  dismissible
+>
+  Please review before proceeding.
+</Alert>
+
+<Alert
+  preset="error"
+  title="Error"
+  icon="error"
+  dismissible
+>
+  Something went wrong. Please try again.
 </Alert>
 
 <!-- Presets: default, info, success, warning, error -->`,
@@ -3001,18 +3168,19 @@ import "./custom-theme.css";
               `<script>
   let toasts = $state([]);
 
-  function addToast(msg, variant, icon) {
+  function addToast(msg, preset, icon) {
     const id = Date.now() + Math.random();
-    toasts = [...toasts, { id, message: msg, variant, duration: 3000, icon }];
+    toasts = [...toasts, { id, message: msg, preset, duration: 3000, icon }];
     setTimeout(() => toasts = toasts.filter(t => t.id !== id), 3000);
   }
 </script>
 
-<Toast bind:toasts position="top-right" />
+<Button onclick={() => addToast("Toast message", "info", "info")}>Info</Button>
+<Button onclick={() => addToast("Saved successfully", "success", "check_circle")}>Success</Button>
+<Button onclick={() => addToast("Review before continuing", "warning", "warning")}>Warning</Button>
+<Button onclick={() => addToast("Something failed", "error", "error")}>Error</Button>
 
-<!-- Icon is auto-wrapped with the configured icon class.
-     Pass icon="info" for Material Icons,
-     or omit it for defaults: info→ℹ, success→✓, warning→⚠, error→✕. -->`,
+<Toast bind:toasts position="top-right" />`,
             )}
           {/if}
         </Card>
@@ -3149,24 +3317,22 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "barChart",
-              `<script>
-  // {label, value} format — order is preserved (unlike plain objects)
-  let data = [
+              `<BarChart
+  data={[
     { label: "q1", value: 12 },
     { label: "q2", value: 19 },
     { label: "q3", value: 8 },
     { label: "q4", value: 15 },
-  ];
-</script>
-
-<BarChart {data} title="Quarterly Revenue" xAxisLabel="Quarter" yAxisLabel="Revenue" />
+  ]}
+  title="Quarterly Revenue"
+  xAxisLabel="Quarter"
+  yAxisLabel="Revenue"
+  downloadable={true}
+/>
 
 <!-- Works for BarChart, LineChart, PieChart, DoughnutChart, RadarChart, PolarAreaChart.
-     For multi-series, pass more keys in each object:
-<BarChart data={[
-  { label: "Jan", revenue: 10, Cost: 5 },
-  { label: "Feb", revenue: 20, Cost: 8 },
-]} /> -->`,
+     Multi-series: add more keys to each object:
+     { label: "Jan", revenue: 10, cost: 5 } -->`,
             )}
           {/if}
         </Card>
@@ -3210,23 +3376,23 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "lineChart",
-              `<script>
-  // Row-oriented format — label + any number of value keys
-  let data = [
+              `<LineChart
+  data={[
     { label: "Jan", revenue: 10, Cost: 5 },
     { label: "Feb", revenue: 20, Cost: 8 },
     { label: "Mar", revenue: 30, Cost: 12 },
     { label: "Apr", revenue: 25, Cost: 10 },
     { label: "May", revenue: 35, Cost: 15 },
     { label: "Jun", revenue: 40, Cost: 18 },
-  ];
-</script>
+  ]}
+  title="Revenue vs Cost"
+  xAxisLabel="Month"
+  yAxisLabel="Amount"
+  downloadable={true}
+/>
 
-<LineChart {data} title="Revenue vs Cost" xAxisLabel="Month" yAxisLabel="Amount" />
-
-<!-- Works for BarChart, Area, StackedBarChart too!
-     The label field becomes the x-axis label, all other keys become series.
-     For single-series, use {label, value} objects in the data prop. -->`,
+<!-- The label field becomes the x-axis label, all other keys become series.
+     For single-series, use {label, value} objects. -->`,
             )}
           {/if}
         </Card>
@@ -3266,19 +3432,16 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "pieChart",
-              `<script>
-  let data = [
+              `<PieChart
+  data={[
     { label: "Direct", value: 35 },
     { label: "Social", value: 25 },
     { label: "Referral", value: 20 },
     { label: "Organic", value: 20 },
-  ];
-</script>
-
-<PieChart {data} title="Traffic Sources" />
-
-<!-- Use the data prop with {label, value} format.
-     Auto-colors from theme palette. -->`,
+  ]}
+  title="Traffic Sources"
+  downloadable={true}
+/>`,
             )}
           {/if}
         </Card>
@@ -3320,20 +3483,18 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "doughnutChart",
-              `<script>
-  let data = [
+              `<DoughnutChart
+  data={[
     { label: "Chrome", value: 45 },
     { label: "Firefox", value: 25 },
     { label: "Safari", value: 15 },
     { label: "Edge", value: 10 },
     { label: "Other", value: 5 },
-  ];
-</script>
-
-<DoughnutChart {data} title="Browser Share" options={{cutout: "60%"}} />
-
-<!-- options={{cutout: "60%"}} creates the ring hole.
-     Use the data prop with {label, value} format. -->`,
+  ]}
+  title="Browser Share"
+  options={{ cutout: "60%" }}
+  downloadable={true}
+/>`,
             )}
           {/if}
         </Card>
@@ -3375,22 +3536,20 @@ import "./custom-theme.css";
             />
           {:else}
             {@render codeBlock(
-              radarChart,
-              `<script>
-  // Row-oriented format — label + any number of value keys
-  let data = [
+              "radarChart",
+              `<RadarChart
+  data={[
     { label: "Speed", "Character A": 80, "Character B": 70 },
     { label: "Power", "Character A": 65, "Character B": 85 },
     { label: "Accuracy", "Character A": 90, "Character B": 75 },
     { label: "Defense", "Character A": 70, "Character B": 85 },
     { label: "Agility", "Character A": 85, "Character B": 80 },
-  ];
-</script>
-
-<RadarChart {data} title="Character Stats" xAxisLabel="Attribute" yAxisLabel="Score" />
-
-<!-- Same row-oriented format works for BarChart, LineChart, StackedBarChart, RadarChart.
-     Single-series: <RadarChart data={[{label:"A", value:5}]} /> -->`,
+  ]}
+  title="Character Stats"
+  xAxisLabel="Attribute"
+  yAxisLabel="Score"
+  downloadable={true}
+/>`,
             )}
           {/if}
         </Card>
@@ -3431,20 +3590,17 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "polarAreaChart",
-              `<script>
-  let data = [
+              `<PolarAreaChart
+  data={[
     { label: "Red", value: 11 },
     { label: "Blue", value: 16 },
     { label: "Green", value: 7 },
     { label: "Yellow", value: 3 },
     { label: "Purple", value: 14 },
-  ];
-</script>
-
-<PolarAreaChart {data} title="Color Distribution" />
-
-<!-- Use the data prop with {label, value} format.
-     Auto-colors from theme palette. -->`,
+  ]}
+  title="Color Distribution"
+  downloadable={true}
+/>`,
             )}
           {/if}
         </Card>
@@ -3491,28 +3647,23 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "scatterChart",
-              `<script>
-  let data = [
-    {x: 1, y: 2},
-    {x: 2, y: 5},
-    {x: 3, y: 3},
-    {x: 4, y: 8},
-    {x: 5, y: 4},
-    {x: 6, y: 7},
-    {x: 7, y: 6},
-    {x: 8, y: 9},
-  ];
-</script>
-
-<ScatterChart {data} title="Data Distribution" xAxisLabel="X Value" yAxisLabel="Y Value" />
-
-<!-- Multi-series:
-<ScatterChart
-  series={[
-    { name: "A", points: [{x:1,y:2},{x:3,y:4}] },
-    { name: "B", points: [{x:2,y:1},{x:4,y:3}] },
+              `<ScatterChart
+  data={[
+    { x: 1, y: 2 },
+    { x: 2, y: 5 },
+    { x: 3, y: 3 },
+    { x: 4, y: 8 },
+    { x: 5, y: 4 },
+    { x: 6, y: 7 },
+    { x: 7, y: 6 },
+    { x: 8, y: 9 },
   ]}
-/> -->`,
+  title="Data Distribution"
+  xAxisLabel="X Value"
+  yAxisLabel="Y Value"
+  downloadable={true}
+  height={280}
+/>`,
             )}
           {/if}
         </Card>
@@ -3556,21 +3707,20 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "bubbleChart",
-              `<script>
-  let series = [
-    {
-      { label: "Product A", x: 10, y: 20, r: 5 },
-      { label: "Product B", x: 15, y: 35, r: 8 },
-      { label: "Product C", x: 25, y: 15, r: 12 },
-      { label: "Product D", x: 30, y: 45, r: 6 },
-      { label: "Product E", x: 40, y: 25, r: 10 },
-  ];
-</script>
-
-<BubbleChart {series} title="Product Performance" xAxisLabel="Feature" yAxisLabel="Performance" />
-
-<!-- r controls bubble size (radius).
-     Multi-series: add more objects to series[]. -->`,
+              `<BubbleChart
+  series={[
+    { label: "Product A", x: 10, y: 20, r: 5 },
+    { label: "Product B", x: 15, y: 35, r: 8 },
+    { label: "Product C", x: 25, y: 15, r: 12 },
+    { label: "Product D", x: 30, y: 45, r: 6 },
+    { label: "Product E", x: 40, y: 25, r: 10 },
+  ]}
+  title="Product Performance"
+  xAxisLabel="Feature"
+  yAxisLabel="Performance"
+  downloadable={true}
+  height={280}
+/>`,
             )}
           {/if}
         </Card>
@@ -3631,21 +3781,19 @@ import "./custom-theme.css";
             />
           {:else}
             {@render codeBlock(
-              stackedBarChart,
-              `<script>
-  // Row-oriented format — label + any number of value keys
-  let data = [
+              "stackedBarChart",
+              `<StackedBarChart
+  data={[
     { label: "Q1", "Product A": 30, "Product B": 20, "Product C": 15 },
     { label: "Q2", "Product A": 45, "Product B": 30, "Product C": 10 },
     { label: "Q3", "Product A": 25, "Product B": 35, "Product C": 20 },
     { label: "Q4", "Product A": 50, "Product B": 25, "Product C": 15 },
-  ];
-</script>
-
-<StackedBarChart {data} title="Revenue Breakdown" xAxisLabel="Quarter" yAxisLabel="Revenue" />
-
-<!-- Same row-oriented format works for BarChart, LineChart, StackedBarChart, ComboChart.
-     Single-series: <BarChart data={[{label:"q1", value:12}]} /> -->`,
+  ]}
+  title="Revenue Breakdown"
+  xAxisLabel="Quarter"
+  yAxisLabel="Revenue"
+  downloadable={true}
+/>`,
             )}
           {/if}
         </Card>
@@ -3687,17 +3835,17 @@ import "./custom-theme.css";
           {:else}
             {@render codeBlock(
               "stackedLineChart",
-              `<script>
-  // Row-oriented format — label + any number of value keys
-  let data = [
-                { label: "Week 1", EMEA: 120, APAC: 450, NA: 80 },
-                { label: "Week 2", EMEA: 180, APAC: 620, NA: 110 },
-                { label: "Week 3", EMEA: 140, APAC: 530, NA: 95 },
-                { label: "Week 4", EMEA: 220, APAC: 780, NA: 150 },
-              ];
-</script>
-
-<StackedLineChart {data} title="Website Traffic" xAxisLabel="Week" yAxisLabel="Count" />
+              `<StackedLineChart
+  data={[
+    { label: "Week 1", EMEA: 120, APAC: 450, NA: 80 },
+    { label: "Week 2", EMEA: 180, APAC: 620, NA: 110 },
+    { label: "Week 3", EMEA: 140, APAC: 530, NA: 95 },
+    { label: "Week 4", EMEA: 220, APAC: 780, NA: 150 },
+  ]}
+  title="Website Traffic"
+  xAxisLabel="Week"
+  yAxisLabel="Page Views"
+/>
 
 <!-- Same row-oriented format works for BarChart, LineChart, StackedBarChart, ComboChart.
      Single-series: <LineChart data={[{label:"q1", value:12}]} /> -->`,
@@ -3707,12 +3855,10 @@ import "./custom-theme.css";
       </div>
     </section>
 
-    {#if activeCat === "flowchart" || activeCat === "blueprint"}
-      {#key activeCat}
-        <section role="tabpanel" aria-label={activeCat === "flowchart" ? "Flowchart" : "Blueprint"}>
-          <GraphDemo mode={activeCat} style={selectedStyle} theme={selectedTheme} />
-        </section>
-      {/key}
+    {#if activeCat === "graph-editor"}
+      <section role="tabpanel" aria-label="Graph Editor">
+        <GraphGallery mode={graphVariant} onVariantChange={selectGraphVariant} style={selectedStyle} theme={selectedTheme} />
+      </section>
     {/if}
 
     <!-- Toast Container -->

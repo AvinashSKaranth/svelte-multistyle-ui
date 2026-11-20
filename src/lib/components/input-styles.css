@@ -91,7 +91,7 @@
 }
 
 /* ===== MATERIAL DESIGN — underline, rounded top, floating label ===== */
-.s-input-material input {
+.s-input-material :is(input, :where(.s-inline-edit-value)) {
   padding: 24px 16px 8px;
   font-size: 16px;
   background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
@@ -123,7 +123,7 @@
 }
 
 /* ===== MATERIAL 3 — outlined, label on border ===== */
-.s-input-material3 input {
+.s-input-material3 :is(input, :where(.s-inline-edit-value)) {
   padding: 24px 16px 8px;
   font-size: 16px;
   background: var(--t-surface);
@@ -135,7 +135,7 @@
 .s-input-material3 input:hover {
   border-color: var(--t-text);
 }
-.s-input-material3.focused input {
+.s-input-material3.focused :is(input, :where(.s-inline-edit-value)) {
   border-color: var(--t-primary);
   border-width: calc(var(--t-border-width) + 0.5px);
   padding: calc(24px - 0.5px) calc(16px - 0.5px) calc(8px - 0.5px);
@@ -160,7 +160,7 @@
 }
 
 /* ===== FLUENT UI — label above, 4px radius, 32px control (Fluent 2) ===== */
-.s-input-fluent input {
+.s-input-fluent :is(input, :where(.s-inline-edit-value)) {
   padding: 6px 10px;
   font-size: 14px;
   min-height: 32px;
@@ -173,7 +173,7 @@
 .s-input-fluent input:hover {
   border-color: color-mix(in srgb, var(--t-text) 60%, transparent);
 }
-.s-input-fluent.focused input {
+.s-input-fluent.focused :is(input, :where(.s-inline-edit-value)) {
   border-bottom: 2px solid var(--t-primary);
   padding-bottom: 5px; /* offset the 2px bottom border so the layout doesn't shift */
 }
@@ -188,7 +188,7 @@
 }
 
 /* ===== BRUTALIST UI ===== */
-.s-input-brutalist input {
+.s-input-brutalist :is(input, :where(.s-inline-edit-value)) {
   padding: 12px 14px;
   font-size: 16px;
   font-family: 'Courier New', monospace;
@@ -211,7 +211,7 @@
 }
 
 /* ===== PIXEL UI ===== */
-.s-input-pixel input {
+.s-input-pixel :is(input, :where(.s-inline-edit-value)) {
   padding: 10px 12px;
   font-size: 14px;
   font-family: 'Courier New', monospace;
@@ -232,7 +232,7 @@
   color: var(--t-text);
 }
 /* ===== NEON UI ===== */
-.s-input-neon input {
+.s-input-neon :is(input, :where(.s-inline-edit-value)) {
   padding: 12px 16px;
   font-size: 15px;
   background: var(--t-surface);
@@ -256,7 +256,7 @@
 }
 
 /* ===== METRO ===== */
-.s-input-metro input {
+.s-input-metro :is(input, :where(.s-inline-edit-value)) {
   padding: 12px 14px;
   font-size: 15px;
   font-weight: 600;
@@ -274,7 +274,7 @@
 }
 
 /* ===== BOOTSTRAP — label above ===== */
-.s-input-bootstrap input {
+.s-input-bootstrap :is(input, :where(.s-inline-edit-value)) {
   padding: 8px 12px;
   font-size: 15px;
   min-height: 38px;
@@ -299,7 +299,7 @@
 }
 
 /* ===== CARTOON ===== */
-.s-input-cartoon input {
+.s-input-cartoon :is(input, :where(.s-inline-edit-value)) {
   padding: 12px 16px;
   font-size: 15px;
   font-weight: 700;
@@ -321,7 +321,7 @@
 }
 
 /* ===== ILLUSTRATION ===== */
-.s-input-illustration input {
+.s-input-illustration :is(input, :where(.s-inline-edit-value)) {
   padding: 12px 16px;
   font-size: 15px;
   font-style: italic;
@@ -342,7 +342,7 @@
 }
 
 /* ===== CARBON — label above, 0 radius, 40px control ===== */
-.s-input-carbon input {
+.s-input-carbon :is(input, :where(.s-inline-edit-value)) {
   padding: 8px 12px;
   font-size: 14px;
   min-height: 40px;
@@ -371,27 +371,10 @@
   color: var(--t-primary);
 }
 
-/* ===== LIQUID GLASS — label above the glass; glass lives on the field box ===== */
-.s-input-liquid-glass .s-input-field {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 16px;
-  backdrop-filter: blur(24px) saturate(1.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
-  box-shadow: var(--t-shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);
-  transition: all 0.3s ease;
-}
-.s-input-liquid-glass:hover .s-input-field {
-  background: rgba(255,255,255,0.15);
-  border-color: rgba(255,255,255,0.3);
-}
-.s-input-liquid-glass.focused .s-input-field {
-  background: rgba(255,255,255,0.18);
-  border-color: var(--t-primary);
-  box-shadow: var(--t-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.4), 0 0 20px var(--t-shadow);
-}
+/* ===== LIQUID GLASS — see liquid-glass-field.css for the field surface ===== */
 .s-input-liquid-glass input {
-  padding: 12px 18px;
+  padding-block: var(--liquid-glass-field-padding-block);
+  padding-inline: var(--liquid-glass-field-padding-inline);
   font-size: 15px;
   background: transparent;
   color: var(--t-text);

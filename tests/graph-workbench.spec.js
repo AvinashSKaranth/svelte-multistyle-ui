@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
+import { compile } from "svelte/compiler";
 import { connectGraphNodes, createGraph, createGraphNode, orientFlowGraph, parseGraph, runGraph } from "../src/lib/graph/index.js";
 import { flowObstacles, routeFlowWire } from "../src/lib/graph/flow-routing.js";
 import { flowPortPoint } from "../src/lib/graph/geometry.js";
@@ -26,6 +27,9 @@ test("the graph runner orders dependencies and rejects invalid or circular data 
   expect(() => connect(ordered, "label", "value", "second", "value")).toThrow("Cannot connect text to number");
   expect(() => runGraph(connect(ordered, "second", "result", "first", "value"), options)).toThrow("circular data connection");
   expect(() => parseGraph(JSON.stringify({ ...ordered, edges: [...ordered.edges, ordered.edges[0]] }), options.nodeTypes)).toThrow("duplicate connection ID");
+  const styled = { ...ordered, edges: [{ ...ordered.edges[0], style: "straight" }, ordered.edges[1]] };
+  expect(parseGraph(JSON.stringify(styled), options.nodeTypes).edges[0].style).toBe("straight");
+  expect(() => parseGraph(JSON.stringify({ ...styled, edges: [{ ...styled.edges[0], style: "invalid" }] }), options.nodeTypes)).toThrow("Unknown connection style");
 });
 
 test("flowchart connectors take a right-angle detour around a shape", () => {
@@ -65,12 +69,13 @@ test("the component gallery opens a runnable blueprint and preserves parent link
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.locator("html")).toHaveClass(/\b(?:light|dark)\b/);
+  await expect(page.locator("html")).toHaveClass(/\b(?:light|dark)\b/, { timeout: 15000 });
   const tabs = page.getByRole("tablist", { name: "Component categories" });
-  const blueprint = tabs.getByRole("tab", { name: "Blueprint" });
-  await blueprint.click();
-  await expect(blueprint).toHaveAttribute("aria-selected", "true");
-  await expect(page).toHaveURL(/\/\?tab=blueprint$/);
+  const graphs = tabs.getByRole("tab", { name: "Graph Editor" });
+  await graphs.click();
+  await page.getByLabel("Graph variant").selectOption("blueprint");
+  await expect(graphs).toHaveAttribute("aria-selected", "true");
+  await expect(page).toHaveURL(/\/\?tab=graph-editor&variant=blueprint$/);
 
   const result = page.getByRole("region", { name: "Run output" });
   await page.getByRole("button", { name: "Run graph" }).click();
@@ -94,8 +99,61 @@ test("the component gallery opens a runnable blueprint and preserves parent link
   expect(errors).toEqual([]);
 });
 
+test("Liquid Glass keeps graph controls and nodes readable in light mode", async ({ page }) => {
+  await page.goto("/?style=liquid-glass&mode=light&tab=flowchart", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveClass(/\blight\b/);
+  const editor = page.locator(".s-graph-editor-liquid-glass");
+
+  for (const mode of ["flowchart", "blueprint"]) {
+    await expect(editor).toHaveAttribute("data-mode", mode);
+    const ratios = await editor.evaluate((root) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 1;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+
+      function luminance(colors) {
+        for (const color of ["white", ...colors]) {
+          context.fillStyle = color;
+          context.fillRect(0, 0, 1, 1);
+        }
+        const channels = Array.from(context.getImageData(0, 0, 1, 1).data).slice(0, 3).map((channel) => {
+          const srgb = channel / 255;
+          return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+        });
+        return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+      }
+
+      const background = (element) => getComputedStyle(element).backgroundColor;
+      function contrast(text, ...surfaces) {
+        const back = luminance(surfaces);
+        const front = luminance([...surfaces, getComputedStyle(text).color]);
+        return (Math.max(back, front) + 0.05) / (Math.min(back, front) + 0.05);
+      }
+
+      const panel = background(root);
+      const stage = root.querySelector(".s-graph-stage");
+      const field = root.querySelector(".s-graph-inspector input");
+      const node = root.querySelector(".s-graph-node");
+      const shape = node.querySelector(".s-flow-outline");
+      const nodeSurfaces = shape ? [getComputedStyle(shape).fill] : [background(node), background(node.firstElementChild)];
+      return {
+        palette: contrast(root.querySelector(".s-graph-palette-node"), panel),
+        field: contrast(field, panel, background(field)),
+        node: contrast(node.querySelector(".s-flow-title, .s-graph-node-title"), panel, background(stage), ...nodeSurfaces),
+      };
+    });
+    for (const [name, ratio] of Object.entries(ratios)) {
+      expect(ratio, `${mode} ${name} contrast`).toBeGreaterThanOrEqual(4.5);
+    }
+    if (mode === "flowchart") await page.getByLabel("Graph variant").selectOption("blueprint");
+  }
+
+  await page.getByRole("button", { name: "Run graph" }).click();
+  await expect(page.getByRole("region", { name: "Run output" })).toContainText("144");
+});
+
 test("flowchart direction updates the layout and persists for each graph level", async ({ page }) => {
-  await page.goto("/?tab=flowchart", { waitUntil: "domcontentloaded" });
+  await page.goto("/?tab=graph-editor", { waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "Load conversation example" }).click();
   const controls = page.getByRole("group", { name: "Flowchart direction" });
   const horizontal = controls.getByRole("button", { name: "Horizontal" });
@@ -137,13 +195,55 @@ test("flowchart direction updates the layout and persists for each graph level",
   await expect(vertical).toHaveAttribute("aria-pressed", "true");
 });
 
+test("one gallery tab offers both variants, runnable code samples and connection styles", async ({ page, request }) => {
+  const removedPages = await Promise.all(["/demo", "/demo/graph", "/demo/blueprint"].map((path) => request.get(path)));
+  expect(removedPages.map((response) => response.status())).toEqual([404, 404, 404]);
+
+  await page.goto("/?tab=graph-editor", { waitUntil: "domcontentloaded" });
+  const tabs = page.getByRole("tablist", { name: "Component categories" });
+  await expect(tabs.getByRole("tab", { name: "Graph Editor" })).toHaveAttribute("aria-selected", "true");
+  await expect(tabs.getByRole("tab", { name: /^(Flowchart|Blueprint)$/ })).toHaveCount(0);
+  const variant = page.getByLabel("Graph variant");
+  const guide = page.getByRole("region", { name: "How to use GraphEditor" });
+  const topics = ["Setup and controls", "Custom nodes", "Connection styles"];
+  await expect(guide.getByRole("heading", { level: 3 })).toHaveText(topics);
+  await expect(guide.getByRole("tablist")).toHaveCount(0);
+  await expect(guide.getByRole("combobox")).toHaveCount(0);
+
+  for (const [mode, node] of [["flowchart", "Assign agent"], ["blueprint", "Double value"]]) {
+    await variant.selectOption(mode);
+    await expect(page.getByRole("button", { name: `Add ${node}` })).toBeVisible();
+    for (const topic of topics) {
+      const markup = guide.getByRole("region", { name: topic }).locator(".s-codeeditor-pre code");
+      await expect(markup).toBeVisible();
+      await expect(markup).toContainText(`mode="${mode}"`);
+      compile(await markup.textContent(), { filename: `${mode}-${topic}.svelte`, runes: true });
+    }
+  }
+
+  const connection = page.getByRole("button", { name: "Select connection from Calculate subtotal to Order total" });
+  const edge = connection.locator("..").locator(".s-graph-edge");
+  await expect(edge).toHaveAttribute("d", / C /);
+  await page.getByLabel("Default connection style").selectOption("straight");
+  await expect(edge).toHaveAttribute("d", /^M [\d.]+ [\d.]+ L [\d.]+ [\d.]+$/);
+  await connection.press("Enter");
+  await page.getByRole("combobox", { name: "Connection style", exact: true }).selectOption("orthogonal");
+  await expect(edge).toHaveAttribute("d", / L .* L /);
+  await page.getByRole("button", { name: "Undo", exact: true }).click();
+  await expect(edge).toHaveAttribute("d", /^M [\d.]+ [\d.]+ L [\d.]+ [\d.]+$/);
+  await page.getByRole("button", { name: "Redo", exact: true }).click();
+  await variant.selectOption("flowchart");
+  await variant.selectOption("blueprint");
+  await expect(edge).toHaveAttribute("d", / L .* L /);
+});
+
 test("build, export and embed a flowchart with a loop", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.locator("html")).toHaveClass(/\b(?:light|dark)\b/);
-  const tab = page.getByRole("tablist", { name: "Component categories" }).getByRole("tab", { name: "Flowchart" });
+  await expect(page.locator("html")).toHaveClass(/\b(?:light|dark)\b/, { timeout: 15000 });
+  const tab = page.getByRole("tablist", { name: "Component categories" }).getByRole("tab", { name: "Graph Editor" });
   await tab.click();
   await expect(tab).toHaveAttribute("aria-selected", "true");
-  await expect(page).toHaveURL(/\/\?tab=flowchart$/);
+  await expect(page).toHaveURL(/\/\?tab=graph-editor$/);
   await page.getByRole("button", { name: "Load conversation example" }).click();
   await expect(page.getByRole("button", { name: "Billing question? output: Yes", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Billing question? output: No", exact: true })).toBeVisible();

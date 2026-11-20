@@ -10,8 +10,12 @@ export { orientFlowGraph } from "./geometry.js";
 /** @typedef {"horizontal" | "vertical"} FlowDirection */
 /** @typedef {{ version: 1, title: string, direction?: FlowDirection, nodes: GraphNode[], edges: GraphEdge[] }} Graph */
 /** @typedef {{ id: string, type: string, title: string, x: number, y: number, width?: number, height?: number, data: Record<string, any>, graph?: Graph }} GraphNode */
-/** @typedef {{ source: string, sourcePort: string, target: string, targetPort: string }} GraphConnection */
+/** @typedef {"straight" | "curve" | "orthogonal"} GraphEdgeStyle */
+/** @typedef {{ source: string, sourcePort: string, target: string, targetPort: string, style?: GraphEdgeStyle }} GraphConnection */
 /** @typedef {GraphConnection & { id: string }} GraphEdge */
+
+/** @type {Record<GraphEdgeStyle, string>} */
+export const edgeStyles = { straight: "Straight", curve: "Curved", orthogonal: "Right-angle" };
 
 /** @param {string} [title] @returns {Graph} */
 export function createGraph(title = "Untitled graph") {
@@ -46,6 +50,9 @@ function portIndex(graph, nodeTypes) {
 
 /** @param {ReturnType<typeof portIndex>} ports @param {GraphConnection} edge */
 function connectionPorts(ports, edge) {
+  if (edge.style !== undefined && (typeof edge.style !== "string" || !Object.hasOwn(edgeStyles, edge.style))) {
+    return { error: "Unknown connection style." };
+  }
   const output = ports.get(edge.source)?.outputs.find((port) => port.id === edge.sourcePort);
   const input = ports.get(edge.target)?.inputs.find((port) => port.id === edge.targetPort);
   if (!output || !input) return { error: "The connection references a missing port." };

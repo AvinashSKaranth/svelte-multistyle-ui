@@ -6,7 +6,7 @@
   position: relative;
   width: 100%;
 }
-.s-textarea-wrapper textarea {
+.s-textarea-wrapper :is(textarea, :where(.s-inline-edit-value)) {
   width: 100%;
   box-sizing: border-box;
   font-family: inherit;
@@ -74,7 +74,7 @@
 }
 
 /* ===== MATERIAL ===== */
-.s-textarea-material textarea {
+.s-textarea-material :is(textarea, :where(.s-inline-edit-value)) {
   background: color-mix(in srgb, var(--t-primary) 4%, var(--t-surface));
   border: none;
   border-bottom: var(--t-border-width) solid var(--t-border);
@@ -87,12 +87,12 @@
 }
 
 /* ===== MATERIAL 3 ===== */
-.s-textarea-material3 textarea {
+.s-textarea-material3 :is(textarea, :where(.s-inline-edit-value)) {
   background: var(--t-surface);
   border: var(--t-border-width) solid var(--t-border);
   border-radius: var(--t-input-radius);
 }
-.s-textarea-material3.focused textarea {
+.s-textarea-material3.focused :is(textarea, :where(.s-inline-edit-value)) {
   border-color: var(--t-primary);
   border-width: calc(var(--t-border-width) + 0.5px);
   padding: calc(24px - 0.5px) calc(14px - 0.5px) calc(12px - 0.5px);
@@ -100,7 +100,7 @@
 
 /* ===== STYLE OVERRIDES ===== */
 /* Fluent 2 — label above, 4px radius, smaller padding */
-.s-textarea-fluent textarea {
+.s-textarea-fluent :is(textarea, :where(.s-inline-edit-value)) {
   padding: 8px 10px;
   font-size: 14px;
   background: var(--t-surface);
@@ -112,7 +112,7 @@
 .s-textarea-fluent textarea:hover {
   border-color: color-mix(in srgb, var(--t-text) 60%, transparent);
 }
-.s-textarea-fluent.focused textarea {
+.s-textarea-fluent.focused :is(textarea, :where(.s-inline-edit-value)) {
   border-bottom: 2px solid var(--t-primary);
   box-shadow: none;
 }
@@ -126,7 +126,7 @@
   color: var(--t-primary);
 }
 
-.s-textarea-brutalist textarea {
+.s-textarea-brutalist :is(textarea, :where(.s-inline-edit-value)) {
   font-family: 'Courier New', monospace;
   font-weight: bold;
   border: var(--t-border-width) solid var(--t-text);
@@ -149,7 +149,7 @@
   box-shadow: 0 0 10px var(--t-primary), 0 0 25px var(--t-shadow);
 }
 
-.s-textarea-pixel textarea {
+.s-textarea-pixel :is(textarea, :where(.s-inline-edit-value)) {
   font-family: 'Courier New', monospace;
   background: var(--t-surface);
   color: var(--t-text);
@@ -160,7 +160,7 @@
 }
 
 /* Metro */
-.s-textarea-metro textarea {
+.s-textarea-metro :is(textarea, :where(.s-inline-edit-value)) {
   border-radius: 0;
   border: var(--t-border-width) solid var(--t-primary);
   background: var(--t-surface);
@@ -173,7 +173,7 @@
 }
 
 /* Bootstrap */
-.s-textarea-bootstrap textarea {
+.s-textarea-bootstrap :is(textarea, :where(.s-inline-edit-value)) {
   border-radius: 6px;
   border: var(--t-border-width) solid var(--t-border);
   box-shadow: var(--t-shadow-xs);
@@ -185,7 +185,7 @@
 }
 
 /* Cartoon */
-.s-textarea-cartoon textarea {
+.s-textarea-cartoon :is(textarea, :where(.s-inline-edit-value)) {
   border-radius: 16px;
   border: var(--t-border-width) solid var(--t-text);
   box-shadow: 4px 4px 0 var(--t-primary);
@@ -198,7 +198,7 @@
 }
 
 /* Illustration */
-.s-textarea-illustration textarea {
+.s-textarea-illustration :is(textarea, :where(.s-inline-edit-value)) {
   border-radius: 8px;
   border: var(--t-border-width) solid var(--t-text);
   box-shadow: 3px 3px 0 var(--t-border);
@@ -211,7 +211,7 @@
 }
 
 /* Carbon — label above, 0 radius */
-.s-textarea-carbon textarea {
+.s-textarea-carbon :is(textarea, :where(.s-inline-edit-value)) {
   padding: 8px 12px;
   font-size: 14px;
   border-radius: 0;

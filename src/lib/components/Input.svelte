@@ -1,5 +1,6 @@
 <script>
   import "./input-styles.css";
+  import "./liquid-glass-field.css";
   import { defaults, iconClass } from "../config.js";
   import { cn } from "../utils/cn.js";
 
