@@ -27,7 +27,6 @@
 
   let wrapper = $state(null);
   let core = $state(null);
-  let previousDisabled = $state(disabled);
 
   let dialog = $state({ open: false, type: null, data: null });
   let imageFileInput = $state(null);
@@ -63,11 +62,7 @@
   });
 
   $effect(() => {
-    if (!core) return;
-    if (disabled !== previousDisabled) {
-      core.setReadOnly(disabled);
-      previousDisabled = disabled;
-    }
+    core?.setReadOnly(disabled);
   });
 
   onDestroy(() => {

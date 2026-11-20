@@ -42,6 +42,8 @@ const registry = {
   FAB:           { importName: "FAB",            kind: "children" },
 
   // ---------------- Layout ----------------
+  Carousel:      { importName: "Carousel",     kind: "leaf", listProps: ["slides"] },
+  GraphEditor:   { importName: "GraphEditor",  kind: "leaf", bindable: ["graph"], primaryBindable: "graph", objectProps: ["graph"] },
   Card:          { importName: "Card",          kind: "container" },
   Row:           { importName: "Row",           kind: "container" },
   Column:        { importName: "Column",        kind: "container" },

@@ -1,5 +1,5 @@
 // Global configuration
-export { initMultistyleUI } from "./config.js";
+export { defaults, iconClass, initMultistyleUI } from "./config.js";
 
 // Theme system — structured config + CSS generator (runtime API for custom themes)
 export { themes, generateThemeCss, resolveLight, resolveDark, applyThemeToElement, hexToHsl, hslToCss, invert, invertHex, styleFonts, fontOptions, SYSTEM_FONT } from "./themes/index.js";
@@ -32,6 +32,7 @@ export { default as DropdownMenu } from "./components/DropdownMenu.svelte";
 export { default as Card } from "./components/Card.svelte";
 export { default as Divider } from "./components/Divider.svelte";
 export { default as Tabs } from "./components/Tabs.svelte";
+export { default as Carousel } from "./components/Carousel.svelte";
 export { default as Accordion } from "./components/Accordion.svelte";
 export { default as Modal } from "./components/Modal.svelte";
 export { default as Drawer } from "./components/Drawer.svelte";
@@ -75,4 +76,6 @@ export { default as StackedLineChart } from "./components/charts/StackedLineChar
 export { default as ComboChart } from "./components/charts/ComboChart.svelte";
 
 // Advanced Components
+export { default as GraphEditor } from "./components/GraphEditor.svelte";
+export { createGraph, createGraphNode, connectGraphNodes, graphNodeTypes, runGraph, parseGraph, orientFlowGraph } from "./graph/index.js";
 export { default as FAB } from "./components/FAB.svelte";

@@ -19,7 +19,11 @@
     "./theme-base.css": "./dist/components/theme-base.css",
     "./themes": "./dist/themes/index.js",
     "./components/*": "./dist/components/*",
-    "./charts/*": "./dist/components/charts/*"
+    "./charts/*": "./dist/components/charts/*",
+    "./graph": {
+      "types": "./dist/graph/index.d.ts",
+      "default": "./dist/graph/index.js"
+    }
   },
   "files": [
     "dist",

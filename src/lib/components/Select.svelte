@@ -22,7 +22,7 @@
   let open = $state(false);
   let focused = $state(false);
   let wrapperEl;
-  let dropdownEl;
+  let dropdownEl = $state();
   let hasValue = $derived(
     value !== "" && value !== null && value !== undefined,
   );
@@ -53,6 +53,7 @@
   }
 
   function selectOption(val) {
+    if (disabled) return;
     value = val;
     open = false;
     focused = false;
@@ -66,6 +67,7 @@
   }
 
   function handleKeydown(e) {
+    if (disabled) return;
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       open = !open;
@@ -91,6 +93,11 @@
   }
 
   $effect(() => {
+    if (disabled) {
+      open = false;
+      focused = false;
+      return;
+    }
     if (open) {
       const handler = (e) => {
         if (
@@ -142,8 +149,11 @@
   <div
     class="s-select-control"
     role="button"
-    tabindex="0"
-    onclick={() => (open = !open)}
+    tabindex={disabled ? -1 : 0}
+    aria-disabled={disabled}
+    aria-expanded={open}
+    aria-label={displayLabel}
+    onclick={() => { if (!disabled) open = !open; }}
     onkeydown={handleKeydown}
   >
     {#if hasValue}

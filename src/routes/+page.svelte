@@ -64,6 +64,9 @@
 
   import { defaults, initMultistyleUI } from "../lib/config.js";
   import { browser } from "$app/environment";
+  import { afterNavigate, replaceState } from "$app/navigation";
+  import { page } from "$app/state";
+  import GraphDemo from "./graph-demo/GraphDemo.svelte";
 
   const styles = [
     { value: "material", label: "Material Design" },
@@ -153,8 +156,25 @@
     { id: "datadisplay", label: "Data Display" },
     { id: "feedback", label: "Feedback" },
     { id: "charts", label: "Charts" },
+    { id: "flowchart", label: "Flowchart" },
+    { id: "blueprint", label: "Blueprint" },
   ];
   let activeCat = $state("form");
+  const isGraphTab = (tab) => tab === "flowchart" || tab === "blueprint";
+
+  afterNavigate(({ to }) => {
+    const tab = to?.url.searchParams.get("tab");
+    if (isGraphTab(tab)) activeCat = tab;
+  });
+
+  function selectCategory(tab) {
+    activeCat = tab;
+    const url = new URL(window.location.href);
+    const previous = url.searchParams.get("tab");
+    if (isGraphTab(tab)) url.searchParams.set("tab", tab);
+    else if (isGraphTab(previous)) url.searchParams.delete("tab");
+    if (url.href !== window.location.href) replaceState(url, page.state);
+  }
   let layoutTab = $state("preview");
 
   // Code preview tab states
@@ -668,7 +688,8 @@ import "./custom-theme.css";
         style={selectedStyle}
         theme={selectedTheme}
         tabs={categoryTabs}
-        bind:active={activeCat}
+        aria-label="Component categories"
+        bind:active={() => activeCat, selectCategory}
       />
     </div>
 
@@ -3685,6 +3706,14 @@ import "./custom-theme.css";
         </Card>
       </div>
     </section>
+
+    {#if activeCat === "flowchart" || activeCat === "blueprint"}
+      {#key activeCat}
+        <section role="tabpanel" aria-label={activeCat === "flowchart" ? "Flowchart" : "Blueprint"}>
+          <GraphDemo mode={activeCat} style={selectedStyle} theme={selectedTheme} />
+        </section>
+      {/key}
+    {/if}
 
     <!-- Toast Container -->
     <Toast

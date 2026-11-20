@@ -4,7 +4,7 @@
 // Run after `vite build` (chained in package.json `build` script).
 
 import { readdir, readFile, writeFile, rename, rm } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join, relative, sep } from "node:path";
 
 const OUT = "docs";
 const JS_REF_RE = /[^"']*bundle\.[A-Za-z0-9_-]+\.js/g;
@@ -32,9 +32,10 @@ async function rewriteHtml() {
   const htmls = await findFiles(OUT, (n) => n.endsWith(".html"));
   for (const f of htmls) {
     const src = await readFile(f, "utf8");
+    const assetPath = relative(dirname(f), OUT).split(sep).join("/") || ".";
     const out = src
-      .replace(JS_REF_RE, "./script.js")
-      .replace(CSS_REF_RE, "./style.css");
+      .replace(JS_REF_RE, `${assetPath}/script.js`)
+      .replace(CSS_REF_RE, `${assetPath}/style.css`);
     if (out !== src) await writeFile(f, out, "utf8");
   }
   return htmls.length;

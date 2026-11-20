@@ -22,7 +22,7 @@
   let open = $state(false);
   let focused = $state(false);
   let wrapperEl;
-  let dropdownEl;
+  let dropdownEl = $state();
   let hasValue = $derived(selected.length > 0);
   let floated = $derived(focused || hasValue);
 
@@ -44,6 +44,7 @@
   );
 
   function toggle(val) {
+    if (disabled) return;
     if (selected.includes(val)) {
       selected = selected.filter((v) => v !== val);
     } else {
@@ -52,6 +53,7 @@
   }
 
   function removeChip(val) {
+    if (disabled) return;
     selected = selected.filter((v) => v !== val);
   }
 
@@ -91,6 +93,11 @@
   }
 
   $effect(() => {
+    if (disabled) {
+      open = false;
+      focused = false;
+      return;
+    }
     if (!open) return;
     const reposition = () => positionDropdown();
     const onDocMouseDown = (e) => {
@@ -139,12 +146,18 @@
   <div
     class="mselect-control"
     role="button"
-    tabindex="0"
-    onclick={() => (open = !open)}
+    tabindex={disabled ? -1 : 0}
+    aria-disabled={disabled}
+    aria-expanded={open}
+    aria-label={displayLabel}
+    onclick={() => { if (!disabled) open = !open; }}
     onkeydown={(e) => {
+      if (disabled || e.target !== e.currentTarget) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         open = !open;
+      } else if (e.key === "Escape") {
+        open = false;
       }
     }}
   >
@@ -155,6 +168,7 @@
             {getLabel(val)}
             <button
               type="button"
+              {disabled}
               class="s-mselect-chip-remove"
               onclick={(e) => {
                 e.stopPropagation();

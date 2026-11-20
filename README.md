@@ -85,13 +85,40 @@ The library exports the following components from `svelte-multistyle-ui`:
 
 - Actions: `Button`, `IconButton`, `FAB`, `ButtonGroup`, `DropdownMenu`, `Popover`
 - Form: `Input`, `Textarea`, `TextEditor`, `Select`, `MultiSelect`, `Checkbox`, `Radio`, `Toggle`, `Slider`, `FileUpload`, `DatePicker`, `SortableList`
-- Layout: `Card`, `Divider`, `Tabs`, `Accordion`, `Modal`, `Drawer`, `CommandPalette`, `Row`, `Column`, `Grid`
+- Layout: `Card`, `Divider`, `Tabs`, `Carousel`, `Accordion`, `Modal`, `Drawer`, `CommandPalette`, `Row`, `Column`, `Grid`
 - Navigation: `Breadcrumb`, `Pagination`, `Stepper`
 - Data display: `Avatar`, `Chip`, `Tooltip`, `ProgressBar`, `Table`, `Spinner`, `Skeleton`, `Rating`
 - Feedback: `Alert`, `Toast`
 - Charts: `BarChart`, `LineChart`, `PieChart`, `DoughnutChart`, `RadarChart`, `PolarAreaChart`, `ScatterChart`, `BubbleChart`, `StackedBarChart`, `StackedLineChart`, `ComboChart`
+- Graphs: `GraphEditor`
 
 You can also import individual files from `svelte-multistyle-ui/components/<Component>.svelte`, and chart components from `svelte-multistyle-ui/charts/<Chart>.svelte`.
+
+## Graph editor
+
+The component gallery has **Flowchart** and **Blueprint** tabs. In **Flowchart**, choose **Load conversation example** to edit support messages, yes/no branches, and a billing subgraph. In **Blueprint**, run the order subtotal example. Both workspaces save locally and can open, export, or embed graph JSON.
+
+```svelte
+<script>
+  import 'svelte-multistyle-ui/theme.css';
+  import { GraphEditor, createGraph, runGraph } from 'svelte-multistyle-ui';
+
+  let graph = $state.raw(createGraph('Order logic'));
+</script>
+
+<GraphEditor bind:graph mode="blueprint" />
+<button onclick={() => console.log(runGraph(graph).outputs)}>Run graph</button>
+```
+
+Drag nodes from the palette or click to add them. Drag from an output to an input to connect, or activate the two ports in order with the keyboard. Use the canvas controls to zoom and fit the graph. With canvas focus, the arrow keys pan, `+` and `-` zoom, and Home fits the graph.
+
+Add a **Subgraph** node and open it to edit its contents. **Graph input** and **Graph output** nodes inside it define ports on the parent node. Their IDs remain stable when their labels change. Call `editor.embedGraph(graph)` on a bound editor instance to insert an independent copy of another graph.
+
+`mode="flowchart"` uses conventional shapes and right-angle connectors, and supports loops. Choose **Horizontal** for left-to-right flow or **Vertical** for top-to-bottom flow. Each graph and subgraph saves its own direction. Use `orientFlowGraph(graph, direction)` to change it in code. Select a shape to resize it using its corner handle or the inspector.
+
+`mode="blueprint"` shows data nodes for synchronous execution. `mode="all"` shows both sets. Use `runGraph(graph, { inputs, nodeTypes })` to evaluate data links in dependency order. Inputs and outputs are keyed by their boundary node IDs. The runner reports circular data dependencies.
+
+Pass custom definitions as `nodeTypes` to both `GraphEditor` and `runGraph`. A definition has a title, input and output ports with stable IDs and types, optional inspector fields, and a synchronous `run(inputs, data)` function that returns values keyed by output port ID. The standalone `svelte-multistyle-ui/graph` entry also exports `createGraphNode`, `connectGraphNodes`, and `parseGraph` for building and validating graphs outside the editor.
 
 ## Theming
 
@@ -133,7 +160,7 @@ Key tokens include `--t-primary`, `--t-secondary`, `--t-surface`, `--t-card-bg`,
 
 ## Demo & development
 
-This repository contains a Vite demo app in `src/App.svelte` that renders every component across every style and theme.
+The SvelteKit demo app in `src/routes/` contains the component gallery and the Graph Workbench.
 
 ```bash
 pnpm install
